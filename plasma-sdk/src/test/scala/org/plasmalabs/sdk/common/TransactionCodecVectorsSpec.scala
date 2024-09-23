@@ -10,23 +10,21 @@ class TransactionCodecVectorsSpec extends munit.FunSuite {
 
   import TransactionCodecVectorsSpec._
 
-  vectors.zipWithIndex.foreach {
-    {
-      case (vector, index) =>
-        test(s"Vector $index should result in correct signable+id") {
-          val txBytes = Encoding.decodeFromHex(vector.txHex).toOption.get
-          val tx = IoTransaction.parseFrom(txBytes)
-          val signable = tx.signable.value
-          assertEquals(Encoding.encodeToHex(signable.toByteArray), vector.txSignableHex)
-          val id = tx.computeId
-          assertEquals(Encoding.encodeToBase58(id.value.toByteArray), vector.txId)
-        }
+  vectors.zipWithIndex.foreach { case (vector, index) =>
+    test(s"Vector $index should result in correct signable+id") {
+      val txBytes = Encoding.decodeFromHex(vector.txHex).toOption.get
+      val tx = IoTransaction.parseFrom(txBytes)
+      val signable = tx.signable.value
+      assertEquals(Encoding.encodeToHex(signable.toByteArray), vector.txSignableHex)
+      val id = tx.computeId
+      assertEquals(Encoding.encodeToBase58(id.value.toByteArray), vector.txId)
     }
 
   }
 }
 
 object TransactionCodecVectorsSpec {
+
   val vectors: List[TestVector] = List(
     TestVector(
       "1a060a040a002200",
