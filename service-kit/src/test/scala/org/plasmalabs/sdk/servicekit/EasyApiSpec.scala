@@ -195,7 +195,7 @@ class EasyApiSpec extends CatsEffectSuite with BaseSpec {
       override def blockById(blockId: BlockId): IO[Option[(BlockId, BlockHeader, BlockBody, Seq[IoTransaction])]] = ???
       override def fetchTransaction(txId: TransactionId): IO[Option[IoTransaction]] = ???
       override def synchronizationTraversal(): IO[Iterator[SynchronizationTraversalRes]] = ???
-      override def makeBlock(nbOfBlocks: Int): IO[Unit] = ???
+      override def makeBlocks(nbOfBlocks: Int): IO[Unit] = ???
     }
     new EasyApi[IO]
   }

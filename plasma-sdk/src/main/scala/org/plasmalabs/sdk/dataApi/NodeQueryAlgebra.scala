@@ -71,7 +71,7 @@ trait NodeQueryAlgebra[F[_]] {
    *
    * @param nbOfBlocks the number of blocks to mint.
    */
-  def makeBlock(
+  def makeBlocks(
     nbOfBlocks: Int
   ): F[Unit]
 
@@ -93,7 +93,7 @@ object NodeQueryAlgebra extends NodeQueryInterpreter {
 
   case class SynchronizationTraversal() extends NodeQueryADT[Iterator[SynchronizationTraversalRes]]
 
-  case class MakeBlock(nbOfBlocks: Int) extends NodeQueryADT[Unit]
+  case class MakeBlocks(nbOfBlocks: Int) extends NodeQueryADT[Unit]
 
   case class BroadcastTransaction(tx: IoTransaction) extends NodeQueryADT[TransactionId]
 
@@ -102,7 +102,7 @@ object NodeQueryAlgebra extends NodeQueryInterpreter {
   def makeBlockF(
     nbOfBlocks: Int
   ): NodeQueryADTMonad[Unit] =
-    Free.liftF(MakeBlock(nbOfBlocks))
+    Free.liftF(MakeBlocks(nbOfBlocks))
 
   def fetchBlockBodyF(
     blockId: BlockId
@@ -134,7 +134,7 @@ object NodeQueryAlgebra extends NodeQueryInterpreter {
   def make[F[_]: Sync](channelResource: Resource[F, ManagedChannel]): NodeQueryAlgebra[F] =
     new NodeQueryAlgebra[F] {
 
-      override def makeBlock(nbOfBlocks: Int): F[Unit] = interpretADT(channelResource, makeBlockF(nbOfBlocks))
+      override def makeBlocks(nbOfBlocks: Int): F[Unit] = interpretADT(channelResource, makeBlockF(nbOfBlocks))
 
       override def blockByDepth(depth: Long): F[Option[(BlockId, BlockHeader, BlockBody, Seq[IoTransaction])]] = {
         import cats.implicits._

@@ -49,9 +49,9 @@ class NodeMonitorTest extends munit.CatsEffectSuite {
           _ <- IO.println("starting monitor")
 
           _ <- IO.println("making blocks: node 1")
-          _ <- NodeQuery1.makeBlock(1)
+          _ <- NodeQuery1.makeBlocks(1)
           _ <- IO.println("making blocks: node 2")
-          _ <- NodeQuery2.makeBlock(2)
+          _ <- NodeQuery2.makeBlocks(2)
 
           _ <- IO.println("waiting after making blocks").andWait(15.seconds)
 
@@ -74,7 +74,7 @@ class NodeMonitorTest extends munit.CatsEffectSuite {
   test("Monitor only new blocks (empty)") {
     assertIO(
       NodeMonitor("localhost", 9184, secureConnection = false, NodeQuery1).use { blockStream =>
-        (blockStream.interruptAfter(15.seconds).compile.toList <& NodeQuery1.makeBlock(2)) map { blocks =>
+        (blockStream.interruptAfter(15.seconds).compile.toList <& NodeQuery1.makeBlocks(2)) map { blocks =>
           println(blocks)
           blocks.count(_.isInstanceOf[AppliedNodeBlock]) == 2
         }
@@ -122,7 +122,7 @@ class NodeMonitorTest extends munit.CatsEffectSuite {
           )
           // Then broadcast transaction
           txId <- NodeQuery1.broadcastTransaction(provedTx).andWait(5.seconds)
-          _    <- NodeQuery1.makeBlock(1).andWait(5.seconds)
+          _    <- NodeQuery1.makeBlocks(1).andWait(5.seconds)
         } yield txId) map { res =>
           val ((blockUpdates, queriedHeights), txId) = res
           val foundUpdate = blockUpdates.find(_._1.contains(txId))
@@ -140,7 +140,7 @@ class NodeMonitorTest extends munit.CatsEffectSuite {
       NodeMonitor("localhost", 9184, secureConnection = false, NodeQuery1, Some(startingBlockId)).use { blockStream =>
         blockStream.interruptAfter(20.seconds).compile.toList both (for {
           retroactiveHeight <- NodeQuery1.blockById(startingBlockId).map(_.get._2.height)
-          _                 <- NodeQuery1.makeBlock(2)
+          _                 <- NodeQuery1.makeBlocks(2)
         } yield retroactiveHeight) map { res =>
           val (blocks, startingHeight) = res
           println(startingHeight)

@@ -26,7 +26,7 @@ trait NodeQueryInterpreter {
         ): ChannelContextKlesli[A] = {
           import cats.implicits._
           fa match {
-            case NodeQueryAlgebra.MakeBlock(nbOfBlocks) =>
+            case NodeQueryAlgebra.MakeBlocks(nbOfBlocks) =>
               Kleisli(blockingStubAndRegTestStub =>
                 Sync[F]
                   .blocking(
