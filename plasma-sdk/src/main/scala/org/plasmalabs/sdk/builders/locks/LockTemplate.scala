@@ -1,6 +1,6 @@
 package org.plasmalabs.sdk.builders.locks
 
-import org.plasmalabs.sdk.builders.BuilderError
+import org.plasmalabs.sdk.builders.{BuilderError, BuilderRuntimeError}
 import LockTemplate.LockType
 import cats.Monad
 import cats.implicits.{catsSyntaxApplicativeId, catsSyntaxEitherId, toFlatMapOps}
@@ -34,6 +34,11 @@ object LockTemplate {
             .withPredicate(Lock.Predicate(innerPropositions.map(Challenge().withRevealed), threshold))
             .asRight[BuilderError]
             .pure[F]
+        case Right(other) =>
+          (BuilderRuntimeError(
+            "LockTemplate, build, match may not be exhaustive",
+            new MatchError(s"${other.getClass.getCanonicalName}")
+          ): BuilderError).asLeft[Lock].pure[F]
       }
   }
 

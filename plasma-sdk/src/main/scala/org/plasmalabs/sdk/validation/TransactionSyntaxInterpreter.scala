@@ -614,7 +614,7 @@ object TransactionSyntaxInterpreter {
     val repeatedInputs: Seq[TransactionSyntaxError] = mergingInputs
       .diff(mergingInputs.distinct)
       .map(
-        TransactionSyntaxError.NonDistinctMergingInput
+        TransactionSyntaxError.NonDistinctMergingInput.apply
       ) // results with a list of inputs that are present in multiple merging statements
     NonEmptyChain.fromSeq(repeatedInputs) match {
       case Some(repeated) => Validated.Invalid(repeated)
@@ -642,7 +642,7 @@ object TransactionSyntaxInterpreter {
       Seq(outputIdxInBounds, multipleInputs, allInputsPresent, distinctInputs).forall(_(s))
 
     val invalidMergingStatements = transaction.mergingStatements.filterNot(isValidStatement)
-    NonEmptyChain.fromSeq(invalidMergingStatements.map(TransactionSyntaxError.InvalidMergingStatement)) match {
+    NonEmptyChain.fromSeq(invalidMergingStatements.map(TransactionSyntaxError.InvalidMergingStatement.apply)) match {
       case Some(repeated) => Validated.Invalid(repeated)
       case None           => ().validNec[TransactionSyntaxError]
     }

@@ -26,7 +26,7 @@ object Phrase {
   ): Either[PhraseFailure, Phrase] =
     for {
       size     <- sizeFromNumberOfWords(words.split(" ").count(_.nonEmpty))
-      wordList <- LanguageWordList.validated(language).leftMap(PhraseFailures.WordListFailure)
+      wordList <- LanguageWordList.validated(language).leftMap(PhraseFailures.WordListFailure.apply)
       phrase   <- Right(Phrase(words.toLowerCase.split("\\s+").map(_.trim).toIndexedSeq, size, wordList))
       _        <- Either.cond(phrase.value.length == size.wordLength, phrase, PhraseFailures.InvalidWordLength)
       _        <- Either.cond(phrase.value.forall(wordList.value.contains), phrase, PhraseFailures.InvalidWords)
@@ -45,7 +45,7 @@ object Phrase {
       entropy,
       PhraseFailures.InvalidEntropyLength
     )
-    wordList <- LanguageWordList.validated(language).leftMap(PhraseFailures.WordListFailure)
+    wordList <- LanguageWordList.validated(language).leftMap(PhraseFailures.WordListFailure.apply)
     entropyBinaryString = entropy.value.toArray.map(byteTo8BitString).mkString
     checksum = calculateChecksum(entropyBinaryString, size)
     phrase = fromBinaryString(entropyBinaryString ++ checksum, size, wordList)

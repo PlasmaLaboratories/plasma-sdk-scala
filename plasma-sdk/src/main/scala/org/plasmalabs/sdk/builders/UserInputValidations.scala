@@ -307,7 +307,7 @@ object UserInputValidations {
             (),
             UserInputError("All UTXOs to merge must be accounted for in txos")
           )
-          .andThen(_ => MergingOps.validMerge(txosToMerge).leftMap(_.map(UserInputError))),
+          .andThen(_ => MergingOps.validMerge(txosToMerge).leftMap(_.map(UserInputError.apply))),
         allInputLocksMatch(txoLocks, locks, "the txos", "a lock in the lock map"),
         allInputLocksMatch(locks, txoLocks, "the lock map", "a lock in the txos"),
         validFee(fee, txos.map(_.transactionOutput.value.value))

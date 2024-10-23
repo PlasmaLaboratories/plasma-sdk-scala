@@ -1,9 +1,12 @@
+val scala213 = "2.13.13"
+val scala33 = "3.4.1"
+
 inThisBuild(
   List(
     organization := "org.plasmalabs",
     homepage := Some(url("https://github.com/PlasmaLaboratories/plasma-sdk-scala")),
     licenses := Seq("MPL2.0" -> url("https://www.mozilla.org/en-US/MPL/2.0/")),
-    scalaVersion := "2.13.13",
+    scalaVersion := scala213,
     testFrameworks += TestFrameworks.MUnit
   )
 )
@@ -13,14 +16,23 @@ lazy val commonScalacOptions = Seq(
   "-feature",
   "-language:higherKinds",
   "-language:postfixOps",
-  "-unchecked",
-  "-Ywarn-unused",
-  "-Yrangepos"
+  "-unchecked"
 )
 
 lazy val commonSettings = Seq(
   fork := true,
-  scalacOptions ++= commonScalacOptions,
+  Compile / scalacOptions ++= commonScalacOptions,
+  Compile / scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v >= 13 =>
+        Seq(
+          "-Ywarn-unused:-implicits,-privates",
+          "-Yrangepos"
+        )
+      case _ =>
+        Nil
+    }
+  },
   semanticdbEnabled := true, // enable SemanticDB for Scalafix
   Compile / unmanagedSourceDirectories += {
     val sourceDir = (Compile / sourceDirectory).value
@@ -41,8 +53,17 @@ lazy val commonSettings = Seq(
     "Bintray" at "https://jcenter.bintray.com/",
     "jitpack" at "https://jitpack.io"
   ),
-  addCompilerPlugin("org.typelevel" % "kind-projector"     % "0.13.3" cross CrossVersion.full),
-  addCompilerPlugin("com.olegpy"   %% "better-monadic-for" % "0.3.1"),
+  libraryDependencies ++= {
+    scalaVersion.value match {
+      case `scala33` =>
+        Nil
+      case _ =>
+        List(
+//          compilerPlugin("org.typelevel" % "kind-projector"     % "0.13.2" cross CrossVersion.full),
+          compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
+        )
+    }
+  },
   testFrameworks += TestFrameworks.MUnit
 )
 
@@ -93,10 +114,12 @@ lazy val crypto = project
     name := "crypto",
     commonSettings,
     publishSettings,
+    crossScalaVersions := Seq(scala213, scala33),
     Test / publishArtifact := true,
     libraryDependencies ++=
       Dependencies.Crypto.sources ++
-      Dependencies.Crypto.tests,
+      Dependencies.Crypto.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
+    excludeDependencies += Dependencies.scodec3ExlusionRule,
     macroAnnotationsSettings
   )
 
@@ -106,11 +129,13 @@ lazy val quivr4s = project
     name := "quivr4s",
     commonSettings,
     publishSettings,
+    crossScalaVersions := Seq(scala213, scala33),
     Test / publishArtifact := true,
     Test / parallelExecution := false,
     libraryDependencies ++=
       Dependencies.Quivr4s.sources ++
-        Dependencies.Quivr4s.tests
+      Dependencies.Quivr4s.tests,
+    excludeDependencies += Dependencies.scodec3ExlusionRule
   )
   .dependsOn(crypto)
 
@@ -120,11 +145,13 @@ lazy val plasmaSdk = project
     name := "plasma-sdk",
     commonSettings,
     publishSettings,
+    crossScalaVersions := Seq(scala213, scala33),
     Test / publishArtifact := true,
     Test / parallelExecution := false,
     libraryDependencies ++=
       Dependencies.PlasmaSdk.sources ++
-      Dependencies.PlasmaSdk.tests
+      Dependencies.PlasmaSdk.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
+    excludeDependencies += Dependencies.scodec3ExlusionRule
   )
   .dependsOn(quivr4s % "compile->compile;test->test")
 
@@ -134,11 +161,13 @@ lazy val serviceKit = project
     name := "service-kit",
     commonSettings,
     publishSettings,
+    crossScalaVersions := Seq(scala213, scala33),
     Test / publishArtifact := true,
     Test / parallelExecution := false,
     libraryDependencies ++=
       Dependencies.ServiceKit.sources ++
-        Dependencies.ServiceKit.tests
+      Dependencies.ServiceKit.tests,
+    excludeDependencies += Dependencies.scodec3ExlusionRule
   )
   .dependsOn(plasmaSdk)
 
@@ -147,7 +176,8 @@ lazy val integration = project
   .settings(
     name := "integration",
     publish / skip := true,
-    libraryDependencies ++= Dependencies.IntegrationTests.sources ++ Dependencies.IntegrationTests.tests
+    libraryDependencies ++= Dependencies.IntegrationTests.sources ++ Dependencies.IntegrationTests.tests,
+    excludeDependencies += Dependencies.scodec3ExlusionRule,
   )
   .dependsOn(plasmaSdk)
 
@@ -158,10 +188,12 @@ lazy val plasma = project
   .settings(
     moduleName := "plasma",
     commonSettings,
+    // crossScalaVersions must be set to Nil on the aggregating project
+    crossScalaVersions := Nil,
     publish / skip := true,
     // Currently excluding crypto since there are issues due to the use of macro annotations
     ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject -- inProjects(crypto),
-    ScalaUnidoc / unidoc / target := DocumentationRoot,
+    ScalaUnidoc / unidoc / target := DocumentationRoot
   )
   .enablePlugins(ReproducibleBuildsPlugin, ScalaUnidocPlugin)
   .aggregate(
@@ -171,6 +203,6 @@ lazy val plasma = project
     quivr4s
   )
 
-addCommandAlias("checkPR", s"; scalafixAll --check; scalafmtCheckAll; +coverage; +test; +coverageReport")
+addCommandAlias("checkPR", s"; scalafixAll --check; scalafmtCheckAll; coverage; +test; coverageReport")
 addCommandAlias("preparePR", s"; scalafixAll; scalafmtAll; +test; unidoc")
-addCommandAlias("checkPRTestQuick", s"; scalafixAll --check; scalafmtCheckAll; testQuick")
+addCommandAlias("checkPRTestQuick", s"; scalafixAll --check; scalafmtCheckAll; +testQuick")

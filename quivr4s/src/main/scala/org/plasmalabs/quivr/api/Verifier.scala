@@ -7,11 +7,11 @@ import org.plasmalabs.quivr._
 import org.plasmalabs.quivr.runtime.QuivrRuntimeErrors.ValidationError.{
   EvaluationAuthorizationFailed,
   LockedPropositionIsUnsatisfiable,
-  MessageAuthorizationFailed
+  MessageAuthorizationFailed,
+  UserProvidedInterfaceFailure
 }
 import org.plasmalabs.quivr.runtime.{DynamicContext, QuivrRuntimeError}
 import quivr.models._
-
 import java.nio.charset.StandardCharsets
 import org.plasmalabs.crypto.hash.Blake2b256
 
@@ -41,7 +41,7 @@ object Verifier {
     tag:         String,
     proof:       Proof,
     proofTxBind: TxBind,
-    context:     DynamicContext[F, A, _]
+    context:     DynamicContext[F, A, ?]
   ): F[Either[QuivrRuntimeError, Boolean]] = for {
     sb <- context.signableBytes
     verifierTxBind = (new Blake2b256).hash(tag.getBytes(StandardCharsets.UTF_8) ++ sb.value.toByteArray)
@@ -64,7 +64,7 @@ object Verifier {
    */
   private def collectResult(proposition: Proposition, proof: Proof)(
     msgResult:  Either[QuivrRuntimeError, Boolean],
-    evalResult: Either[QuivrRuntimeError, _]
+    evalResult: Either[QuivrRuntimeError, ?]
   ): Either[QuivrRuntimeError, Boolean] = (msgResult, evalResult) match {
     case (Right(true), Right(_)) => Right[QuivrRuntimeError, Boolean](true)
     case _                       => Left[QuivrRuntimeError, Boolean](EvaluationAuthorizationFailed(proposition, proof))
@@ -102,7 +102,7 @@ object Verifier {
     private def lockedVerifier[F[_]: Monad](
       proposition: Proposition.Locked,
       proof:       Proof.Locked,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] =
       // should always fail, the Locked Proposition is unsatisfiable
       Either
@@ -112,7 +112,7 @@ object Verifier {
     private def digestVerifier[F[_]: Monad](
       proposition: Proposition.Digest,
       proof:       Proof.Digest,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withDigest(proposition).pure[F]
       wrappedProof       <- Proof().withDigest(proof).pure[F]
@@ -125,7 +125,7 @@ object Verifier {
     private def signatureVerifier[F[_]: Monad](
       proposition: Proposition.DigitalSignature,
       proof:       Proof.DigitalSignature,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withDigitalSignature(proposition).pure[F]
       wrappedProof       <- Proof().withDigitalSignature(proof).pure[F]
@@ -148,7 +148,7 @@ object Verifier {
     private def heightVerifier[F[_]: Monad](
       proposition: Proposition.HeightRange,
       proof:       Proof.HeightRange,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withHeightRange(proposition).pure[F]
       wrappedProof       <- Proof().withHeightRange(proof).pure[F]
@@ -169,7 +169,7 @@ object Verifier {
     private def tickVerifier[F[_]: Monad](
       proposition: Proposition.TickRange,
       proof:       Proof.TickRange,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withTickRange(proposition).pure[F]
       wrappedProof       <- Proof().withTickRange(proof).pure[F]
@@ -185,7 +185,7 @@ object Verifier {
     private def exactMatchVerifier[F[_]: Monad](
       proposition: Proposition.ExactMatch,
       proof:       Proof.ExactMatch,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withExactMatch(proposition).pure[F]
       wrappedProof       <- Proof().withExactMatch(proof).pure[F]
@@ -197,7 +197,7 @@ object Verifier {
     private def lessThanVerifier[F[_]: Monad](
       proposition: Proposition.LessThan,
       proof:       Proof.LessThan,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withLessThan(proposition).pure[F]
       wrappedProof       <- Proof().withLessThan(proof).pure[F]
@@ -209,7 +209,7 @@ object Verifier {
     private def greaterThanVerifier[F[_]: Monad](
       proposition: Proposition.GreaterThan,
       proof:       Proof.GreaterThan,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withGreaterThan(proposition).pure[F]
       wrappedProof       <- Proof().withGreaterThan(proof).pure[F]
@@ -221,7 +221,7 @@ object Verifier {
     private def equalToVerifier[F[_]: Monad](
       proposition: Proposition.EqualTo,
       proof:       Proof.EqualTo,
-      context:     DynamicContext[F, String, _]
+      context:     DynamicContext[F, String, ?]
     ): F[Either[QuivrRuntimeError, Boolean]] = for {
       wrappedProposition <- Proposition().withEqualTo(proposition).pure[F]
       wrappedProof       <- Proof().withEqualTo(proof).pure[F]
@@ -282,6 +282,7 @@ object Verifier {
     } yield res match {
       case Right(true) => Left(EvaluationAuthorizationFailed(wrappedProposition, wrappedProof))
       case Left(EvaluationAuthorizationFailed(_, _)) => Right(true)
+      case _                                         => Left(UserProvidedInterfaceFailure) // pattern matching warnings.
     }
 
     private def andVerifier[F[_]: Monad, Datum](

@@ -27,16 +27,20 @@ trait ValidationErrorDisplayOps {
   }
 
   implicit val syntaxErrorDisplay: DisplayOps[TransactionSyntaxError] = {
-    case EmptyInputs               => "Transaction has no inputs"
-    case _: DuplicateInput         => "Transaction has duplicate inputs"
-    case ExcessiveOutputsCount     => "Transaction has too many outputs"
-    case _: InvalidTimestamp       => "Transaction has an invalid timestamp"
-    case _: InvalidSchedule        => "Transaction has an invalid schedule"
-    case _: NonPositiveOutputValue => "Transaction has an output with a non-positive quantity value"
-    case _: InsufficientInputFunds => "Transaction inputs cannot satisfy outputs"
-    case _: InvalidProofType       => "Transaction has a proof whose type does not match its corresponding proposition"
-    case InvalidDataLength         => "Transaction has an invalid size"
-    case _: InvalidUpdateProposal  => "Transaction has an invalid UpdateProposal"
+    case EmptyInputs                => "Transaction has no inputs"
+    case _: DuplicateInput          => "Transaction has duplicate inputs"
+    case ExcessiveOutputsCount      => "Transaction has too many outputs"
+    case _: InvalidTimestamp        => "Transaction has an invalid timestamp"
+    case _: InvalidSchedule         => "Transaction has an invalid schedule"
+    case _: NonPositiveOutputValue  => "Transaction has an output with a non-positive quantity value"
+    case _: InsufficientInputFunds  => "Transaction inputs cannot satisfy outputs"
+    case _: InvalidProofType        => "Transaction has a proof whose type does not match its corresponding proposition"
+    case InvalidDataLength          => "Transaction has an invalid size"
+    case _: InvalidUpdateProposal   => "Transaction has an invalid UpdateProposal"
+    case _: InvalidMergingStatement => "Transaction has an invalid InvalidMergingStatement"
+    case _: NonDistinctMergingInput => "Transaction has an invalid NonDistinctMergingInput"
+    case _: IncompatibleMerge       => "Transaction has an invalid IncompatibleMerge"
+    case _: InconsistentNetworkIDs  => "Transaction has an invalid InconsistentNetworkIDs"
   }
 
   implicit val authorizationErrorDisplay: DisplayOps[AuthorizationFailed] = (err: AuthorizationFailed) =>

@@ -5,12 +5,12 @@ object Dependencies {
 
   object Versions {
     val catsCoreVersion = "2.10.0"
-    val simulacrumVersion = "1.0.1"
     val circeVersion = "0.14.6"
     val protobufSpecsVersion = "0.1.1"
     val mUnitTeVersion = "0.7.29"
     val btcVersion = "1.9.9"
     val btcVersionZmq = "1.9.8"
+    val scodecBitsVersion = "1.2.1"
   }
 
   val catsSlf4j: ModuleID =
@@ -29,15 +29,25 @@ object Dependencies {
     "org.scalatestplus" %% "scalacheck-1-16" % "3.2.14.0"
   )
 
-  val scalamock: Seq[ModuleID] = Seq(
-    "org.scalamock" %% "scalamock" % "5.2.0"
-  )
+  def scalamock(v: Option[(Long, Long)]): Seq[ModuleID] =
+    Seq(v match {
+      case Some((2, 13)) =>
+        "org.scalamock" %% "scalamock" % "5.2.0"
+      case _ =>
+        "eu.monniot" %% "scala3mock" % "0.1.1"
+    })
 
-  val scalatest: Seq[ModuleID] = Seq(
-    "org.scalatest"    %% "scalatest"                     % "3.2.18",
-    "com.ironcorelabs" %% "cats-scalatest"                % "3.1.1",
-    "org.typelevel"    %% "cats-effect-testing-scalatest" % "1.5.0"
-  )
+  def scalatest(v: Option[(Long, Long)]): Seq[ModuleID] =
+    Seq(
+      "org.scalatest" %% "scalatest" % "3.2.18",
+      v match {
+        case Some((2, 13)) =>
+          "com.ironcorelabs" %% "cats-scalatest" % "3.1.1"
+        case _ =>
+          "com.ironcorelabs" %% "cats-scalatest" % "4.0.0"
+      },
+      "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0"
+    )
 
   val mUnitTest: Seq[ModuleID] = Seq(
     "org.scalameta" %% "munit"                   % mUnitTeVersion,
@@ -46,19 +56,11 @@ object Dependencies {
     "org.typelevel" %% "scalacheck-effect-munit" % "1.0.4"
   )
 
-  val newType: Seq[ModuleID] = Seq(
-    "io.estatico" %% "newtype" % "0.4.4"
-  )
-
   val cats: Seq[ModuleID] = Seq(
     "org.typelevel" %% "cats-core"   % catsCoreVersion,
     "org.typelevel" %% "mouse"       % "1.2.3",
     "org.typelevel" %% "cats-free"   % catsCoreVersion,
     "org.typelevel" %% "cats-effect" % "3.5.4"
-  )
-
-  val simulacrum: Seq[ModuleID] = Seq(
-    "org.typelevel" %% "simulacrum" % simulacrumVersion
   )
 
   val protobufSpecs: Seq[ModuleID] = Seq(
@@ -71,25 +73,30 @@ object Dependencies {
 
   val grpcNetty = "io.grpc" % "grpc-netty" % "1.62.2"
 
+  /**
+   * There is no bitcoin-s artifacts for scala3, 2.13 is used, but transitive makes conflicts with scodec.
+   * scodec-bits_3 was excluded in all projects
+   * https://github.com/bitcoin-s/bitcoin-s/issues/5672
+   */
   val btc: Seq[ModuleID] = Seq(
-    "org.bitcoin-s" %% "bitcoin-s-core"         % btcVersion,
-    "org.bitcoin-s" %% "bitcoin-s-zmq"          % btcVersionZmq,
-    "org.bitcoin-s" %% "bitcoin-s-bitcoind-rpc" % btcVersion
+    "org.bitcoin-s" %% "bitcoin-s-core"         % btcVersion cross CrossVersion.for3Use2_13,
+    "org.bitcoin-s" %% "bitcoin-s-zmq"          % btcVersionZmq cross CrossVersion.for3Use2_13,
+    "org.bitcoin-s" %% "bitcoin-s-bitcoind-rpc" % btcVersion cross CrossVersion.for3Use2_13
   )
+
+  val scodec3ExlusionRule = ExclusionRule("org.scodec", "scodec-bits_3")
 
   object Crypto {
 
     lazy val sources: Seq[ModuleID] =
       Seq("org.bouncycastle" % "bcprov-jdk18on" % "1.77") ++
       circe ++
-      newType ++
-      cats ++
-      simulacrum
+      cats
 
-    lazy val tests: Seq[ModuleID] =
+    def tests(v: Option[(Long, Long)]): Seq[ModuleID] =
       (
-        scalatest ++
-          scalamock ++
+        scalatest(v) ++
+          scalamock(v) ++
           scalacheck
       )
         .map(_ % Test)
@@ -99,10 +106,10 @@ object Dependencies {
 
     lazy val sources: Seq[ModuleID] = Dependencies.protobufSpecs ++ btc :+ grpcNetty
 
-    lazy val tests: Seq[ModuleID] =
+    def tests(v: Option[(Long, Long)]): Seq[ModuleID] =
       (
         mUnitTest ++
-          scalamock
+          scalamock(v)
       ).map(_ % Test)
   }
 

@@ -5,7 +5,7 @@ import org.plasmalabs.crypto.utils.{Generators, Hex, TestVector}
 import io.circe.{Decoder, DecodingFailure, HCursor}
 import io.circe.generic.semiauto.deriveDecoder
 import org.scalacheck.Gen
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers._
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.{ScalaCheckDrivenPropertyChecks, ScalaCheckPropertyChecks}
 import org.scalatest.EitherValues
@@ -97,7 +97,7 @@ object EntropyTestVectorHelper {
       SpecInputs(str, size)
     }
 
-  implicit val outputsDecoder: Decoder[SpecOutputs] = (c: HCursor) => entropyDecoder(c).map(SpecOutputs)
+  implicit val outputsDecoder: Decoder[SpecOutputs] = (c: HCursor) => entropyDecoder(c).map(SpecOutputs.apply)
 
   implicit val testVectorDecoder: Decoder[MnemonicToEntropyTestVector] = deriveDecoder[MnemonicToEntropyTestVector]
   val testVectors: List[MnemonicToEntropyTestVector] = TestVector.read("generation/MnemonicToEntropy.json")

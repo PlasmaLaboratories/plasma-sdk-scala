@@ -1,8 +1,6 @@
 package org.plasmalabs.crypto.generation.mnemonic
 
 import cats.implicits._
-import io.estatico.newtype.macros.newtype
-import io.estatico.newtype.ops._
 
 import java.nio.charset.StandardCharsets
 import scala.language.implicitConversions
@@ -56,8 +54,7 @@ object Language {
    *
    * @param value the valid words for creating phrases
    */
-  @newtype
-  class LanguageWordList(val value: IndexedSeq[String])
+  case class LanguageWordList(val value: IndexedSeq[String])
 
   object LanguageWordList {
 
@@ -98,10 +95,10 @@ object Language {
       Try(
         scala.io.Source.fromResource(s"${language.wordlistDirectory}/${language.filePath}").getLines().toIndexedSeq
       ).toEither
-        .leftMap(FileReadFailure)
+        .leftMap(FileReadFailure.apply)
         .flatMap(words =>
           validateChecksum(words, language.hash)
-            .map(_.coerce)
+            .map(LanguageWordList(_))
         )
   }
 }

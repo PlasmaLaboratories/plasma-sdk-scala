@@ -2,8 +2,9 @@ package org.plasmalabs.crypto
 
 import org.scalatest.propspec.AnyPropSpec
 import org.plasmalabs.crypto.utils.Hex
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
-import generation.Pbkdf2Sha512
+import org.plasmalabs.crypto.generation.Pbkdf2Sha512
+import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers._
 
 class Pbkdf2Sha512Spec extends AnyPropSpec {
 

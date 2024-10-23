@@ -20,7 +20,7 @@ class MerkleTreeSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks wit
   private val leafSize = 32
 
   property("Proof generation by element") {
-    forAll(Gen.choose(1, 15)) { N: Int =>
+    forAll(Gen.choose(1, 15)) { (N: Int) =>
       val d = (0 until N).map(_ => LeafData(randomBytes(leafSize)))
       val leafs = d.map(data => Leaf[HashScheme, HashDigest](data))
       val tree = MerkleTree[HashScheme, HashDigest](d)
@@ -34,7 +34,7 @@ class MerkleTreeSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks wit
   }
 
   property("Proof generation by index") {
-    forAll(Gen.choose(1, 15)) { N: Int =>
+    forAll(Gen.choose(1, 15)) { (N: Int) =>
       val d = (0 until N).map(_ => LeafData(randomBytes(leafSize)))
       val tree = MerkleTree[HashScheme, HashDigest](d)
 
@@ -60,7 +60,7 @@ class MerkleTreeSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks wit
   }
 
   property("Tree creation from 1 element") {
-    forAll { d: Array[Byte] =>
+    forAll { (d: Array[Byte]) =>
       whenever(d.length > 0) {
         val tree = MerkleTree.apply[HashScheme, HashDigest](Seq(LeafData(d)))
 
@@ -76,7 +76,7 @@ class MerkleTreeSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks wit
   }
 
   property("Tree creation from 5 elements") {
-    forAll { d: Array[Byte] =>
+    forAll { (d: Array[Byte]) =>
       whenever(d.length > 0) {
         val leafs: Seq[LeafData] = (0 until 5).map(_ => LeafData(d))
         val tree = MerkleTree[HashScheme, HashDigest](leafs)
@@ -95,17 +95,19 @@ class MerkleTreeSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks wit
   property("Tree creation from 2 element") {
     forAll { (d1: Array[Byte], d2: Array[Byte]) =>
       val tree = MerkleTree.apply[HashScheme, HashDigest](Seq(LeafData(d1), LeafData(d2)))
-      tree.rootHash shouldEqual hf
-        .hash(
-          MerkleTree.InternalNodePrefix,
-          bytesOf(hf.hash(MerkleTree.LeafPrefix, d1)),
-          bytesOf(hf.hash(MerkleTree.LeafPrefix, d2))
-        )
+      bytesOf(tree.rootHash) shouldEqual bytesOf(
+        hf
+          .hash(
+            MerkleTree.InternalNodePrefix,
+            bytesOf(hf.hash(MerkleTree.LeafPrefix, d1)),
+            bytesOf(hf.hash(MerkleTree.LeafPrefix, d2))
+          )
+      )
     }
   }
 
   property("Tree creation from a lot of elements") {
-    forAll { d: Seq[Array[Byte]] =>
+    forAll { (d: Seq[Array[Byte]]) =>
       whenever(d.nonEmpty) {
         val tree = MerkleTree.apply[HashScheme, HashDigest](d.map(a => LeafData(a)))
         tree.rootHash

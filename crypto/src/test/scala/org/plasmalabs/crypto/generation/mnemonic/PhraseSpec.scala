@@ -1,7 +1,7 @@
 package org.plasmalabs.crypto.generation.mnemonic
 
 import org.plasmalabs.crypto.utils.Generators
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers._
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.{ScalaCheckDrivenPropertyChecks, ScalaCheckPropertyChecks}
 import org.plasmalabs.crypto.generation.mnemonic.{Entropy, Language, MnemonicSizes, Phrase}

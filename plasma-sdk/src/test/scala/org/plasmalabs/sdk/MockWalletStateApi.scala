@@ -54,8 +54,7 @@ object MockWalletStateApi extends WalletStateAlgebra[IO] with MockHelpers {
     fellowship: String,
     contract:   String,
     someState:  Option[Int]
-  ): F[Option[Indices]] =
-    ???
+  ): F[Option[Indices]] = ???
 
   override def validateCurrentIndicesForFunds(
     fellowship: String,

@@ -21,7 +21,7 @@ trait HashSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks with Matc
   ): Unit = {
 
     property(s"$hashName returns hash with expected size") {
-      forAll { data: Array[Byte] =>
+      forAll { (data: Array[Byte]) =>
         Digest[D].bytes(hash.hash(data)).length shouldBe Digest[D].size
       }
     }

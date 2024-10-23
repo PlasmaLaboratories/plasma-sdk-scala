@@ -39,7 +39,7 @@ object Entropy {
   ): Either[EntropyFailure, IndexedSeq[String]] =
     for {
       size   <- sizeFromEntropyLength(entropy.value.length.toInt)
-      phrase <- Phrase.fromEntropy(entropy, size, language).leftMap(EntropyFailures.PhraseToEntropyFailure)
+      phrase <- Phrase.fromEntropy(entropy, size, language).leftMap(EntropyFailures.PhraseToEntropyFailure.apply)
     } yield phrase.value
 
   /**
@@ -56,7 +56,7 @@ object Entropy {
     Phrase
       .validated(mnemonic, language)
       .map(Entropy.unsafeFromPhrase)
-      .leftMap(EntropyFailures.PhraseToEntropyFailure)
+      .leftMap(EntropyFailures.PhraseToEntropyFailure.apply)
 
   /**
    * Instantiates a 128-bit `Entropy` (12 word) value from a given `UUID`.

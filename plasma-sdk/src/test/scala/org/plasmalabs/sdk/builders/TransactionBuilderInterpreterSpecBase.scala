@@ -144,7 +144,7 @@ trait TransactionBuilderInterpreterSpecBase extends munit.FunSuite with MockHelp
   val trivialByte32: ByteString = ByteString.copyFrom(Array.fill(32)(0: Byte))
 
   private val trivialSignatureKesSum =
-    SignatureKesSum(trivialByte32, trivialByte32 concat trivialByte32, Seq(trivialByte32))
+    SignatureKesSum(trivialByte32, trivialByte32.concat(trivialByte32), Seq(trivialByte32))
 
   private val trivialSignatureKesProduct =
     SignatureKesProduct(trivialSignatureKesSum, trivialSignatureKesSum, trivialByte32)

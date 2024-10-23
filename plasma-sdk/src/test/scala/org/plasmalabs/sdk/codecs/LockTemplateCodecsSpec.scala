@@ -12,7 +12,6 @@ class LockTemplateCodecsSpec extends munit.FunSuite with PropositionTemplateCode
     // Decode test
     val testPropositionRes = decodeLockTemplate[Id](expectedJson)
     assert(testPropositionRes.isRight)
-    assert(testPropositionRes.toOption.get.isInstanceOf[TemplateType])
     val templateInstance = testPropositionRes.toOption.get.asInstanceOf[TemplateType]
     assertEquals(templateInstance, expectedValue)
 
@@ -29,7 +28,6 @@ class LockTemplateCodecsSpec extends munit.FunSuite with PropositionTemplateCode
     // Encode then Decode test
     val decodedFromEncoded = decodeLockTemplate[Id](testJson)
     assert(decodedFromEncoded.isRight)
-    assert(decodedFromEncoded.toOption.get.isInstanceOf[TemplateType])
     val templateInstanceFromEncoded = testPropositionRes.toOption.get.asInstanceOf[TemplateType]
     assertEquals(templateInstanceFromEncoded, expectedValue)
   }
