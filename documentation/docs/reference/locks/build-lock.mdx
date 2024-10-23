@@ -33,13 +33,13 @@ can build an instance of the 1-of-1 Signature Lock by providing the verification
 
 ```scala
 import cats.effect.IO
-import xyz.stratalab.sdk.builders.BuilderError
-import xyz.stratalab.sdk.builders.locks.{LockTemplate, PropositionTemplate}
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.SignatureTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
-import xyz.stratalab.sdk.models.box.Lock
-import xyz.stratalab.sdk.syntax.cryptoToPbKeyPair
-import xyz.stratalab.crypto.signing.ExtendedEd25519
+import org.plasmalabs.sdk.builders.BuilderError
+import org.plasmalabs.sdk.builders.locks.{LockTemplate, PropositionTemplate}
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.SignatureTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.models.box.Lock
+import org.plasmalabs.sdk.syntax.cryptoToPbKeyPair
+import org.plasmalabs.crypto.signing.ExtendedEd25519
 import quivr.models.KeyPair
 
 

@@ -61,15 +61,15 @@ The following example shows how to build a transaction to mint 1 group construct
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.builders.locks.LockTemplate
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.HeightTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
-import xyz.stratalab.sdk.codecs.AddressCodecs.decodeAddress
-import xyz.stratalab.sdk.syntax.{LvlType, valueToTypeIdentifierSyntaxOps}
-import xyz.stratalab.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
-import xyz.stratalab.sdk.models.Event.GroupPolicy
+import org.plasmalabs.sdk.builders.locks.LockTemplate
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.HeightTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.codecs.AddressCodecs.decodeAddress
+import org.plasmalabs.sdk.syntax.{LvlType, valueToTypeIdentifierSyntaxOps}
+import org.plasmalabs.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.models.Event.GroupPolicy
 
 // Mock address. Replace with recipient address.
 val toAddr = decodeAddress("ptetP7jshHTuV9bmPmtVLm6PtUzBMZ8iYRvAxvbGTJ5VgiEPHqCCnZ8MLLdi").toOption.get
@@ -137,15 +137,15 @@ The following example shows how to build a transaction to mint 1 series construc
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.builders.locks.LockTemplate
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.HeightTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
-import xyz.stratalab.sdk.codecs.AddressCodecs.decodeAddress
-import xyz.stratalab.sdk.syntax.{LvlType, valueToTypeIdentifierSyntaxOps}
-import xyz.stratalab.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
-import xyz.stratalab.sdk.models.Event.SeriesPolicy
+import org.plasmalabs.sdk.builders.locks.LockTemplate
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.HeightTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.codecs.AddressCodecs.decodeAddress
+import org.plasmalabs.sdk.syntax.{LvlType, valueToTypeIdentifierSyntaxOps}
+import org.plasmalabs.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.models.Event.SeriesPolicy
 
 // Mock address. Replace with recipient address.
 val toAddr = decodeAddress("ptetP7jshHTuV9bmPmtVLm6PtUzBMZ8iYRvAxvbGTJ5VgiEPHqCCnZ8MLLdi").toOption.get
@@ -226,18 +226,18 @@ is much shorter thus we were able to only wait 1 second in the example.
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.builders.locks.LockTemplate
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.HeightTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
-import xyz.stratalab.sdk.syntax.{GroupType, LvlType, SeriesType, cryptoToPbKeyPair, groupPolicyAsGroupPolicySyntaxOps, longAsInt128, seriesPolicyAsSeriesPolicySyntaxOps, valueToTypeIdentifierSyntaxOps}
-import xyz.stratalab.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
-import xyz.stratalab.sdk.models.Event.{GroupPolicy, SeriesPolicy}
-import xyz.stratalab.sdk.models.box.AssetMintingStatement
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.wallet.{CredentiallerInterpreter, WalletApi}
-import xyz.stratalab.crypto.signing.ExtendedEd25519
+import org.plasmalabs.sdk.builders.locks.LockTemplate
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.HeightTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.syntax.{GroupType, LvlType, SeriesType, cryptoToPbKeyPair, groupPolicyAsGroupPolicySyntaxOps, longAsInt128, seriesPolicyAsSeriesPolicySyntaxOps, valueToTypeIdentifierSyntaxOps}
+import org.plasmalabs.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.models.Event.{GroupPolicy, SeriesPolicy}
+import org.plasmalabs.sdk.models.box.AssetMintingStatement
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
+import org.plasmalabs.crypto.signing.ExtendedEd25519
 
 // Replace with the address and port of your node's gRPC endpoint
 val channelResource = RpcChannelResource.channelResource[IO]("localhost", 9084, secureConnection = false)

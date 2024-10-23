@@ -19,8 +19,8 @@ initialize an instance as follows:
 
 ```scala
 import cats.effect.IO
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.wallet.WalletApi
 
 import java.io.File
 
@@ -71,8 +71,8 @@ the <ScaladocLink path="co/topl/brambl/servicekit/index.html"><code>ServiceKit</
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.wallet.WalletApi
 
 import java.io.File
 
@@ -136,13 +136,13 @@ assume that the wallet state has already been initialized to `wallet.db`.
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import cats.implicits.toTraverseOps
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
-import xyz.stratalab.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.models.Indices
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.utils.Encoding
-import xyz.stratalab.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.models.Indices
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.utils.Encoding
+import org.plasmalabs.sdk.wallet.WalletApi
 import quivr.models.VerificationKey
 
 import java.io.File
@@ -200,9 +200,9 @@ assume that the wallet state has already been initialized to `wallet.db`.
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.crypto.hash.Blake2b256
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.crypto.hash.Blake2b256
 import com.google.protobuf.ByteString
 import quivr.models.{Digest, Preimage, Proposition}
 

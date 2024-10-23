@@ -19,13 +19,13 @@ The first step is to create a vault. The vault is where the master key is stored
 //> using dep "org.typelevel::cats-core:2.10.0"
 
 import cats.effect.IO
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
 import co.topl.brambl.constants.NetworkConstants
 
 import cats.effect.std
 import io.circe.syntax._
-import xyz.stratalab.crypto.encryption.VaultStore.Codecs._
+import org.plasmalabs.crypto.encryption.VaultStore.Codecs._
 import cats.effect.unsafe.implicits.global
 
 import java.io.File
@@ -100,19 +100,19 @@ Users must update the wallet state whenever one of their child keys is used to c
 //> using dep "org.typelevel::cats-core:2.10.0"
 
 import cats.effect.IO
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
 import co.topl.brambl.constants.NetworkConstants
 import cats.effect.std
 import io.circe.syntax._
-import xyz.stratalab.crypto.encryption.VaultStore.Codecs._
+import org.plasmalabs.crypto.encryption.VaultStore.Codecs._
 import cats.effect.unsafe.implicits.global
 import cats.implicits.toTraverseOps
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
-import xyz.stratalab.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.models.Indices
-import xyz.stratalab.sdk.utils.Encoding
+import org.plasmalabs.sdk.models.Indices
+import org.plasmalabs.sdk.utils.Encoding
 import quivr.models.VerificationKey
 
 import java.io.File

@@ -24,14 +24,14 @@ Senders wallet should look something like:
 import cats.arrow.FunctionK
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.Context
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.Context
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
-import xyz.stratalab.sdk.models.{Datum, Event}
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.syntax.{LvlType, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps, int128AsBigInt}
-import xyz.stratalab.sdk.wallet.{CredentiallerInterpreter, WalletApi}
+import org.plasmalabs.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.models.{Datum, Event}
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.syntax.{LvlType, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps, int128AsBigInt}
+import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
 
 import java.io.File
 import java.nio.file.Paths
@@ -217,17 +217,17 @@ Your code should look something like this:
 import cats.arrow.FunctionK
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.Context
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
-import xyz.stratalab.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
+import org.plasmalabs.sdk.Context
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
-import xyz.stratalab.sdk.models.Event.GroupPolicy
-import xyz.stratalab.sdk.models.Indices
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.syntax.{int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
-import xyz.stratalab.sdk.utils.Encoding
-import xyz.stratalab.sdk.wallet.{CredentiallerInterpreter, WalletApi}
+import org.plasmalabs.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.models.Event.GroupPolicy
+import org.plasmalabs.sdk.models.Indices
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.syntax.{int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
+import org.plasmalabs.sdk.utils.Encoding
+import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
 import quivr.models.VerificationKey
 
 import java.nio.file.Paths
@@ -395,17 +395,17 @@ Your code should look something like this:
 import cats.arrow.FunctionK
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.Context
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
-import xyz.stratalab.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
+import org.plasmalabs.sdk.Context
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
-import xyz.stratalab.sdk.models.Event.SeriesPolicy
-import xyz.stratalab.sdk.models.Indices
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.syntax.{LvlType, int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
-import xyz.stratalab.sdk.utils.Encoding
-import xyz.stratalab.sdk.wallet.{CredentiallerInterpreter, WalletApi}
+import org.plasmalabs.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.models.Event.SeriesPolicy
+import org.plasmalabs.sdk.models.Indices
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.syntax.{LvlType, int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
+import org.plasmalabs.sdk.utils.Encoding
+import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
 import quivr.models.VerificationKey
 
 import java.nio.file.Paths
@@ -586,17 +586,17 @@ At this point, your code should look something like this:
 import cats.arrow.FunctionK
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.Context
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
-import xyz.stratalab.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
+import org.plasmalabs.sdk.Context
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
-import xyz.stratalab.sdk.models.Indices
-import xyz.stratalab.sdk.models.box.AssetMintingStatement
-import xyz.stratalab.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
-import xyz.stratalab.sdk.syntax.{bigIntAsInt128, int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
-import xyz.stratalab.sdk.utils.Encoding
-import xyz.stratalab.sdk.wallet.{CredentiallerInterpreter, WalletApi}
+import org.plasmalabs.sdk.dataApi.{BifrostQueryAlgebra, GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.models.Indices
+import org.plasmalabs.sdk.models.box.AssetMintingStatement
+import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateResource}
+import org.plasmalabs.sdk.syntax.{bigIntAsInt128, int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
+import org.plasmalabs.sdk.utils.Encoding
+import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
 import quivr.models.VerificationKey
 
 import java.nio.file.Paths

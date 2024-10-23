@@ -51,8 +51,8 @@ The following example shows how to create a new wallet using the default of no p
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.WalletKeyApi
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.WalletKeyApi
 
 val walletApi = WalletApi.make[IO](WalletKeyApi.make())
 // highlight-next-line
@@ -116,8 +116,8 @@ of the `WalletKeyApi` uses the local filesystem to persist the wallet and mnemon
 import cats.arrow.FunctionK
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.WalletKeyApi
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.WalletKeyApi
 
 import java.io.File
 

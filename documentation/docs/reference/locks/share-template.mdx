@@ -57,10 +57,10 @@ and decode to-and-from JSON.
 
 ```scala
 import cats.effect.IO
-import xyz.stratalab.sdk.builders.locks.{LockTemplate, PropositionTemplate}
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.SignatureTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
-import xyz.stratalab.sdk.codecs.LockTemplateCodecs.{decodeLockTemplate, encodeLockTemplate}
+import org.plasmalabs.sdk.builders.locks.{LockTemplate, PropositionTemplate}
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.SignatureTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.codecs.LockTemplateCodecs.{decodeLockTemplate, encodeLockTemplate}
 import io.circe.{DecodingFailure, Json}
 
 

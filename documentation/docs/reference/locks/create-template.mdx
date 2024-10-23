@@ -39,9 +39,9 @@ The following example shows how to create a Template for a 1-of-1 Signature Lock
 
 ```scala
 import cats.effect.IO
-import xyz.stratalab.sdk.builders.locks.{LockTemplate, PropositionTemplate}
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.SignatureTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.builders.locks.{LockTemplate, PropositionTemplate}
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.SignatureTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
 
 
 val signatureTemplate: PropositionTemplate[IO] = SignatureTemplate[IO]("ExtendedEd25519", 0)

@@ -27,8 +27,8 @@ the Wallet Api as follows:
 
 ```scala
 import cats.effect.IO
-import xyz.stratalab.sdk.servicekit.WalletKeyApi
-import xyz.stratalab.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.WalletKeyApi
+import org.plasmalabs.sdk.wallet.WalletApi
 
 val walletApi = WalletApi.make[IO](WalletKeyApi.make())
 ```

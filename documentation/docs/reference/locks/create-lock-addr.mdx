@@ -31,15 +31,15 @@ successfully we can generate the LockAddress using the Transaction Builder.
 
 ```scala
 import cats.effect.IO
-import xyz.stratalab.sdk.builders.{BuilderError, TransactionBuilderApi}
-import xyz.stratalab.sdk.builders.locks.{LockTemplate, PropositionTemplate}
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.SignatureTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.builders.{BuilderError, TransactionBuilderApi}
+import org.plasmalabs.sdk.builders.locks.{LockTemplate, PropositionTemplate}
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.SignatureTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, MAIN_NETWORK_ID}
-import xyz.stratalab.sdk.models.LockAddress
-import xyz.stratalab.sdk.models.box.Lock
-import xyz.stratalab.sdk.syntax.cryptoToPbKeyPair
-import xyz.stratalab.crypto.signing.ExtendedEd25519
+import org.plasmalabs.sdk.models.LockAddress
+import org.plasmalabs.sdk.models.box.Lock
+import org.plasmalabs.sdk.syntax.cryptoToPbKeyPair
+import org.plasmalabs.crypto.signing.ExtendedEd25519
 import quivr.models.KeyPair
 
 

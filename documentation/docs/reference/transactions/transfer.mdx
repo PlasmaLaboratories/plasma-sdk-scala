@@ -68,14 +68,14 @@ The following example shows how to build a transaction to transfer 1 LVL from a 
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.builders.locks.LockTemplate
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.HeightTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
-import xyz.stratalab.sdk.codecs.AddressCodecs.decodeAddress
-import xyz.stratalab.sdk.syntax.LvlType
-import xyz.stratalab.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.builders.locks.LockTemplate
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.HeightTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.codecs.AddressCodecs.decodeAddress
+import org.plasmalabs.sdk.syntax.LvlType
+import org.plasmalabs.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
 
 // Mock address. Replace with recipient address.
 val toAddr = decodeAddress("ptetP7jshHTuV9bmPmtVLm6PtUzBMZ8iYRvAxvbGTJ5VgiEPHqCCnZ8MLLdi").toOption.get
@@ -141,13 +141,13 @@ The following example shows how to build a transaction to transfer all known tok
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.builders.TransactionBuilderApi
+import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
-import xyz.stratalab.sdk.builders.locks.LockTemplate
-import xyz.stratalab.sdk.builders.locks.PropositionTemplate.HeightTemplate
-import xyz.stratalab.sdk.builders.locks.LockTemplate.PredicateTemplate
-import xyz.stratalab.sdk.codecs.AddressCodecs.decodeAddress
-import xyz.stratalab.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
+import org.plasmalabs.sdk.builders.locks.LockTemplate
+import org.plasmalabs.sdk.builders.locks.PropositionTemplate.HeightTemplate
+import org.plasmalabs.sdk.builders.locks.LockTemplate.PredicateTemplate
+import org.plasmalabs.sdk.codecs.AddressCodecs.decodeAddress
+import org.plasmalabs.sdk.dataApi.{GenusQueryAlgebra, RpcChannelResource}
 
 // Mock address. Replace with recipient address.
 val toAddr = decodeAddress("ptetP7jshHTuV9bmPmtVLm6PtUzBMZ8iYRvAxvbGTJ5VgiEPHqCCnZ8MLLdi").toOption.get

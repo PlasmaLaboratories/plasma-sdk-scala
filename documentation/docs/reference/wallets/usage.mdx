@@ -20,8 +20,8 @@ the <ScaladocLink path="co/topl/brambl/servicekit/index.html"><code>ServiceKit</
 
 ```scala
 import cats.effect.IO
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.WalletKeyApi
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.WalletKeyApi
 
 val password = "password".getBytes
 val walletApi = WalletApi.make[IO](WalletKeyApi.make())
@@ -65,8 +65,8 @@ The following example shows how to extract the main key pair after initializing 
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.WalletKeyApi
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.WalletKeyApi
 
 val password = "password".getBytes
 val walletApi = WalletApi.make[IO](WalletKeyApi.make())
@@ -128,8 +128,8 @@ of the `WalletKeyApi` uses the local filesystem to persist the wallet and mnemon
 import cats.arrow.FunctionK
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.WalletKeyApi
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.WalletKeyApi
 
 import java.io.File
 
@@ -186,9 +186,9 @@ The following example shows how to derive 2 different child key pairs from the m
 ```scala
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.models.Indices
-import xyz.stratalab.sdk.wallet.WalletApi
-import xyz.stratalab.sdk.servicekit.WalletKeyApi
+import org.plasmalabs.sdk.models.Indices
+import org.plasmalabs.sdk.wallet.WalletApi
+import org.plasmalabs.sdk.servicekit.WalletKeyApi
 
 val password = "password".getBytes
 val walletApi = WalletApi.make[IO](WalletKeyApi.make())

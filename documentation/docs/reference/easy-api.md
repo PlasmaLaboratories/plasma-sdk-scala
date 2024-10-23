@@ -83,13 +83,13 @@ with 100Lvls from the faucet account (`GenesisAccount`). Finally, it prints the 
 For the code to work, you need to have a local instance of the node running.
 
 ```scala
-package xyz.stratalab.strata.servicekit
+package org.plasmalabs.sdk.servicekit
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import xyz.stratalab.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
-import xyz.stratalab.sdk.syntax.LvlType
-import xyz.stratalab.strata.servicekit.EasyApi.{DefaultAccount, GenesisAccount, InitArgs}
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
+import org.plasmalabs.sdk.syntax.LvlType
+import org.plasmalabs.sdk.servicekit.EasyApi.{DefaultAccount, GenesisAccount, InitArgs}
 
 import scala.concurrent.duration.DurationInt
 

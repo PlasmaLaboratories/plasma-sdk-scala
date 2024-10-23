@@ -3,8 +3,8 @@ val scala33 = "3.4.1"
 
 inThisBuild(
   List(
-    organization := "xyz.stratalab",
-    homepage := Some(url("https://github.com/Stratalab/strata-sdk-scala")),
+    organization := "org.plasmalabs",
+    homepage := Some(url("https://github.com/PlasmaLaboratories/plasma-sdk-scala")),
     licenses := Seq("MPL2.0" -> url("https://www.mozilla.org/en-US/MPL/2.0/")),
     scalaVersion := scala213,
     testFrameworks += TestFrameworks.MUnit
@@ -68,7 +68,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val publishSettings = Seq(
-  homepage := Some(url("https://github.com/Stratalab/strata-sdk-scala")),
+  homepage := Some(url("https://github.com/PlasmaLaboratories/plasma-sdk-scala")),
   ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
   Test / publishArtifact := false,
@@ -139,18 +139,18 @@ lazy val quivr4s = project
   )
   .dependsOn(crypto)
 
-lazy val strataSdk = project
-  .in(file("strata-sdk"))
+lazy val plasmaSdk = project
+  .in(file("plasma-sdk"))
   .settings(
-    name := "strata-sdk",
+    name := "plasma-sdk",
     commonSettings,
     publishSettings,
     crossScalaVersions := Seq(scala213, scala33),
     Test / publishArtifact := true,
     Test / parallelExecution := false,
     libraryDependencies ++=
-      Dependencies.StrataSdk.sources ++
-      Dependencies.StrataSdk.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
+      Dependencies.PlasmaSdk.sources ++
+      Dependencies.PlasmaSdk.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
     excludeDependencies += Dependencies.scodec3ExlusionRule
   )
   .dependsOn(quivr4s % "compile->compile;test->test")
@@ -169,7 +169,7 @@ lazy val serviceKit = project
       Dependencies.ServiceKit.tests,
     excludeDependencies += Dependencies.scodec3ExlusionRule
   )
-  .dependsOn(strataSdk)
+  .dependsOn(plasmaSdk)
 
 lazy val integration = project
   .in(file("integration"))
@@ -179,14 +179,14 @@ lazy val integration = project
     libraryDependencies ++= Dependencies.IntegrationTests.sources ++ Dependencies.IntegrationTests.tests,
     excludeDependencies += Dependencies.scodec3ExlusionRule,
   )
-  .dependsOn(strataSdk)
+  .dependsOn(plasmaSdk)
 
 val DocumentationRoot = file("documentation") / "static" / "scaladoc" / "current"
 
-lazy val strata = project
+lazy val plasma = project
   .in(file("."))
   .settings(
-    moduleName := "strata",
+    moduleName := "plasma",
     commonSettings,
     // crossScalaVersions must be set to Nil on the aggregating project
     crossScalaVersions := Nil,
@@ -198,7 +198,7 @@ lazy val strata = project
   .enablePlugins(ReproducibleBuildsPlugin, ScalaUnidocPlugin)
   .aggregate(
     crypto,
-    strataSdk,
+    plasmaSdk,
     serviceKit,
     quivr4s
   )
