@@ -71,12 +71,6 @@ object Dependencies {
 
   val grpcNetty = "io.grpc" % "grpc-netty" % "1.62.2"
 
-  val btc: Seq[ModuleID] = Seq(
-    "org.bitcoin-s" %% "bitcoin-s-core"         % btcVersion,
-    "org.bitcoin-s" %% "bitcoin-s-zmq"          % btcVersionZmq,
-    "org.bitcoin-s" %% "bitcoin-s-bitcoind-rpc" % btcVersion
-  )
-
   object Crypto {
 
     lazy val sources: Seq[ModuleID] =
@@ -97,7 +91,7 @@ object Dependencies {
 
   object PlasmaSdk {
 
-    lazy val sources: Seq[ModuleID] = Dependencies.protobufSpecs ++ btc :+ grpcNetty
+    lazy val sources: Seq[ModuleID] = Dependencies.protobufSpecs :+ grpcNetty
 
     lazy val tests: Seq[ModuleID] =
       (
@@ -113,13 +107,6 @@ object Dependencies {
     lazy val tests: Seq[ModuleID] = (
       mUnitTest ++ sqlite
     ).map(_ % Test)
-  }
-
-  object IntegrationTests {
-
-    lazy val sources: Seq[ModuleID] =
-      Crypto.sources ++ PlasmaSdk.sources ++ ServiceKit.sources :+ fs2Io
-    lazy val tests: Seq[ModuleID] = (sources ++ mUnitTest).map(_ % Test)
   }
 
   object Quivr4s {

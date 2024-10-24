@@ -142,15 +142,6 @@ lazy val serviceKit = project
   )
   .dependsOn(plasmaSdk)
 
-lazy val integration = project
-  .in(file("integration"))
-  .settings(
-    name := "integration",
-    publish / skip := true,
-    libraryDependencies ++= Dependencies.IntegrationTests.sources ++ Dependencies.IntegrationTests.tests
-  )
-  .dependsOn(plasmaSdk)
-
 val DocumentationRoot = file("documentation") / "static" / "scaladoc" / "current"
 
 lazy val plasma = project
