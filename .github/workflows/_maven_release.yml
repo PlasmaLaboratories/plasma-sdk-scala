@@ -22,39 +22,39 @@ jobs:
         java: ${{fromJson(inputs.java-versions)}}
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: true
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: ${{ matrix.java }}
-          cache: sbt
-      - uses: sbt/setup-sbt@v1
-      - name: Publish artifacts to Maven Central
-        run: sbt ci-release
-        env:
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment (release)
-        id: deployment-release
-        # Tag pushes are considered releases
-        if: github.ref_type == 'tag'
-        with:
-          token: "${{ github.token }}"
-          initial-status: success
-          environment: release
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment (snapshot)
-        id: deployment-snap
-        # Branch pushes are considered snapshots
-        if: github.ref_type == 'branch'
-        with:
-          token: "${{ github.token }}"
-          initial-status: success
-          environment: snapshot
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: true
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: ${{ matrix.java }}
+        cache: sbt
+    - uses: sbt/setup-sbt@v1
+    - name: Publish artifacts to Maven Central
+      run: sbt ci-release
+      env:
+        PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+        PGP_SECRET: ${{ secrets.PGP_SECRET }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+    - uses: chrnorm/deployment-action@v2
+      name: Create GitHub deployment (release)
+      id: deployment-release
+      # Tag pushes are considered releases
+      if: github.ref_type == 'tag'
+      with:
+        token: "${{ github.token }}"
+        initial-status: success
+        environment: release
+    - uses: chrnorm/deployment-action@v2
+      name: Create GitHub deployment (snapshot)
+      id: deployment-snap
+      # Branch pushes are considered snapshots
+      if: github.ref_type == 'branch'
+      with:
+        token: "${{ github.token }}"
+        initial-status: success
+        environment: snapshot
