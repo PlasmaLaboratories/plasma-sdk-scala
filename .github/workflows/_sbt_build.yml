@@ -4,17 +4,17 @@ on:
   workflow_call:
     inputs:
       target-os:
-        description: 'List of operating systems to build on.'
-        default: 'ubuntu-latest'
+        description: "List of operating systems to build on."
+        default: "ubuntu-latest"
         required: false
         type: string
       java-versions:
-        description: 'List of Java versions to target.'
-        default: '11'
+        description: "List of Java versions to target."
+        default: "11"
         required: false
         type: string
       preserve-cache-between-runs:
-        description: 'Preserve project cache between new runs.'
+        description: "Preserve project cache between new runs."
         default: false
         required: false
         type: boolean
@@ -29,22 +29,17 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Need full history to update last modified time.
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: ${{ matrix.java }}
-
-      - name: Setup SBT
-        run: |
-          mkdir -p $HOME/bin/sbt
-          set -eux && curl --fail --silent --location --retry 3 https://github.com/sbt/sbt/releases/download/v1.9.9/sbt-1.9.9.tgz | gunzip | tar x -C $HOME/bin/sbt
-          echo "$HOME/bin/sbt" >> $GITHUB_PATH
-
+          cache: sbt
+      - uses: sbt/setup-sbt@v1
       - name: Cache sbt
         uses: actions/cache@v3
         with:
@@ -111,4 +106,3 @@ jobs:
           find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
           find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
           find $HOME/.sbt                              -name "*.lock"               -delete || true
-          
