@@ -7,12 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: true
-      - uses: olafurpg/setup-scala@v14
-      - uses: olafurpg/setup-gpg@v3
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: sbt
+      - uses: sbt/setup-sbt@v1
       - name: Publish artifacts to Maven Central
         run: sbt ci-release
         env:
@@ -26,7 +30,7 @@ jobs:
         # Tag pushes are considered releases
         if: github.ref_type == 'tag'
         with:
-          token: '${{ github.token }}'
+          token: "${{ github.token }}"
           initial-status: success
           environment: release
       - uses: chrnorm/deployment-action@v2
@@ -35,6 +39,6 @@ jobs:
         # Branch pushes are considered snapshots
         if: github.ref_type == 'branch'
         with:
-          token: '${{ github.token }}'
+          token: "${{ github.token }}"
           initial-status: success
           environment: snapshot
