@@ -59,7 +59,6 @@ lazy val commonSettings = Seq(
         Nil
       case _ =>
         List(
-//          compilerPlugin("org.typelevel" % "kind-projector"     % "0.13.2" cross CrossVersion.full),
           compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
         )
     }
@@ -119,7 +118,6 @@ lazy val crypto = project
     libraryDependencies ++=
       Dependencies.Crypto.sources ++
       Dependencies.Crypto.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
-    excludeDependencies += Dependencies.scodec3ExlusionRule,
     macroAnnotationsSettings
   )
 
@@ -134,8 +132,7 @@ lazy val quivr4s = project
     Test / parallelExecution := false,
     libraryDependencies ++=
       Dependencies.Quivr4s.sources ++
-      Dependencies.Quivr4s.tests,
-    excludeDependencies += Dependencies.scodec3ExlusionRule
+        Dependencies.Quivr4s.tests
   )
   .dependsOn(crypto)
 
@@ -151,7 +148,6 @@ lazy val plasmaSdk = project
     libraryDependencies ++=
       Dependencies.PlasmaSdk.sources ++
       Dependencies.PlasmaSdk.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
-    excludeDependencies += Dependencies.scodec3ExlusionRule
   )
   .dependsOn(quivr4s % "compile->compile;test->test")
 
@@ -166,18 +162,7 @@ lazy val serviceKit = project
     Test / parallelExecution := false,
     libraryDependencies ++=
       Dependencies.ServiceKit.sources ++
-      Dependencies.ServiceKit.tests,
-    excludeDependencies += Dependencies.scodec3ExlusionRule
-  )
-  .dependsOn(plasmaSdk)
-
-lazy val integration = project
-  .in(file("integration"))
-  .settings(
-    name := "integration",
-    publish / skip := true,
-    libraryDependencies ++= Dependencies.IntegrationTests.sources ++ Dependencies.IntegrationTests.tests,
-    excludeDependencies += Dependencies.scodec3ExlusionRule,
+        Dependencies.ServiceKit.tests
   )
   .dependsOn(plasmaSdk)
 
