@@ -8,8 +8,6 @@ object Dependencies {
     val circeVersion = "0.14.6"
     val protobufSpecsVersion = "0.1.1"
     val mUnitTeVersion = "0.7.29"
-    val btcVersion = "1.9.9"
-    val btcVersionZmq = "1.9.8"
   }
 
   val catsSlf4j: ModuleID =
@@ -28,25 +26,14 @@ object Dependencies {
     "org.scalatestplus" %% "scalacheck-1-16" % "3.2.14.0"
   )
 
-  def scalamock(v: Option[(Long, Long)]): Seq[ModuleID] =
-    Seq(v match {
-      case Some((2, 13)) =>
-        "org.scalamock" %% "scalamock" % "5.2.0"
-      case _ =>
-        "eu.monniot" %% "scala3mock" % "0.1.1"
-    })
+  val scalamock: Seq[ModuleID] = Seq(
+    "org.scalamock" %% "scalamock" % "6.0.0"
+  )
 
-  def scalatest(v: Option[(Long, Long)]): Seq[ModuleID] =
-    Seq(
-      "org.scalatest" %% "scalatest" % "3.2.18",
-      v match {
-        case Some((2, 13)) =>
-          "com.ironcorelabs" %% "cats-scalatest" % "3.1.1"
-        case _ =>
-          "com.ironcorelabs" %% "cats-scalatest" % "4.0.0"
-      },
-      "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0"
-    )
+  val scalatest: Seq[ModuleID] = Seq(
+    "org.scalatest" %% "scalatest"                     % "3.2.18",
+    "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0"
+  )
 
   val mUnitTest: Seq[ModuleID] = Seq(
     "org.scalameta" %% "munit"                   % mUnitTeVersion,
@@ -79,10 +66,10 @@ object Dependencies {
       circe ++
       cats
 
-    def tests(v: Option[(Long, Long)]): Seq[ModuleID] =
+    lazy val tests: Seq[ModuleID] =
       (
-        scalatest(v) ++
-          scalamock(v) ++
+        scalatest ++
+          scalamock ++
           scalacheck
       )
         .map(_ % Test)
@@ -90,12 +77,12 @@ object Dependencies {
 
   object PlasmaSdk {
 
-    lazy val sources: Seq[ModuleID] = Dependencies.protobufSpecs :+ grpcNetty
+    lazy val sources: Seq[ModuleID] = protobufSpecs :+ grpcNetty
 
-    def tests(v: Option[(Long, Long)]): Seq[ModuleID] =
+    lazy val tests: Seq[ModuleID] =
       (
         mUnitTest ++
-          scalamock(v)
+          scalamock
       ).map(_ % Test)
   }
 
@@ -110,10 +97,8 @@ object Dependencies {
 
   object Quivr4s {
 
-    lazy val sources: Seq[ModuleID] = Dependencies.protobufSpecs
+    lazy val sources: Seq[ModuleID] = protobufSpecs
 
-    lazy val tests: Seq[ModuleID] = (
-      mUnitTest
-    ).map(_ % Test)
+    lazy val tests: Seq[ModuleID] = mUnitTest.map(_ % Test)
   }
 }

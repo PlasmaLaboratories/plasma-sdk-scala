@@ -1,6 +1,5 @@
 package org.plasmalabs.crypto.generation
 
-import cats.scalatest.EitherValues
 import org.plasmalabs.crypto.generation.mnemonic._
 import org.plasmalabs.crypto.utils.TestVector
 import io.circe.generic.semiauto.deriveDecoder
@@ -10,6 +9,7 @@ import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.plasmalabs.crypto.utils.Hex.implicits.Ops
 import org.plasmalabs.crypto.signing.{Ed25519, ExtendedEd25519}
+import org.scalatest.exceptions.{StackDepthException, TestFailedException}
 
 /**
  * test vectors adapted from multiple sources:
@@ -17,7 +17,7 @@ import org.plasmalabs.crypto.signing.{Ed25519, ExtendedEd25519}
  * https://github.com/input-output-hk/rust-cardano/blob/9fad3d12341acc2ab0f9c2026149af3d839447e4/cardano/src/bip/test_vectors/bip39_english.txt
  */
 
-class KeyInitializerSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks with Matchers with EitherValues {
+class KeyInitializerSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks with Matchers {
   import KeyInitializer.Instances._
   implicit val ed25519Instance: Ed25519 = new Ed25519
   implicit val extendedEd25519Instance: ExtendedEd25519 = new ExtendedEd25519
@@ -56,12 +56,26 @@ class KeyInitializerSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks
       s"Generate 96 byte seed from mnemonic: ${underTest.inputs.mnemonic} + password: ${underTest.inputs.password}"
     ) {
       val actualEd25519Sk = ed25519Initializer
-        .fromMnemonicString(underTest.inputs.mnemonic)(Language.English, underTest.inputs.password)
-        .value
+        .fromMnemonicString(underTest.inputs.mnemonic)(Language.English, underTest.inputs.password) match {
+        case Right(value) => value
+        case Left(value) =>
+          throw new TestFailedException(
+            (_: StackDepthException) => Some(s"'$value' is a Left, expected a Right."),
+            None,
+            _ => 0
+          )
+      }
 
       val actualExtended25519Sk = extendedEd25519Initializer
-        .fromMnemonicString(underTest.inputs.mnemonic)(Language.English, underTest.inputs.password)
-        .value
+        .fromMnemonicString(underTest.inputs.mnemonic)(Language.English, underTest.inputs.password) match {
+        case Right(value) => value
+        case Left(value) =>
+          throw new TestFailedException(
+            (_: StackDepthException) => Some(s"'$value' is a Left, expected a Right."),
+            None,
+            _ => 0
+          )
+      }
 
       actualEd25519Sk shouldBe underTest.outputs.ed25519
       actualExtended25519Sk shouldBe underTest.outputs.extendedEd25519

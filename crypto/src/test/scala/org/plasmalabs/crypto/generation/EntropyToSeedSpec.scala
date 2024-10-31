@@ -1,6 +1,5 @@
 package org.plasmalabs.crypto.generation
 
-import cats.scalatest.EitherValues
 import org.plasmalabs.crypto.generation.mnemonic.{Entropy, EntropyTestVectorHelper}
 import org.plasmalabs.crypto.utils.{Hex, TestVector}
 import io.circe.generic.semiauto.deriveDecoder
@@ -9,7 +8,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class EntropyToSeedSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks with Matchers with EitherValues {
+class EntropyToSeedSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks with Matchers {
 
   case class SpecInputs(entropy: Entropy, password: Option[String])
   case class SpecOutputs(seed96: Array[Byte])

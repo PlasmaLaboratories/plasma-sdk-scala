@@ -54,7 +54,7 @@ trait MockHelpers {
         }
       })
 
-      override val datums = mapOfDatums.get _
+      override val datums: String => Option[Datum] = mapOfDatums.get
 
       override val interfaces: Map[String, ParsableDataInterface] = mapOfInterfaces
 

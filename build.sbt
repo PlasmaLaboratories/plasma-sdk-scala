@@ -6,8 +6,7 @@ inThisBuild(
     organization := "org.plasmalabs",
     homepage := Some(url("https://github.com/PlasmaLaboratories/plasma-sdk-scala")),
     licenses := Seq("MPL2.0" -> url("https://www.mozilla.org/en-US/MPL/2.0/")),
-    scalaVersion := scala213,
-    testFrameworks += TestFrameworks.MUnit
+    scalaVersion := scala213
   )
 )
 
@@ -34,13 +33,6 @@ lazy val commonSettings = Seq(
     }
   },
   semanticdbEnabled := true, // enable SemanticDB for Scalafix
-  Compile / unmanagedSourceDirectories += {
-    val sourceDir = (Compile / sourceDirectory).value
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, n)) if n >= 13 => sourceDir / "scala-2.13+"
-      case _                       => sourceDir / "scala-2.12-"
-    }
-  },
   Test / testOptions ++= Seq(
     Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "2"),
     Tests.Argument(TestFrameworks.ScalaTest, "-f", "sbttest.log", "-oDGG", "-u", "target/test-reports")
@@ -62,8 +54,7 @@ lazy val commonSettings = Seq(
           compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
         )
     }
-  },
-  testFrameworks += TestFrameworks.MUnit
+  }
 )
 
 lazy val publishSettings = Seq(
@@ -117,7 +108,7 @@ lazy val crypto = project
     Test / publishArtifact := true,
     libraryDependencies ++=
       Dependencies.Crypto.sources ++
-      Dependencies.Crypto.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
+      Dependencies.Crypto.tests,
     macroAnnotationsSettings
   )
 
@@ -147,7 +138,7 @@ lazy val plasmaSdk = project
     Test / parallelExecution := false,
     libraryDependencies ++=
       Dependencies.PlasmaSdk.sources ++
-      Dependencies.PlasmaSdk.tests(CrossVersion.partialVersion(Keys.scalaVersion.value)),
+      Dependencies.PlasmaSdk.tests,
   )
   .dependsOn(quivr4s % "compile->compile;test->test")
 
