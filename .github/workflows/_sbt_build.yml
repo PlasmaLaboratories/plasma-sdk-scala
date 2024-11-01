@@ -39,6 +39,8 @@ jobs:
         java-version: ${{ matrix.java }}
         cache: sbt
     - uses: sbt/setup-sbt@v1
+      with:
+        sbt-runner-version: 1.9.9
     - name: Cache project
       uses: actions/cache@v3
       with:
@@ -50,44 +52,43 @@ jobs:
         restore-keys: ${{ inputs.preserve-cache-between-runs && format('{0}-project-{1}-', runner.os, github.base_ref) || format('{0}-project-{1}-{2}', runner.os, github.base_ref, github.run_number) }}
     - name: git-restore-mtime
       uses: chetan/git-restore-mtime-action@v1
-
-      - name: Compile and Test
-        run: sbt checkPR
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: unit-test-reports
-          path: |
-            **/target/test-reports/*.xml
-            !target/**
-          overwrite: true
-      - name: Aggregate Coverage Reports
-        run: sbt coverageAggregate
-      - name: Code Coverage Report Markdown
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: target/scala-2.13/coverage-report/cobertura.xml
-          badge: true
-          fail_below_min: false
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-      - uses: jwalton/gh-find-current-pr@v1
-        id: finder
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          recreate: true
-          path: code-coverage-results.md
-          number: ${{ steps.finder.outputs.pr }}
-      - name: Cleanup before cache
-        shell: bash
-        run: |
-          rm -rf "$HOME/.ivy2/local" || true
-          find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
-          find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
-          find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
-          find $HOME/.sbt                              -name "*.lock"               -delete || true
+    - name: Compile and Test
+      run: sbt checkPR
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: unit-test-reports
+        path: |
+          **/target/test-reports/*.xml
+          !target/**
+        overwrite: true
+    - name: Aggregate Coverage Reports
+      run: sbt coverageAggregate
+    - name: Code Coverage Report Markdown
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: target/scala-2.13/coverage-report/cobertura.xml
+        badge: true
+        fail_below_min: false
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+    - uses: jwalton/gh-find-current-pr@v1
+      id: finder
+    - name: Add Coverage PR Comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        recreate: true
+        path: code-coverage-results.md
+        number: ${{ steps.finder.outputs.pr }}
+    - name: Cleanup before cache
+      shell: bash
+      run: |
+        rm -rf "$HOME/.ivy2/local" || true
+        find $HOME/Library/Caches/Coursier/v1        -name "ivydata-*.properties" -delete || true
+        find $HOME/.ivy2/cache                       -name "ivydata-*.properties" -delete || true
+        find $HOME/.cache/coursier/v1                -name "ivydata-*.properties" -delete || true
+        find $HOME/.sbt                              -name "*.lock"               -delete || true
