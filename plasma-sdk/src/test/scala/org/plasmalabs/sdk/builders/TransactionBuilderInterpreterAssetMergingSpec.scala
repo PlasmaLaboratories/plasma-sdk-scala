@@ -96,10 +96,9 @@ class TransactionBuilderInterpreterAssetMergingSpec extends MergingSpecBase {
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 0)))
+              SmallData.defaultInstance
             )
+            .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 0)))
         )
       )
       .withInputs(buildStxos(valuesToTxos(groupValues ++ Seq(lvlValue, lvlValue, lvlValue))))
@@ -140,10 +139,9 @@ class TransactionBuilderInterpreterAssetMergingSpec extends MergingSpecBase {
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 1)))
+              SmallData.defaultInstance
             )
+            .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 1)))
         )
       )
       .withInputs(buildStxos(valuesToTxos(assetValues ++ Seq(lvlValue, lvlValue, lvlValue))))

@@ -166,7 +166,7 @@ trait EventGenerator {
         metadata <- Gen.const(
           org.plasmalabs.quivr.models.SmallData.of(ByteString.EMPTY)
         ) // TODO create Small Data generator: QuivrRepo, and Data Generator Policies
-      } yield Event.IoTransaction.of(schedule, metadata, Event.IoTransaction.Policies())
+      } yield Event.IoTransaction.of(schedule, metadata, Seq.empty, Seq.empty, Seq.empty, Seq.empty, Seq.empty)
     )
 
 }

@@ -67,8 +67,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatement_1)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
     val testTx =
       txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1, output_2, output_3), datum = datum)
 
@@ -120,8 +119,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val mintingStatement_1 =
       Seq(AssetMintingStatement(groupTokenUtxo = txoAddress_1, seriesTokenUtxo = txoAddress_2, quantity = 10))
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatement_1)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2),
@@ -194,8 +192,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -261,8 +258,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatement_1)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2, output_3),
@@ -331,8 +327,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatement_1)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2),
@@ -396,8 +391,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -499,8 +493,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -554,8 +547,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1, output_2), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -619,8 +611,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1, output_2), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -684,8 +675,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2),
@@ -790,8 +780,9 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       quantity = BigInt(1)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = List(mintingStatement_1, mintingStatement_2))
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event =
+      txFull.datum.event.copy(mintingStatements = List(mintingStatement_1, mintingStatement_2))
+    )
     val testTx = txFull.copy(
       inputs = List(input_abc, input_def, input_xyz, input_uvw),
       outputs = List(output_1, output_2, output_3, output_4, output_5),
@@ -895,8 +886,9 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       quantity = BigInt(1)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = List(mintingStatement_1, mintingStatement_2))
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event =
+      txFull.datum.event.copy(mintingStatements = List(mintingStatement_1, mintingStatement_2))
+    )
     val testTx = txFull.copy(
       inputs = List(input_abc, input_def, input_xyz, input_uvw),
       outputs = List(output_1, output_2, output_3, output_4, output_5),
@@ -1000,8 +992,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo2, seriesTokenUtxo = utxo4, quantity = BigInt(5))
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -1090,8 +1081,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo2, seriesTokenUtxo = utxo4, quantity = BigInt(10))
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -1153,8 +1143,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo_xyz, seriesTokenUtxo = utxo_abc, quantity = 1)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -1216,8 +1205,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo_xyz, seriesTokenUtxo = utxo_abc, quantity = 1)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()

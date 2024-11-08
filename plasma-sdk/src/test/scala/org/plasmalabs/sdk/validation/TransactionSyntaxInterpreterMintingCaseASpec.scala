@@ -42,8 +42,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val policies = txFull.datum.event.policies.copy(groupPolicies = Seq(groupPolicy))
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
 
     val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
@@ -84,8 +83,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val policies = txFull.datum.event.policies.copy(groupPolicies = Seq(groupPolicy))
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
     val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -128,8 +126,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val policies = txFull.datum.event.policies.copy(groupPolicies = Seq(groupPolicy))
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
     val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -174,8 +171,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val policies = txFull.datum.event.policies.copy(groupPolicies = Seq(groupPolicy))
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
     val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()

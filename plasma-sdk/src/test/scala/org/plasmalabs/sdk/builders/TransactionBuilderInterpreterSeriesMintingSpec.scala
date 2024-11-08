@@ -16,10 +16,9 @@ class TransactionBuilderInterpreterSeriesMintingSpec extends TransactionBuilderI
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withSeriesPolicies(Seq(mockSeriesPolicyAlt))
+              SmallData.defaultInstance
             )
+            .withSeriesPolicies(Seq(mockSeriesPolicyAlt))
         )
       )
       .withInputs(buildStxos(mockTxos :+ valToTxo(lvlValue, txAddr = mockSeriesPolicyAlt.registrationUtxo)))

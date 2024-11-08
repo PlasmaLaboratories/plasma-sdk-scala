@@ -100,8 +100,7 @@ trait MockHelpers {
     Event
       .IoTransaction(
         Schedule(0, Long.MaxValue, System.currentTimeMillis),
-        SmallData.defaultInstance,
-        Event.IoTransaction.Policies()
+        SmallData.defaultInstance
       )
   )
 

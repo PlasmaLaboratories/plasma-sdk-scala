@@ -343,14 +343,6 @@ object ContainsImmutable {
     implicit val headerEventImmutable: ContainsImmutable[Event.Header] =
       event => event.height.immutable
 
-    implicit val iotxPoliciesImmutable: ContainsImmutable[Event.IoTransaction.Policies] =
-      p =>
-        p.groupPolicies.immutable ++
-        p.seriesPolicies.immutable ++
-        p.mintingStatements.immutable ++
-        p.mergingStatements.immutable ++
-        p.splittingStatements.immutable
-
     implicit val iotxEventImmutable: ContainsImmutable[Event.IoTransaction] =
       event =>
         event.schedule.immutable ++

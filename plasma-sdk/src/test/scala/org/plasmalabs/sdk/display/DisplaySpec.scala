@@ -28,13 +28,12 @@ class DisplaySpec extends munit.FunSuite with MockHelpers {
             Event
               .IoTransaction(
                 Schedule(0, Long.MaxValue, System.currentTimeMillis),
-                SmallData(ByteString.copyFrom("metadata".getBytes)),
-                policies = Event.IoTransaction.Policies.defaultInstance
-                  .withGroupPolicies(Seq(mockGroupPolicy))
-                  .withSeriesPolicies(Seq(mockSeriesPolicy))
-                  .withMintingStatements(
-                    Seq(AssetMintingStatement(mockGroupPolicy.registrationUtxo, mockSeriesPolicy.registrationUtxo, 1))
-                  )
+                SmallData(ByteString.copyFrom("metadata".getBytes))
+              )
+              .withGroupPolicies(Seq(mockGroupPolicy))
+              .withSeriesPolicies(Seq(mockSeriesPolicy))
+              .withMintingStatements(
+                Seq(AssetMintingStatement(mockGroupPolicy.registrationUtxo, mockSeriesPolicy.registrationUtxo, 1))
               )
           )
         )

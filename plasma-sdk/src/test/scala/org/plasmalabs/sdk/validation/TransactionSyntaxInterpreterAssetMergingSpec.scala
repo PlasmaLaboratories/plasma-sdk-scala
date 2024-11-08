@@ -100,9 +100,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup, asmSeries))
-                )
+                .withMergingStatements(Seq(asmGroup, asmSeries))
             )
         )
 
@@ -132,9 +130,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup, asmGroupDup))
-                )
+                .withMergingStatements(Seq(asmGroup, asmGroupDup))
             )
         )
 
@@ -166,9 +162,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -198,9 +192,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -231,9 +223,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -264,9 +254,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -297,9 +285,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -335,9 +321,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -370,9 +354,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -423,9 +405,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroupSeries))
-                )
+                .withMergingStatements(Seq(asmGroupSeries))
             )
         )
 
@@ -462,9 +442,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asm))
-                )
+                .withMergingStatements(Seq(asm))
             )
         )
 
@@ -503,9 +481,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -548,9 +524,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asm))
-                )
+                .withMergingStatements(Seq(asm))
             )
         )
 
@@ -591,9 +565,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -637,9 +609,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asm))
-                )
+                .withMergingStatements(Seq(asm))
             )
         )
 
@@ -680,9 +650,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -718,9 +686,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -760,9 +726,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
     val result = validator.validate(testTx).swap
@@ -802,9 +766,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
     val result = validator.validate(testTx).swap
@@ -847,9 +809,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asm))
-                )
+                .withMergingStatements(Seq(asm))
             )
         )
 
@@ -890,9 +850,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -928,9 +886,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -971,9 +927,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -1013,9 +967,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 
@@ -1055,9 +1007,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
               Event.IoTransaction.defaultInstance
                 .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
                 .withMetadata(SmallData.defaultInstance)
-                .withPolicies(
-                  Event.IoTransaction.Policies.defaultInstance.withMergingStatements(Seq(asmGroup))
-                )
+                .withMergingStatements(Seq(asmGroup))
             )
         )
 

@@ -33,13 +33,11 @@ class CredentiallerInterpreterSpec extends CatsEffectSuite with MockHelpers {
 
   test("prove: other fields on transaction are preserved") {
 
-    val iotxEvent = txFull.datum.event.withPolicies(
-      Event.IoTransaction
-        .Policies()
-        .withGroupPolicies(Seq(mockGroupPolicy))
-        .withSeriesPolicies(Seq(mockSeriesPolicy))
-        .withMintingStatements(Seq(AssetMintingStatement(dummyTxoAddress, dummyTxoAddress, quantity)))
-    )
+    val iotxEvent = txFull.datum.event
+      .withGroupPolicies(Seq(mockGroupPolicy))
+      .withSeriesPolicies(Seq(mockSeriesPolicy))
+      .withMintingStatements(Seq(AssetMintingStatement(dummyTxoAddress, dummyTxoAddress, quantity)))
+
     val testTx = txFull
       .withDatum(txFull.datum.copy(event = iotxEvent))
 

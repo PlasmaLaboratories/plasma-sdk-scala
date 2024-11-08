@@ -231,10 +231,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -263,10 +262,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -308,10 +306,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -360,10 +357,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -411,10 +407,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -456,10 +451,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -495,10 +489,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -536,10 +529,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -575,10 +567,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -617,10 +608,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))
@@ -659,10 +649,9 @@ class TransactionBuilderInterpreterAssetMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withMintingStatements(Seq(mockAssetMintingStatement))
+              SmallData.defaultInstance
             )
+            .withMintingStatements(Seq(mockAssetMintingStatement))
         )
       )
       .withInputs(buildStxos(allTxos))

@@ -347,8 +347,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
     val mintingStatements =
       List(AssetMintingStatement(groupTokenUtxo = txoAddress_1, seriesTokenUtxo = txoAddress_2, quantity = BigInt(1)))
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
 
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
@@ -477,8 +476,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_3_out)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
 
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
@@ -547,8 +545,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_3_out)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
 
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
@@ -645,8 +642,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_3_out),
       UnspentTransactionOutput(trivialLockAddress, value_4_out)
     )
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
 
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
@@ -739,8 +736,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_4_out)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -834,8 +830,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, invalid_out)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = Seq(mintingStatement))
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = Seq(mintingStatement)))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -928,8 +923,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, minted_out_invalidQuantity)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -1022,8 +1016,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, minted_out_invalid)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()

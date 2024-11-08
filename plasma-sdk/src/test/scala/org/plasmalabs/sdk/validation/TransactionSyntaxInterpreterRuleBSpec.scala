@@ -67,8 +67,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
       AssetMintingStatement(groupTokenUtxo = txoAddress_1, seriesTokenUtxo = txoAddress_1, quantity = 1)
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -125,8 +124,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
       )
     )
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -183,8 +181,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
 
     val mintingStatements = List(mintingStatement_1, mintingStatement_2)
 
-    val policies = txFull.datum.event.policies.copy(mintingStatements = mintingStatements)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -214,8 +211,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     // policies contains same referenced Utxos
     val groupPolicies = List(groupPolicy, groupPolicy)
 
-    val policies = txFull.datum.event.policies.copy(groupPolicies = groupPolicies)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = groupPolicies))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -248,8 +244,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     // policies contains same referenced Utxos
     val groupPolicies = List(groupPolicy_A, groupPolicy_B)
 
-    val policies = txFull.datum.event.policies.copy(groupPolicies = groupPolicies)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = groupPolicies))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -278,8 +273,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     // policies contains same referenced Utxos
     val seriesPolicies = List(seriesPolicy, seriesPolicy)
 
-    val policies = txFull.datum.event.policies.copy(seriesPolicies = seriesPolicies)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = seriesPolicies))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -312,8 +306,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     // policies contains same referenced Utxos
     val seriesPolicies = List(seriesPolicy_A, seriesPolicy_B)
 
-    val policies = txFull.datum.event.policies.copy(seriesPolicies = seriesPolicies)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = seriesPolicies))
     val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -347,8 +340,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     val groupPolicies = List(g1)
     val seriesPolicies = List(s1)
 
-    val policies = txFull.datum.event.policies.copy(seriesPolicies = seriesPolicies, groupPolicies = groupPolicies)
-    val datum = txFull.datum.copy(event = txFull.datum.event.copy(policies = policies))
+    val datum =
+      txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = seriesPolicies, groupPolicies = groupPolicies))
     val testTx =
       txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 

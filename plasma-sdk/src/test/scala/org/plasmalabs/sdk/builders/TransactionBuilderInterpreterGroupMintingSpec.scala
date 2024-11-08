@@ -16,10 +16,9 @@ class TransactionBuilderInterpreterGroupMintingSpec extends TransactionBuilderIn
           Event
             .IoTransaction(
               Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData.defaultInstance,
-              Event.IoTransaction.Policies.defaultInstance
-                .withGroupPolicies(Seq(mockGroupPolicyAlt))
+              SmallData.defaultInstance
             )
+            .withGroupPolicies(Seq(mockGroupPolicyAlt))
         )
       )
       .withInputs(buildStxos(mockTxos :+ valToTxo(lvlValue, txAddr = mockGroupPolicyAlt.registrationUtxo)))

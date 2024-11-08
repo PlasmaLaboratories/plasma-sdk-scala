@@ -61,7 +61,7 @@ class BasicTransactionBuilderInterpreterSpec extends TransactionBuilderInterpret
   }
 
   test("datum") {
-    val testDatum = txBuilder.datum(Event.IoTransaction.Policies())
+    val testDatum = txBuilder.datum()
     // Testing fields individually since the timestamp is generated at runtime
     assert(testDatum.event.metadata == txDatum.event.metadata)
     assert(testDatum.event.schedule.min == txDatum.event.schedule.min)
