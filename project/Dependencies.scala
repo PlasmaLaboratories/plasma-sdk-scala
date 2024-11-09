@@ -4,7 +4,7 @@ import sbt._
 object Dependencies {
 
   object Versions {
-    val catsCoreVersion = "2.10.0"
+    val catsCoreVersion = "2.12.0"
     val circeVersion = "0.14.10"
     val protobufSpecsVersion = "0.1.1"
     val mUnitTeVersion = "1.0.2"
