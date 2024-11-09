@@ -46,7 +46,7 @@ object Dependencies {
     "org.typelevel" %% "cats-core"   % catsCoreVersion,
     "org.typelevel" %% "mouse"       % "1.2.3",
     "org.typelevel" %% "cats-free"   % catsCoreVersion,
-    "org.typelevel" %% "cats-effect" % "3.5.4"
+    "org.typelevel" %% "cats-effect" % "3.5.5"
   )
 
   val protobufSpecs: Seq[ModuleID] = Seq(
