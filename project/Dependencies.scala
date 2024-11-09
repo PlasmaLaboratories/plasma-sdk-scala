@@ -5,7 +5,7 @@ object Dependencies {
 
   object Versions {
     val catsCoreVersion = "2.10.0"
-    val circeVersion = "0.14.6"
+    val circeVersion = "0.14.10"
     val protobufSpecsVersion = "0.1.1"
     val mUnitTeVersion = "0.7.29"
   }
