@@ -7,7 +7,6 @@ object Dependencies {
     val catsCoreVersion = "2.12.0"
     val circeVersion = "0.14.10"
     val protobufSpecsVersion = "0.1.1"
-    val mUnitTeVersion = "1.0.2"
   }
 
   val catsSlf4j: ModuleID =
@@ -36,8 +35,8 @@ object Dependencies {
   )
 
   val mUnitTest: Seq[ModuleID] = Seq(
-    "org.scalameta" %% "munit"                   % mUnitTeVersion,
-    "org.scalameta" %% "munit-scalacheck"        % mUnitTeVersion,
+    "org.scalameta" %% "munit"                   % "1.0.2",
+    "org.scalameta" %% "munit-scalacheck"        % "1.0.0",
     "org.typelevel" %% "munit-cats-effect"       % "2.0.0",
     "org.typelevel" %% "scalacheck-effect-munit" % "1.0.4"
   )
