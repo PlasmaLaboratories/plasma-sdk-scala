@@ -6,7 +6,7 @@ object Dependencies {
   object Versions {
     val catsCoreVersion = "2.12.0"
     val circeVersion = "0.14.10"
-    val protobufSpecsVersion = "0.1.1"
+    val protobufSpecsVersion = "0.1.2"
   }
 
   val catsSlf4j: ModuleID =
@@ -21,7 +21,7 @@ object Dependencies {
   )
 
   val scalacheck: Seq[ModuleID] = Seq(
-    "org.scalacheck"    %% "scalacheck"      % "1.17.1",
+    "org.scalacheck"    %% "scalacheck"      % "1.18.1",
     "org.scalatestplus" %% "scalacheck-1-16" % "3.2.14.0"
   )
 
@@ -43,7 +43,6 @@ object Dependencies {
 
   val cats: Seq[ModuleID] = Seq(
     "org.typelevel" %% "cats-core"   % catsCoreVersion,
-    "org.typelevel" %% "mouse"       % "1.2.4",
     "org.typelevel" %% "cats-free"   % catsCoreVersion,
     "org.typelevel" %% "cats-effect" % "3.5.5"
   )
@@ -53,7 +52,7 @@ object Dependencies {
   )
 
   val sqlite: Seq[ModuleID] = Seq(
-    "org.xerial" % "sqlite-jdbc" % "3.45.3.0"
+    "org.xerial" % "sqlite-jdbc" % "3.47.0.0"
   )
 
   val grpcNetty = "io.grpc" % "grpc-netty" % "1.68.1"
