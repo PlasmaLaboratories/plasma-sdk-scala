@@ -1,8 +1,8 @@
 package org.plasmalabs.sdk.syntax
 
 import org.plasmalabs.sdk.common.ContainsImmutable.ContainsImmutableTOps
-import org.plasmalabs.sdk.common.ContainsImmutable.instances.seriesPolicyEventImmutable
-import org.plasmalabs.sdk.models.Event.SeriesPolicy
+import org.plasmalabs.sdk.common.ContainsImmutable.instances.seriesPolicyImmutable
+import org.plasmalabs.sdk.models.SeriesPolicy
 import org.plasmalabs.sdk.models.SeriesId
 import com.google.protobuf.ByteString
 import java.security.MessageDigest

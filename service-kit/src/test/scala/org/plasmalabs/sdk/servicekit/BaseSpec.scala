@@ -14,7 +14,7 @@ import org.plasmalabs.sdk.constants.NetworkConstants._
 import org.plasmalabs.sdk.dataApi.WalletStateAlgebra
 import org.plasmalabs.sdk.syntax.cryptoToPbKeyPair
 import org.plasmalabs.crypto.generation.KeyInitializer.Instances.extendedEd25519Initializer
-import quivr.models
+import org.plasmalabs.quivr.models
 
 import java.sql.Connection
 import org.plasmalabs.crypto.signing.{ExtendedEd25519, KeyPair}

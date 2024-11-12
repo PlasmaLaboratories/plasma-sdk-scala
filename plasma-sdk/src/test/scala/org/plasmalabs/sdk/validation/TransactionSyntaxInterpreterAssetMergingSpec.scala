@@ -7,11 +7,11 @@ import org.plasmalabs.sdk.builders.MergingOps
 import org.plasmalabs.sdk.common.ContainsEvidence.Ops
 import org.plasmalabs.sdk.common.ContainsImmutable.instances.lockImmutable
 import org.plasmalabs.sdk.models.box._
-import org.plasmalabs.sdk.models.transaction.{IoTransaction, SpentTransactionOutput, UnspentTransactionOutput}
-import org.plasmalabs.sdk.models.{GroupId, LockAddress, LockId, SeriesId}
+import org.plasmalabs.sdk.models.transaction.{IoTransaction, Schedule, SpentTransactionOutput, UnspentTransactionOutput}
+import org.plasmalabs.sdk.models.{AssetMergingStatement, Datum, Event, GroupId, LockAddress, LockId, SeriesId}
 import org.plasmalabs.indexer.services.Txo
 import com.google.protobuf.ByteString
-import quivr.models.Int128
+import org.plasmalabs.quivr.models.{Int128, SmallData}
 
 /**
  * Test to coverage Asset Merging:
@@ -89,7 +89,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         txo.transactionOutput.value
       )) :+ SpentTransactionOutput(dummyTxoAddress, mockAttestation, lvlValue)
     val outputs = Seq(UnspentTransactionOutput(mockLockAddress, lvlValue), mergedGroup, mergedSeries)
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup, asmSeries))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup, asmSeries))
+            )
+        )
 
     val result = validator.validate(testTx)
 
@@ -106,8 +119,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- groupTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(mergedGroup, mergedGroup)
+
     val testTx =
-      mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup, asmGroupDup))
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup, asmGroupDup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -126,7 +151,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- groupTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(MergingOps.merge(groupTxos :+ groupTxos.head, mockLockAddress, None, None))
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -143,7 +181,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
     val inputs =
       Seq(SpentTransactionOutput(groupTxos.head.outputAddress, mockAttestation, groupTxos.head.transactionOutput.value))
     val outputs = Seq(MergingOps.merge(Seq(groupTxos.head), mockLockAddress, None, None))
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -161,7 +212,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- groupTxos.tail)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(MergingOps.merge(groupTxos.tail, mockLockAddress, None, None))
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -179,7 +243,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- groupTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq()
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -197,7 +274,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- groupTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(mergedGroup, UnspentTransactionOutput(mockLockAddress, groupTxos.head.transactionOutput.value))
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -220,7 +310,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
     val asmGroup = AssetMergingStatement(groupTxos.map(_.outputAddress), 0)
     val inputs = for (txo <- groupTxos) yield SpentTransactionOutput(txo.outputAddress, mockAttestation, lvlValue)
     val outputs = for (_ <- groupTxos.indices) yield UnspentTransactionOutput(mockLockAddress, lvlValue)
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -240,7 +343,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- groupTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(UnspentTransactionOutput(mockLockAddress, lvlValue))
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -278,7 +394,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- groupSeriesTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(mergedGroupSeries)
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroupSeries))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroupSeries))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -302,7 +431,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- mockTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(mockOutput)
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asm))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asm))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -328,7 +470,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         mergedGroup.value.withAsset(mergedGroup.value.getAsset.withFungibility(FungibilityType.SERIES))
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -358,7 +513,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- mockTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(mockOutput)
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asm))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asm))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -386,7 +554,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -417,7 +598,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- mockTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(mockOutput)
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asm))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asm))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -445,7 +639,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -468,7 +675,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs =
       Seq(mergedGroup.copy(value = mergedGroup.value.withAsset(mergedGroup.value.getAsset.clearSeriesAlloy)))
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -496,8 +716,19 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
-
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
     val result = validator.validate(testTx).swap
 
     val assertError = result.exists(
@@ -524,8 +755,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
 
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
     val result = validator.validate(testTx).swap
 
     val assertError = result.exists(
@@ -555,7 +798,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
       for (txo <- mockTxos)
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs = Seq(mockOutput)
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asm))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asm))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -583,7 +839,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -606,7 +875,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         yield SpentTransactionOutput(txo.outputAddress, mockAttestation, txo.transactionOutput.value)
     val outputs =
       Seq(mergedSeries.copy(value = mergedSeries.value.withAsset(mergedSeries.value.getAsset.clearGroupAlloy)))
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -634,7 +916,20 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -662,7 +957,19 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 
@@ -690,7 +997,19 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
         )
       )
     )
-    val testTx = mockTransaction.withInputs(inputs).withOutputs(outputs).withMergingStatements(Seq(asmGroup))
+    val testTx =
+      IoTransaction.defaultInstance
+        .withInputs(inputs)
+        .withOutputs(outputs)
+        .withDatum(
+          Datum.IoTransaction.defaultInstance
+            .withEvent(
+              Event.IoTransaction.defaultInstance
+                .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+                .withMetadata(SmallData.defaultInstance)
+                .withMergingStatements(Seq(asmGroup))
+            )
+        )
 
     val result = validator.validate(testTx).swap
 

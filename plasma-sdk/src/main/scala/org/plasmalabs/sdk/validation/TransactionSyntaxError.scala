@@ -1,9 +1,10 @@
 package org.plasmalabs.sdk.validation
 
 import org.plasmalabs.sdk.models.TransactionOutputAddress
-import org.plasmalabs.sdk.models.box.{AssetMergingStatement, Value}
+import org.plasmalabs.sdk.models.box.Value
+import org.plasmalabs.sdk.models.AssetMergingStatement
 import org.plasmalabs.sdk.models.transaction.Schedule
-import quivr.models.{Proof, Proposition}
+import org.plasmalabs.quivr.models.{Proof, Proposition}
 
 sealed abstract class TransactionSyntaxError extends ValidationError
 

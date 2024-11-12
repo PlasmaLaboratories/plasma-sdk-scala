@@ -3,7 +3,7 @@ package org.plasmalabs.sdk.syntax
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.box.Value.{Value => BoxValue}
 import com.google.protobuf.ByteString
-import quivr.models.Int128
+import org.plasmalabs.quivr.models.Int128
 import org.plasmalabs.sdk.MockHelpers
 
 class BoxValueSyntaxSpec extends munit.FunSuite with MockHelpers {

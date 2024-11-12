@@ -6,7 +6,7 @@ import org.plasmalabs.sdk.models.box.Attestation
 import org.plasmalabs.sdk.models.common.ImmutableBytes
 import org.plasmalabs.sdk.models.transaction.IoTransaction
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
-import quivr.models._
+import org.plasmalabs.quivr.models._
 
 // Long -> longSignable -> longSignableEvidence -> longSignableEvidenceId
 // Long -> longSignable -> longSignableEvidence -> longSingableEvidenceSignable -> longSingableEvidenceSignableEvidence

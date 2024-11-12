@@ -6,7 +6,7 @@ import org.plasmalabs.sdk.models.{AccumulatorRootId, Datum, LockId}
 import org.plasmalabs.sdk.models.box.Attestation
 import org.plasmalabs.sdk.models.transaction.IoTransaction
 import org.plasmalabs.sdk.validation.algebras.TransactionAuthorizationVerifier
-import quivr.models.{Proof, Proposition}
+import org.plasmalabs.quivr.models.{Proof, Proposition}
 import org.plasmalabs.quivr.api.Verifier
 import org.plasmalabs.quivr.runtime.DynamicContext
 

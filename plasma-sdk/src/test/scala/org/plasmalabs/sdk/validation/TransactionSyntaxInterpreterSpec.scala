@@ -7,7 +7,7 @@ import org.plasmalabs.sdk.constants.NetworkConstants.{MAIN_NETWORK_ID, TEST_NETW
 import org.plasmalabs.sdk.models.box.{Attestation, Challenge, Lock, Value}
 import org.plasmalabs.sdk.models.transaction.Schedule
 import com.google.protobuf.ByteString
-import quivr.models.{Int128, Proof, Proposition}
+import org.plasmalabs.quivr.models.{Int128, Proof, Proposition}
 import org.plasmalabs.quivr.api.{Proposer, Prover}
 
 class TransactionSyntaxInterpreterSpec extends munit.FunSuite with MockHelpers {

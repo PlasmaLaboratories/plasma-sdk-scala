@@ -5,7 +5,7 @@ import org.plasmalabs.sdk.common.ContainsImmutable.instances.ioTransactionImmuta
 import org.plasmalabs.sdk.models.box.Attestation
 import org.plasmalabs.sdk.models.transaction._
 import org.plasmalabs.sdk.validation.algebras.TransactionCostCalculator
-import quivr.models.Proof
+import org.plasmalabs.quivr.models.Proof
 
 object TransactionCostCalculatorInterpreter {
 

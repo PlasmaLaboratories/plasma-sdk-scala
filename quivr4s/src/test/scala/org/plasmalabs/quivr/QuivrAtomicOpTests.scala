@@ -4,8 +4,8 @@ import cats.{Id, Monad}
 import org.plasmalabs.sdk.models.Datum
 import org.plasmalabs.quivr.runtime.QuivrRuntimeErrors
 import com.google.protobuf.ByteString
-import quivr.models.VerificationKey._
-import quivr.models._
+import org.plasmalabs.quivr.models.VerificationKey._
+import org.plasmalabs.quivr.models._
 import org.plasmalabs.crypto.hash.Blake2b256
 
 /**

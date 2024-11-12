@@ -9,7 +9,7 @@ import org.plasmalabs.sdk.utils.Encoding
 trait TransactionDisplayOps {
 
   implicit val transactionIdDisplay: DisplayOps[TransactionId] = (id: TransactionId) =>
-    Encoding.encodeToBase58(id.value.toByteArray())
+    Encoding.encodeToBase58(id.value.toByteArray)
 
   implicit val transactionDisplay: DisplayOps[IoTransaction] = (tx: IoTransaction) =>
     s"""
@@ -17,19 +17,19 @@ ${padLabel("TransactionId")}${tx.transactionId.getOrElse(tx.computeId).display}
 
 Group Policies
 ==============
-${tx.groupPolicies.map(gp => gp.display).mkString("\n-----------\n")}
+${tx.datum.event.groupPolicies.map(gp => gp.display).mkString("\n-----------\n")}
 
 Series Policies
 ===============
-${tx.seriesPolicies.map(sp => sp.display).mkString("\n-----------\n")}
+${tx.datum.event.seriesPolicies.map(sp => sp.display).mkString("\n-----------\n")}
 
 Asset Minting Statements
 ========================
-${tx.mintingStatements.map(ams => ams.display).mkString("\n-----------\n")}
+${tx.datum.event.mintingStatements.map(ams => ams.display).mkString("\n-----------\n")}
 
 Asset Merging Statements
 ========================
-${tx.mergingStatements.map(ams => ams.display).mkString("\n-----------\n")}
+${tx.datum.event.mergingStatements.map(ams => ams.display).mkString("\n-----------\n")}
 
 Inputs
 ======
@@ -43,6 +43,6 @@ ${if (tx.outputs.isEmpty) ("No outputs")
 
 Datum
 =====
-${padLabel("Value")}${Encoding.encodeToBase58(tx.datum.event.metadata.value.toByteArray())}
+${padLabel("Value")}${Encoding.encodeToBase58(tx.datum.event.metadata.value.toByteArray)}
 """
 }

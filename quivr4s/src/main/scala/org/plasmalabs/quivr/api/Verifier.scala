@@ -11,7 +11,7 @@ import org.plasmalabs.quivr.runtime.QuivrRuntimeErrors.ValidationError.{
   UserProvidedInterfaceFailure
 }
 import org.plasmalabs.quivr.runtime.{DynamicContext, QuivrRuntimeError}
-import quivr.models._
+import org.plasmalabs.quivr.models._
 import java.nio.charset.StandardCharsets
 import org.plasmalabs.crypto.hash.Blake2b256
 

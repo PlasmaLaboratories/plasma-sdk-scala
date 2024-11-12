@@ -228,7 +228,7 @@ import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateR
 import org.plasmalabs.sdk.syntax.{int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
 import org.plasmalabs.sdk.utils.Encoding
 import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
-import quivr.models.VerificationKey
+import org.plasmalabs.quivr.models.VerificationKey
 
 import java.nio.file.Paths
 
@@ -406,7 +406,7 @@ import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateR
 import org.plasmalabs.sdk.syntax.{LvlType, int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
 import org.plasmalabs.sdk.utils.Encoding
 import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
-import quivr.models.VerificationKey
+import org.plasmalabs.quivr.models.VerificationKey
 
 import java.nio.file.Paths
 
@@ -597,7 +597,7 @@ import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateR
 import org.plasmalabs.sdk.syntax.{bigIntAsInt128, int128AsBigInt, valueToQuantitySyntaxOps, valueToTypeIdentifierSyntaxOps}
 import org.plasmalabs.sdk.utils.Encoding
 import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
-import quivr.models.VerificationKey
+import org.plasmalabs.quivr.models.VerificationKey
 
 import java.nio.file.Paths
 

@@ -6,59 +6,57 @@ import org.plasmalabs.sdk.MockHelpers
 import org.plasmalabs.sdk.MockWalletKeyApi
 import org.plasmalabs.sdk.MockWalletStateApi
 import org.plasmalabs.sdk.display.DisplayOps.DisplayTOps
-import org.plasmalabs.sdk.models.Datum
-import org.plasmalabs.sdk.models.Event
+import org.plasmalabs.sdk.models.{AssetMintingStatement, Datum, Event}
 import org.plasmalabs.sdk.models.box._
-import org.plasmalabs.sdk.models.transaction.Schedule
+import org.plasmalabs.sdk.models.transaction.{IoTransaction, Schedule}
 import org.plasmalabs.sdk.syntax.bigIntAsInt128
 import org.plasmalabs.sdk.syntax.longAsInt128
 import org.plasmalabs.sdk.wallet.CredentiallerInterpreter
 import org.plasmalabs.sdk.wallet.WalletApi
 import com.google.protobuf.ByteString
-import quivr.models.Proof
-import quivr.models.SmallData
+import org.plasmalabs.quivr.models.Proof
+import org.plasmalabs.quivr.models.SmallData
 import org.plasmalabs.quivr.api.Proposer
 
 class DisplaySpec extends munit.FunSuite with MockHelpers {
 
   test("Display Complex Transaction") {
-    val testTx = txFull
-      .withDatum(
-        Datum.IoTransaction(
-          Event
-            .IoTransaction(
-              Schedule(0, Long.MaxValue, System.currentTimeMillis),
-              SmallData(ByteString.copyFrom("metadata".getBytes))
-            )
+    val testTx =
+      IoTransaction.defaultInstance
+        .withDatum(
+          Datum.IoTransaction(
+            Event
+              .IoTransaction(
+                Schedule(0, Long.MaxValue, System.currentTimeMillis),
+                SmallData(ByteString.copyFrom("metadata".getBytes))
+              )
+              .withGroupPolicies(Seq(mockGroupPolicy))
+              .withSeriesPolicies(Seq(mockSeriesPolicy))
+              .withMintingStatements(
+                Seq(AssetMintingStatement(mockGroupPolicy.registrationUtxo, mockSeriesPolicy.registrationUtxo, 1))
+              )
+          )
         )
-      )
-      .withGroupPolicies(Seq(Datum.GroupPolicy(mockGroupPolicy)))
-      .withSeriesPolicies(Seq(Datum.SeriesPolicy(mockSeriesPolicy)))
-      .withMintingStatements(
-        Seq(
-          AssetMintingStatement(mockGroupPolicy.registrationUtxo, mockSeriesPolicy.registrationUtxo, 1)
+        .withInputs(
+          Seq(
+            lvlValue,
+            groupValue,
+            seriesValue,
+            assetGroupSeries
+          ).map(value => inputFull.withValue(value))
         )
-      )
-      .withInputs(
-        Seq(
-          lvlValue,
-          groupValue,
-          seriesValue,
-          assetGroupSeries
-        ).map(value => inputFull.withValue(value))
-      )
-      .withOutputs(
-        Seq(
-          lvlValue,
-          groupValue,
-          seriesValue,
-          assetGroupSeries
-        ).map(value => output.withValue(value))
-      )
+        .withOutputs(
+          Seq(
+            lvlValue,
+            groupValue,
+            seriesValue,
+            assetGroupSeries
+          ).map(value => output.withValue(value))
+        )
     assertNoDiff(
       testTx.display.trim(),
       s"""
-TransactionId              : 3G1TsJUpmurYxMnzQ8NaBrnK3DymVGzRKLUwLysinjb6
+TransactionId              : AQQiYaYH5FGspd5R4sCkKDdQszHWdTTYPThL12PJ3od2
 
 Group Policies
 ==============

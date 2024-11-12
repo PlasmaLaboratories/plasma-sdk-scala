@@ -4,8 +4,8 @@ import cats.Id
 import org.plasmalabs.sdk.MockHelpers
 import org.plasmalabs.sdk.builders.locks.PropositionTemplate.UnableToBuildPropositionTemplate
 import com.google.protobuf.ByteString
-import quivr.models.Data
-import quivr.models.Proposition.Value._
+import org.plasmalabs.quivr.models.Data
+import org.plasmalabs.quivr.models.Proposition.Value._
 
 class PropositionTemplateSpec extends munit.FunSuite with MockHelpers {
 

@@ -7,7 +7,7 @@ import org.plasmalabs.common.ParsableDataInterface
 import org.plasmalabs.quivr.algebras.{DigestVerifier, SignatureVerifier}
 import org.plasmalabs.quivr.runtime.{DynamicContext, QuivrRuntimeError, QuivrRuntimeErrors}
 import com.google.protobuf.ByteString
-import quivr.models._
+import org.plasmalabs.quivr.models._
 import org.plasmalabs.crypto.hash.Blake2b256
 
 trait MockHelpers {

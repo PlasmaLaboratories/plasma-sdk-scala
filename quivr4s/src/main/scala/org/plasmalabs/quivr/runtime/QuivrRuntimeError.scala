@@ -1,7 +1,7 @@
 package org.plasmalabs.quivr.runtime
 
-import quivr.models.Proof
-import quivr.models.Proposition
+import org.plasmalabs.quivr.models.Proof
+import org.plasmalabs.quivr.models.Proposition
 
 /**
  * Errors resulting from evaluation of Quivr propositions / proofs

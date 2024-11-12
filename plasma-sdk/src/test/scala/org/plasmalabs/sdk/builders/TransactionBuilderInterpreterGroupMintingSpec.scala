@@ -1,7 +1,8 @@
 package org.plasmalabs.sdk.builders
 
-import org.plasmalabs.sdk.models.transaction.IoTransaction
-import org.plasmalabs.sdk.models.Datum
+import org.plasmalabs.quivr.models.SmallData
+import org.plasmalabs.sdk.models.transaction.{IoTransaction, Schedule}
+import org.plasmalabs.sdk.models.{Datum, Event}
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.syntax.{ioTransactionAsTransactionSyntaxOps, valueToTypeIdentifierSyntaxOps, LvlType}
 
@@ -10,8 +11,16 @@ class TransactionBuilderInterpreterGroupMintingSpec extends TransactionBuilderIn
   test("Success") {
     val txRes = buildMintGroupTransaction.run
     val expectedTx = IoTransaction.defaultInstance
-      .withDatum(txDatum)
-      .withGroupPolicies(Seq(Datum.GroupPolicy(mockGroupPolicyAlt)))
+      .withDatum(
+        Datum.IoTransaction(
+          Event
+            .IoTransaction(
+              Schedule(0, Long.MaxValue, System.currentTimeMillis),
+              SmallData.defaultInstance
+            )
+            .withGroupPolicies(Seq(mockGroupPolicyAlt))
+        )
+      )
       .withInputs(buildStxos(mockTxos :+ valToTxo(lvlValue, txAddr = mockGroupPolicyAlt.registrationUtxo)))
       .withOutputs(
         // minted output

@@ -11,7 +11,7 @@ import org.plasmalabs.crypto.encryption.kdf.SCrypt
 import org.plasmalabs.crypto.encryption.cipher.Cipher
 import org.plasmalabs.crypto.encryption.cipher.Aes
 import org.plasmalabs.crypto.signing.ExtendedEd25519
-import quivr.models._
+import org.plasmalabs.quivr.models._
 import org.plasmalabs.sdk.syntax.{cryptoToPbKeyPair, cryptoVkToPbVk, pbKeyPairToCryptoKeyPair, pbVkToCryptoVk}
 import cats.implicits._
 

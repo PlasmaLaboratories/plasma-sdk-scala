@@ -2,12 +2,14 @@ package org.plasmalabs.sdk.builders
 
 import org.plasmalabs.sdk.models.box.FungibilityType.GROUP
 import org.plasmalabs.sdk.models.box.QuantityDescriptorType.LIQUID
-import org.plasmalabs.sdk.models.box.{AssetMergingStatement, Value}
-import org.plasmalabs.sdk.models.transaction.IoTransaction
+import org.plasmalabs.sdk.models.box.Value
+import org.plasmalabs.sdk.models.{AssetMergingStatement, Datum, Event}
+import org.plasmalabs.sdk.models.transaction.{IoTransaction, Schedule}
 import org.plasmalabs.sdk.syntax.ioTransactionAsTransactionSyntaxOps
 import org.plasmalabs.sdk.syntax.bigIntAsInt128
 import com.google.protobuf.struct.{Struct, Value => StructValue}
 import com.google.protobuf.struct.Value.Kind.StringValue
+import org.plasmalabs.quivr.models.SmallData
 
 class TransactionBuilderInterpreterAssetMergingSpec extends MergingSpecBase {
 
@@ -89,8 +91,16 @@ class TransactionBuilderInterpreterAssetMergingSpec extends MergingSpecBase {
       .run
     val merkleRoot = MergingOps.getAlloy(groupValues.map(_.getAsset))
     val expectedTx: IoTransaction = IoTransaction.defaultInstance
-      .withDatum(txDatum)
-      .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 0)))
+      .withDatum(
+        Datum.IoTransaction(
+          Event
+            .IoTransaction(
+              Schedule(0, Long.MaxValue, System.currentTimeMillis),
+              SmallData.defaultInstance
+            )
+            .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 0)))
+        )
+      )
       .withInputs(buildStxos(valuesToTxos(groupValues ++ Seq(lvlValue, lvlValue, lvlValue))))
       .withOutputs(
         buildRecipientUtxos(
@@ -124,8 +134,16 @@ class TransactionBuilderInterpreterAssetMergingSpec extends MergingSpecBase {
       .run
     val merkleRoot = MergingOps.getAlloy(assetValues.map(_.getAsset))
     val expectedTx: IoTransaction = IoTransaction.defaultInstance
-      .withDatum(txDatum)
-      .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 1)))
+      .withDatum(
+        Datum.IoTransaction(
+          Event
+            .IoTransaction(
+              Schedule(0, Long.MaxValue, System.currentTimeMillis),
+              SmallData.defaultInstance
+            )
+            .withMergingStatements(Seq(AssetMergingStatement(groupTxos.map(_.outputAddress), 1)))
+        )
+      )
       .withInputs(buildStxos(valuesToTxos(assetValues ++ Seq(lvlValue, lvlValue, lvlValue))))
       .withOutputs(
         buildChangeUtxos(List(lvlValue.withLvl(lvlValue.getLvl.withQuantity(BigInt(2)))))

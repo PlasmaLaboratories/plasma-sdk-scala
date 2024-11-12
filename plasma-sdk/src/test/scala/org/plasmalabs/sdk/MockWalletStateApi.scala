@@ -8,7 +8,7 @@ import org.plasmalabs.sdk.common.ContainsImmutable.instances._
 import org.plasmalabs.sdk.dataApi.WalletStateAlgebra
 import org.plasmalabs.sdk.models._
 import org.plasmalabs.sdk.models.box.Lock
-import quivr.models._
+import org.plasmalabs.quivr.models._
 
 /**
  * Mock Implementation of the WalletStateAlgebra for testing

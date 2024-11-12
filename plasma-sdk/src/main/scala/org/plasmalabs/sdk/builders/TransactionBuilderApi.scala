@@ -7,7 +7,7 @@ import org.plasmalabs.sdk.builders.UserInputValidations.TransactionBuilder._
 import org.plasmalabs.sdk.codecs.AddressCodecs
 import org.plasmalabs.sdk.common.ContainsEvidence.Ops
 import org.plasmalabs.sdk.common.ContainsImmutable.instances._
-import org.plasmalabs.sdk.models.Event.{GroupPolicy, SeriesPolicy}
+import org.plasmalabs.sdk.models.{GroupPolicy, SeriesPolicy}
 import org.plasmalabs.sdk.models._
 import org.plasmalabs.sdk.models.box.Value.{Value => BoxValue}
 import org.plasmalabs.sdk.models.box._
@@ -27,9 +27,8 @@ import org.plasmalabs.sdk.syntax.{
 import org.plasmalabs.indexer.services.Txo
 import com.google.protobuf.ByteString
 import com.google.protobuf.struct.Struct
-import quivr.models.{Int128, Proof, SmallData}
+import org.plasmalabs.quivr.models.{Int128, Proof, SmallData}
 import scala.collection.immutable._
-
 import scala.language.implicitConversions
 import scala.util.{Failure, Success, Try}
 import org.plasmalabs.sdk.models.LockAddress
@@ -136,7 +135,13 @@ trait TransactionBuilderApi[F[_]] {
    *
    * @return A transaction datum
    */
-  def datum(): F[Datum.IoTransaction]
+  def datum(
+    groupPolicies:       Seq[GroupPolicy] = Seq.empty,
+    seriesPolicies:      Seq[SeriesPolicy] = Seq.empty,
+    mintingStatements:   Seq[AssetMintingStatement] = Seq.empty,
+    mergingStatements:   Seq[AssetMergingStatement] = Seq.empty,
+    splittingStatements: Seq[AssetSplittingStatement] = Seq.empty
+  ): F[Datum.IoTransaction]
 
   /**
    * Builds a simple lvl transaction with the given parameters
@@ -533,7 +538,7 @@ object TransactionBuilderApi {
             .leftMap(errs => UserInputErrors(errs.toList))
           stxoAttestation <- EitherT.right[BuilderError](unprovenAttestation(lockPredicateFrom))
           stxos           <- buildStxos(filteredTxos, stxoAttestation)
-          datum           <- EitherT.right[BuilderError](datum())
+          datum           <- EitherT.right[BuilderError](datum(groupPolicies = Seq(groupPolicy)))
           utxoMinted <- EitherT.right[BuilderError](
             groupOutput(mintedAddress, quantityToMint, groupPolicy.computeId, groupPolicy.fixedSeries)
           )
@@ -541,8 +546,7 @@ object TransactionBuilderApi {
         } yield IoTransaction(
           inputs = stxos,
           outputs = utxoChange :+ utxoMinted,
-          datum = datum,
-          groupPolicies = Seq(Datum.GroupPolicy(groupPolicy))
+          datum = datum
         )
       ).value
 
@@ -571,7 +575,7 @@ object TransactionBuilderApi {
             .leftMap(errs => UserInputErrors(errs.toList))
           stxoAttestation <- EitherT.right[BuilderError](unprovenAttestation(lockPredicateFrom))
           stxos           <- buildStxos(filteredTxos, stxoAttestation)
-          datum           <- EitherT.right[BuilderError](datum())
+          datum           <- EitherT.right[BuilderError](datum(seriesPolicies = Seq(seriesPolicy)))
           utxoMinted <- EitherT.right[BuilderError](
             seriesOutput(
               mintedAddress,
@@ -586,8 +590,7 @@ object TransactionBuilderApi {
         } yield IoTransaction(
           inputs = stxos,
           outputs = utxoChange :+ utxoMinted,
-          datum = datum,
-          seriesPolicies = Seq(Datum.SeriesPolicy(seriesPolicy))
+          datum = datum
         )
       ).value
 
@@ -613,7 +616,7 @@ object TransactionBuilderApi {
         commitment:             Option[ByteString] = None
       ): F[Either[BuilderError, IoTransaction]] = (
         for {
-          datum <- EitherT.right[BuilderError](datum())
+          datum <- EitherT.right[BuilderError](datum(mintingStatements = Seq(mintingStatement)))
           filteredTxos = txos.filter(_.transactionOutput.value.value.typeIdentifier != UnknownType)
           _ <- EitherT
             .fromEither[F](validateAssetMintingParams(mintingStatement, filteredTxos, locks.keySet, fee))
@@ -667,8 +670,7 @@ object TransactionBuilderApi {
         } yield IoTransaction(
           inputs = stxos,
           outputs = changeOutputs :+ utxoMinted,
-          datum = datum,
-          mintingStatements = Seq(mintingStatement)
+          datum = datum
         )
       ).value
 
@@ -764,10 +766,23 @@ object TransactionBuilderApi {
           Value.defaultInstance.withLvl(Value.LVL(amount))
         ).pure[F]
 
-      override def datum(): F[Datum.IoTransaction] =
+      override def datum(
+        groupPolicies:       Seq[GroupPolicy] = Seq.empty,
+        seriesPolicies:      Seq[SeriesPolicy] = Seq.empty,
+        mintingStatements:   Seq[AssetMintingStatement] = Seq.empty,
+        mergingStatements:   Seq[AssetMergingStatement] = Seq.empty,
+        splittingStatements: Seq[AssetSplittingStatement] = Seq.empty
+      ): F[Datum.IoTransaction] =
         Datum
           .IoTransaction(
-            Event.IoTransaction(Schedule(0, Long.MaxValue, System.currentTimeMillis), SmallData.defaultInstance)
+            Event.IoTransaction.defaultInstance
+              .withSchedule(Schedule(0, Long.MaxValue, System.currentTimeMillis))
+              .withMetadata(SmallData.defaultInstance)
+              .withGroupPolicies(groupPolicies)
+              .withSeriesPolicies(seriesPolicies)
+              .withMintingStatements(mintingStatements)
+              .withMergingStatements(mergingStatements)
+              .withSplittingStatements(splittingStatements)
           )
           .pure[F]
 
@@ -805,11 +820,11 @@ object TransactionBuilderApi {
           utxosChange <- buildUtxos(otherTxos, None, None, changeAddress, changeAddress, fee)
           mergedUtxo = MergingOps.merge(txosToMerge, mergedAssetLockAddress, ephemeralMetadata, commitment)
           asm = AssetMergingStatement(utxosToMerge, utxosChange.length)
+          datumWithAssetMintingStatement = datum.copy(event = datum.event.copy(mergingStatements = Seq(asm)))
         } yield IoTransaction(
           inputs = stxos,
           outputs = utxosChange :+ mergedUtxo,
-          datum = datum,
-          mergingStatements = Seq(asm)
+          datum = datumWithAssetMintingStatement
         )
       ).value
     }

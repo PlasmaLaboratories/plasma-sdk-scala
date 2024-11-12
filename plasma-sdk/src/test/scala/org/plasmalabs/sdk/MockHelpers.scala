@@ -8,7 +8,7 @@ import org.plasmalabs.sdk.common.ContainsImmutable.ContainsImmutableTOps
 import org.plasmalabs.sdk.common.ContainsImmutable.instances._
 import org.plasmalabs.sdk.common.ContainsSignable.ContainsSignableTOps
 import org.plasmalabs.sdk.common.ContainsSignable.instances._
-import org.plasmalabs.sdk.models.Event.{GroupPolicy, SeriesPolicy}
+import org.plasmalabs.sdk.models.{GroupPolicy, SeriesPolicy}
 import org.plasmalabs.sdk.models._
 import org.plasmalabs.sdk.models.box.Attestation
 import org.plasmalabs.sdk.models.box.Challenge
@@ -21,7 +21,7 @@ import org.plasmalabs.sdk.syntax.{assetAsBoxVal, groupPolicyAsGroupPolicySyntaxO
 import org.plasmalabs.quivr.api.Proposer
 import org.plasmalabs.quivr.api.Prover
 import com.google.protobuf.ByteString
-import quivr.models.{
+import org.plasmalabs.quivr.models.{
   Digest,
   Int128,
   KeyPair,

@@ -4,7 +4,7 @@ import cats.data.ValidatedNel
 import org.plasmalabs.sdk.builders.locks.LockTemplate
 import org.plasmalabs.sdk.models.Indices
 import org.plasmalabs.sdk.models.box.Lock
-import quivr.models.{KeyPair, Preimage, Proposition}
+import org.plasmalabs.quivr.models.{KeyPair, Preimage, Proposition}
 
 /**
  * Defines a data API for storing and retrieving wallet interaction.

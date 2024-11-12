@@ -11,7 +11,7 @@ import org.plasmalabs.sdk.common.ContainsSignable.instances._
 import org.plasmalabs.sdk.dataApi.WalletStateAlgebra
 import org.plasmalabs.sdk.models.box._
 import org.plasmalabs.sdk.models.transaction.IoTransaction
-import org.plasmalabs.sdk.models.{Datum, Event, Indices}
+import org.plasmalabs.sdk.models.{AssetMintingStatement, Datum, Event, Indices}
 import org.plasmalabs.sdk.syntax.{cryptoToPbKeyPair, pbKeyPairToCryptoKeyPair}
 import org.plasmalabs.sdk.validation.TransactionAuthorizationError.AuthorizationFailed
 import org.plasmalabs.sdk.validation.TransactionSyntaxError
@@ -23,8 +23,7 @@ import org.plasmalabs.quivr.runtime.QuivrRuntimeErrors.ValidationError.{
 }
 import com.google.protobuf.ByteString
 import munit.CatsEffectSuite
-import quivr.models._
-
+import org.plasmalabs.quivr.models._
 import scala.util.Random
 import org.plasmalabs.crypto.generation.Bip32Indexes
 import org.plasmalabs.crypto.signing.ExtendedEd25519
@@ -33,10 +32,15 @@ class CredentiallerInterpreterSpec extends CatsEffectSuite with MockHelpers {
   val walletApi: WalletApi[F] = WalletApi.make[F](MockWalletKeyApi)
 
   test("prove: other fields on transaction are preserved") {
-    val testTx = txFull
-      .withGroupPolicies(Seq(Datum.GroupPolicy(mockGroupPolicy)))
-      .withSeriesPolicies(Seq(Datum.SeriesPolicy(mockSeriesPolicy)))
+
+    val iotxEvent = txFull.datum.event
+      .withGroupPolicies(Seq(mockGroupPolicy))
+      .withSeriesPolicies(Seq(mockSeriesPolicy))
       .withMintingStatements(Seq(AssetMintingStatement(dummyTxoAddress, dummyTxoAddress, quantity)))
+
+    val testTx = txFull
+      .withDatum(txFull.datum.copy(event = iotxEvent))
+
     assertIO(
       for {
         provenTx <- CredentiallerInterpreter.make[F](walletApi, MockWalletStateApi, MockMainKeyPair).prove(testTx)

@@ -12,8 +12,8 @@ import org.plasmalabs.sdk.builders.TransactionBuilderInterpreterSpecBase.{
 }
 import org.plasmalabs.sdk.common.ContainsImmutable.ContainsImmutableTOps
 import org.plasmalabs.sdk.common.ContainsImmutable.instances.{spentOutputImmutable, unspentOutputImmutable}
-import org.plasmalabs.sdk.models.Event.{GroupPolicy, SeriesPolicy}
-import org.plasmalabs.sdk.models.box.{AssetMintingStatement, Lock, Value}
+import org.plasmalabs.sdk.models.{AssetMintingStatement, GroupPolicy, SeriesPolicy}
+import org.plasmalabs.sdk.models.box.{Lock, Value}
 import org.plasmalabs.sdk.models.transaction.{IoTransaction, SpentTransactionOutput, UnspentTransactionOutput}
 import org.plasmalabs.sdk.models.{LockAddress, TransactionOutputAddress}
 import org.plasmalabs.sdk.syntax.{

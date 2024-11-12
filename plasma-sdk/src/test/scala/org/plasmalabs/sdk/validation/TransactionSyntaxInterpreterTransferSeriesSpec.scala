@@ -3,8 +3,7 @@ package org.plasmalabs.sdk.validation
 import cats.Id
 import cats.implicits._
 import org.plasmalabs.sdk.MockHelpers
-import org.plasmalabs.sdk.models.Event
-import org.plasmalabs.sdk.models.TransactionOutputAddress
+import org.plasmalabs.sdk.models.{Event, SeriesPolicy, TransactionOutputAddress}
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
@@ -20,7 +19,7 @@ class TransactionSyntaxInterpreterTransferSeriesSpec extends munit.FunSuite with
   TransactionOutputAddress(2, 0, 0, dummyTxIdentifier)
 
   test("Valid data-input case, transfer a simple series ") {
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
 
     val value_1_in: Value =
       Value.defaultInstance.withSeries(Value.Series(seriesId = seriesPolicy.computeId, quantity = BigInt(1)))
@@ -56,7 +55,7 @@ class TransactionSyntaxInterpreterTransferSeriesSpec extends munit.FunSuite with
   }
 
   test("Valid data-input case 2, transfer a simple series ") {
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
 
     val value_1_in: Value =
       Value.defaultInstance.withSeries(Value.Series(seriesId = seriesPolicy.computeId, quantity = BigInt(2)))
@@ -96,7 +95,7 @@ class TransactionSyntaxInterpreterTransferSeriesSpec extends munit.FunSuite with
   }
 
   test("InValid data-input case 2, transfer a simple series ") {
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
 
     val value_1_in: Value =
       Value.defaultInstance.withSeries(

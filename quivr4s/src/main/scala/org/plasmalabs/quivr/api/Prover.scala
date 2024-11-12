@@ -4,7 +4,7 @@ import cats.Applicative
 import cats.implicits._
 import org.plasmalabs.quivr.Tokens
 import com.google.protobuf.ByteString
-import quivr.models._
+import org.plasmalabs.quivr.models._
 
 import java.nio.charset.StandardCharsets
 import org.plasmalabs.crypto.hash.Blake2b256

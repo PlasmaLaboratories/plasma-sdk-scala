@@ -7,8 +7,8 @@ import org.plasmalabs.quivr.generators.ModelGenerators.arbitraryDigest
 import com.google.protobuf.ByteString
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import quivr.models.Int128
-import quivr.models.Proof
+import org.plasmalabs.quivr.models.Int128
+import org.plasmalabs.quivr.models.Proof
 
 import java.util.Random
 
@@ -164,9 +164,9 @@ trait EventGenerator {
       for {
         schedule <- arbitrarySchedule.arbitrary
         metadata <- Gen.const(
-          quivr.models.SmallData.of(ByteString.EMPTY)
-        ) // TODO create Small Data generator: QuivrRepo
-      } yield Event.IoTransaction.of(schedule, metadata)
+          org.plasmalabs.quivr.models.SmallData.of(ByteString.EMPTY)
+        ) // TODO create Small Data generator: QuivrRepo, and Data Generator Policies
+      } yield Event.IoTransaction.of(schedule, metadata, Seq.empty, Seq.empty, Seq.empty, Seq.empty, Seq.empty)
     )
 
 }

@@ -1,7 +1,7 @@
 package org.plasmalabs.sdk.syntax
 
 import com.google.protobuf.ByteString
-import quivr.models.Int128
+import org.plasmalabs.quivr.models.Int128
 
 import scala.language.implicitConversions
 

@@ -2,7 +2,7 @@ package org.plasmalabs.quivr.generators
 
 import com.google.protobuf.ByteString
 import org.scalacheck.{Arbitrary, Gen}
-import quivr.models.Digest
+import org.plasmalabs.quivr.models.Digest
 
 trait ModelGenerators {
 

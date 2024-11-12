@@ -1,7 +1,7 @@
 package org.plasmalabs.sdk.display
 
 import org.plasmalabs.sdk.display.DisplayOps.DisplayTOps
-import org.plasmalabs.sdk.models.{Datum, SeriesId}
+import org.plasmalabs.sdk.models.{SeriesId, SeriesPolicy}
 import org.plasmalabs.sdk.models.box.{FungibilityType, QuantityDescriptorType}
 import org.plasmalabs.sdk.utils.Encoding
 import org.plasmalabs.sdk.models.box.Value
@@ -25,17 +25,17 @@ trait SeriesDisplayOps {
     case _ => throw new Exception("Unknown quantity descriptor type") // should not happen
   }
 
-  implicit val seriesPolicyDisplay: DisplayOps[Datum.SeriesPolicy] = (sp: Datum.SeriesPolicy) =>
+  implicit val seriesPolicyDisplay: DisplayOps[SeriesPolicy] = (sp: SeriesPolicy) =>
     Seq(
-      padLabel("Label") + sp.event.label,
-      padLabel("Registration-Utxo") + sp.event.registrationUtxo.display,
-      padLabel("Fungibility") + sp.event.fungibility.display,
-      padLabel("Quantity-Descriptor") + sp.event.quantityDescriptor.display,
-      padLabel("Token-Supply") + displayTokenSupply(sp.event.tokenSupply),
+      padLabel("Label") + sp.label,
+      padLabel("Registration-Utxo") + sp.registrationUtxo.display,
+      padLabel("Fungibility") + sp.fungibility.display,
+      padLabel("Quantity-Descriptor") + sp.quantityDescriptor.display,
+      padLabel("Token-Supply") + displayTokenSupply(sp.tokenSupply),
       padLabel("Permanent-Metadata-Scheme"),
-      sp.event.permanentMetadataScheme.map(meta => meta.display).getOrElse("No permanent metadata"),
+      sp.permanentMetadataScheme.map(meta => meta.display).getOrElse("No permanent metadata"),
       padLabel("Ephemeral-Metadata-Scheme"),
-      sp.event.ephemeralMetadataScheme.map(meta => meta.display).getOrElse("No ephemeral metadata")
+      sp.ephemeralMetadataScheme.map(meta => meta.display).getOrElse("No ephemeral metadata")
     ).mkString("\n")
 
   implicit val seriesDisplay: DisplayOps[Value.Series] = (series: Value.Series) =>

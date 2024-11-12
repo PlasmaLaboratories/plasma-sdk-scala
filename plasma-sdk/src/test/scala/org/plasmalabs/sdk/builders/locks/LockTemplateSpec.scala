@@ -1,7 +1,7 @@
 package org.plasmalabs.sdk.builders.locks
 
 import cats.Id
-import quivr.models.Proposition.Value._
+import org.plasmalabs.quivr.models.Proposition.Value._
 import org.plasmalabs.sdk.MockHelpers
 import org.plasmalabs.sdk.builders.locks.PropositionTemplate.UnableToBuildPropositionTemplate
 import org.plasmalabs.sdk.models.box.Lock.Value.Predicate

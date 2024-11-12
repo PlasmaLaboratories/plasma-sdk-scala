@@ -6,7 +6,7 @@ import cats.implicits._
 import com.google.protobuf.ByteString
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
-import quivr.models.{KeyPair, Preimage, Proposition, VerificationKey}
+import org.plasmalabs.quivr.models.{KeyPair, Preimage, Proposition, VerificationKey}
 import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import org.plasmalabs.sdk.builders.locks.{LockTemplate, PropositionTemplate}
 import org.plasmalabs.sdk.codecs.AddressCodecs

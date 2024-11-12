@@ -2,7 +2,7 @@ package org.plasmalabs.sdk.syntax
 
 import org.plasmalabs.sdk.models.box.{FungibilityType, QuantityDescriptorType}
 import org.plasmalabs.sdk.models.box.Value._
-import quivr.models.Int128
+import org.plasmalabs.quivr.models.Int128
 
 import scala.language.implicitConversions
 

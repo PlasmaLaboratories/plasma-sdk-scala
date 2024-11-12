@@ -8,7 +8,7 @@ import org.plasmalabs.crypto.hash.implicits._
 import org.plasmalabs.crypto.hash.Blake2b
 import org.plasmalabs.crypto.hash.blake2b256
 import com.google.protobuf.ByteString
-import quivr.models.Digest
+import org.plasmalabs.quivr.models.Digest
 
 /**
  * Contains signable bytes and has methods to get evidence of those bytes in the form of a 32 or 64 byte hash.

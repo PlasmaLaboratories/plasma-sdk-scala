@@ -1,5 +1,6 @@
 package org.plasmalabs.sdk.builders
 
+import org.plasmalabs.sdk.models.Event
 import org.plasmalabs.sdk.models.box.FungibilityType.GROUP_AND_SERIES
 import org.plasmalabs.sdk.models.box.QuantityDescriptorType.LIQUID
 import org.plasmalabs.sdk.models.box.Value

@@ -4,7 +4,7 @@ import cats.Monad
 import cats.data.EitherT
 import org.plasmalabs.common.ParsableDataInterface
 import org.plasmalabs.quivr.runtime.QuivrRuntimeErrors.{ContextError, ValidationError}
-import quivr.models._
+import org.plasmalabs.quivr.models._
 import org.plasmalabs.quivr.algebras.{DigestVerifier, SignatureVerifier}
 
 /**

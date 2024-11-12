@@ -11,7 +11,7 @@ import org.plasmalabs.sdk.models.box.Lock
 import org.plasmalabs.sdk.utils.Encoding
 import com.google.protobuf.ByteString
 import munit.CatsEffectSuite
-import quivr.models.{Digest, Preimage, Proposition}
+import org.plasmalabs.quivr.models.{Digest, Preimage, Proposition}
 
 class WalletStateApiSpec extends CatsEffectSuite with BaseSpec {
 

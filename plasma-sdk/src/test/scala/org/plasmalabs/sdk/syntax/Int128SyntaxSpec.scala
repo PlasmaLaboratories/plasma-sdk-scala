@@ -2,7 +2,7 @@ package org.plasmalabs.sdk.syntax
 
 import org.plasmalabs.sdk.MockHelpers
 import com.google.protobuf.ByteString
-import quivr.models.Int128
+import org.plasmalabs.quivr.models.Int128
 
 class Int128SyntaxSpec extends munit.FunSuite with MockHelpers {
 

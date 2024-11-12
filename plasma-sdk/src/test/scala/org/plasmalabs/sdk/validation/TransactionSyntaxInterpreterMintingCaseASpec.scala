@@ -3,9 +3,7 @@ package org.plasmalabs.sdk.validation
 import cats.Id
 import cats.implicits._
 import org.plasmalabs.sdk.MockHelpers
-import org.plasmalabs.sdk.models.Datum
-import org.plasmalabs.sdk.models.Event
-import org.plasmalabs.sdk.models.TransactionOutputAddress
+import org.plasmalabs.sdk.models.{Datum, Event, GroupPolicy, TransactionOutputAddress}
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
@@ -25,7 +23,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
   private val txoAddress_2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
 
   test("Valid data-input case 1, minting a Group constructor Token") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val value_1_in: Value =
       Value.defaultInstance.withLvl(
         Value.LVL(
@@ -44,11 +42,9 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(
-      inputs = List(input_1),
-      outputs = List(output_1),
-      groupPolicies = List(Datum.GroupPolicy(groupPolicy))
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
+
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -68,7 +64,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
    * reference in policy contains LVLs (> 0)
    */
   test("Invalid data-input case 2, minting a Group constructor Token") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val value_1_in: Value =
       Value.defaultInstance.withLvl(
         Value.LVL(
@@ -87,11 +83,8 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(
-      inputs = List(input_1),
-      outputs = List(output_1),
-      groupPolicies = List(Datum.GroupPolicy(groupPolicy))
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -114,7 +107,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
    * reference in policy contains LVLs (> 0), registrationUtxo on policy is different that input_1
    */
   test("Invalid data-input case 3, minting a Group constructor Token") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withLvl(
         Value.LVL(
@@ -133,11 +126,8 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(
-      inputs = List(input_1),
-      outputs = List(output_1),
-      groupPolicies = List(Datum.GroupPolicy(groupPolicy))
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -161,7 +151,7 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
    * there is no constraint about the amount of constructor token quantity == 10000000 and LVL quantity
    */
   test("Valid data-input case 4, minting a Group constructor Token") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
 
     val value_1_in: Value =
       Value.defaultInstance.withLvl(
@@ -181,11 +171,8 @@ class TransactionSyntaxInterpreterMintingCaseASpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(
-      inputs = List(input_1),
-      outputs = List(output_1),
-      groupPolicies = List(Datum.GroupPolicy(groupPolicy))
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap

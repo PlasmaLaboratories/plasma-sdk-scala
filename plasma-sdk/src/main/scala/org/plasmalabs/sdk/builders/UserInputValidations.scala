@@ -3,7 +3,8 @@ package org.plasmalabs.sdk.builders
 import cats.data.{Chain, NonEmptyChain, Validated, ValidatedNec}
 import cats.implicits.{catsSyntaxEitherId, catsSyntaxValidatedIdBinCompat0, toFoldableOps}
 import org.plasmalabs.sdk.models.box.Value._
-import org.plasmalabs.sdk.models.box.{AssetMintingStatement, QuantityDescriptorType}
+import org.plasmalabs.sdk.models.box.QuantityDescriptorType
+import org.plasmalabs.sdk.models.AssetMintingStatement
 import org.plasmalabs.sdk.models.{LockAddress, SeriesId, TransactionOutputAddress}
 import org.plasmalabs.sdk.syntax.{
   int128AsBigInt,
@@ -17,7 +18,7 @@ import org.plasmalabs.sdk.syntax.{
   ValueTypeIdentifier
 }
 import org.plasmalabs.indexer.services.Txo
-import quivr.models.Int128
+import org.plasmalabs.quivr.models.Int128
 
 import scala.util.{Failure, Success, Try}
 

@@ -5,8 +5,8 @@ import cats.Monad
 import org.plasmalabs.quivr.algebras.SignatureVerifier
 import org.plasmalabs.quivr.runtime.QuivrRuntimeError
 import org.plasmalabs.quivr.runtime.QuivrRuntimeErrors.ValidationError
-import quivr.models.{Message, SignatureVerification, VerificationKey, Witness}
-import quivr.models.VerificationKey._
+import org.plasmalabs.quivr.models.{Message, SignatureVerification, VerificationKey, Witness}
+import org.plasmalabs.quivr.models.VerificationKey._
 import org.plasmalabs.crypto.signing.{Ed25519, ExtendedEd25519}
 
 /**

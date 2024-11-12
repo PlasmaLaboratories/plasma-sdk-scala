@@ -3,11 +3,11 @@ package org.plasmalabs.quivr.api
 import cats.Applicative
 import cats.implicits._
 import com.google.protobuf.ByteString
-import quivr.models.Data
-import quivr.models.Digest
-import quivr.models.Int128
-import quivr.models.Proposition
-import quivr.models.VerificationKey
+import org.plasmalabs.quivr.models.Data
+import org.plasmalabs.quivr.models.Digest
+import org.plasmalabs.quivr.models.Int128
+import org.plasmalabs.quivr.models.Proposition
+import org.plasmalabs.quivr.models.VerificationKey
 
 // Proposers create Propositions from a tuple of arguments (or single argument) of type A.
 trait Proposer[F[_], A] {

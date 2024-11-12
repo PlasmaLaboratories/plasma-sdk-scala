@@ -1,7 +1,8 @@
 package org.plasmalabs.sdk.display
 
 import org.plasmalabs.sdk.display.DisplayOps.DisplayTOps
-import org.plasmalabs.sdk.models.box.{AssetMergingStatement, AssetMintingStatement, Value}
+import org.plasmalabs.sdk.models.box.Value
+import org.plasmalabs.sdk.models.{AssetMergingStatement, AssetMintingStatement}
 import org.plasmalabs.sdk.utils.Encoding
 import org.plasmalabs.sdk.syntax.int128AsBigInt
 

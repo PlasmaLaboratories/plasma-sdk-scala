@@ -22,7 +22,7 @@ import org.plasmalabs.crypto.hash.digest.Digest32
 import org.plasmalabs.crypto.hash.implicits.{digestDigest32, sha256Hash}
 import com.google.protobuf.ByteString
 import com.google.protobuf.struct.Struct
-import quivr.models.Int128
+import org.plasmalabs.quivr.models.Int128
 import org.plasmalabs.sdk.models.box.Value.Asset
 
 import scala.language.implicitConversions

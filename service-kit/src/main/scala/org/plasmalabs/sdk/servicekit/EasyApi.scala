@@ -6,7 +6,7 @@ import cats.effect.Async
 import cats.implicits.{catsSyntaxApplicativeError, catsSyntaxEitherId, toBifunctorOps, toFlatMapOps, toFunctorOps}
 import org.plasmalabs.sdk.models.transaction.IoTransaction
 import org.plasmalabs.sdk.models.{Datum, Event, LockAddress, TransactionId}
-import quivr.models.VerificationKey
+import org.plasmalabs.quivr.models.VerificationKey
 import org.plasmalabs.sdk.Context
 import org.plasmalabs.sdk.builders.TransactionBuilderApi
 import org.plasmalabs.sdk.builders.TransactionBuilderApi.implicits.lockAddressOps

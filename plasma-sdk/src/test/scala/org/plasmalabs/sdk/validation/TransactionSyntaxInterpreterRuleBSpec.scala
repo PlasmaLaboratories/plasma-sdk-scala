@@ -3,10 +3,14 @@ package org.plasmalabs.sdk.validation
 import cats.Id
 import cats.implicits._
 import org.plasmalabs.sdk.MockHelpers
-import org.plasmalabs.sdk.models.Datum
-import org.plasmalabs.sdk.models.Event
-import org.plasmalabs.sdk.models.TransactionOutputAddress
-import org.plasmalabs.sdk.models.box.AssetMintingStatement
+import org.plasmalabs.sdk.models.{
+  AssetMintingStatement,
+  Datum,
+  Event,
+  GroupPolicy,
+  SeriesPolicy,
+  TransactionOutputAddress
+}
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
@@ -28,8 +32,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
    * DuplicateInput because minting statements contains the same txoAddress
    */
   test("Invalid data-input case, input(0) + minted1 == output1, input and asset mining statements are duplicated") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
     val value_1_in =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = 1))
 
@@ -63,7 +67,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
       AssetMintingStatement(groupTokenUtxo = txoAddress_1, seriesTokenUtxo = txoAddress_1, quantity = 1)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -81,8 +86,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
    * DuplicateInput because minting statements contains the same txoAddress
    */
   test("Invalid data-input case, input(0) + minted1 == output1, asset mining statements are duplicated") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = 1))
 
@@ -119,7 +124,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
       )
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -136,8 +142,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
    * DuplicateInput because minting statements contains the same txoAddress
    */
   test("Invalid data-input case, input(0) + minted1 == output1, asset mining statements are duplicated, case 2") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = 1))
 
@@ -175,7 +181,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
 
     val mintingStatements = List(mintingStatement_1, mintingStatement_2)
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -191,7 +198,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
   }
 
   test("Invalid data-input, minting a Group constructor Token") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val value_1_in =
       Value.defaultInstance.withLvl(Value.LVL(quantity = 1))
 
@@ -202,9 +209,10 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     val outputs = List(UnspentTransactionOutput(trivialLockAddress, value_1_out))
 
     // policies contains same referenced Utxos
-    val groupPolicies = List(Datum.GroupPolicy(groupPolicy), Datum.GroupPolicy(groupPolicy))
+    val groupPolicies = List(groupPolicy, groupPolicy)
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, groupPolicies = groupPolicies)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = groupPolicies))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -216,8 +224,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
   }
 
   test("Invalid data-input, minting a Group constructor Token") {
-    val groupPolicy_A = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val groupPolicy_B = Event.GroupPolicy(label = "groupLabelB", registrationUtxo = txoAddress_1)
+    val groupPolicy_A = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy_B = GroupPolicy(label = "groupLabelB", registrationUtxo = txoAddress_1)
     val value_1_in =
       Value.defaultInstance.withLvl(Value.LVL(quantity = 1))
 
@@ -234,9 +242,10 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     )
 
     // policies contains same referenced Utxos
-    val groupPolicies = List(Datum.GroupPolicy(groupPolicy_A), Datum.GroupPolicy(groupPolicy_B))
+    val groupPolicies = List(groupPolicy_A, groupPolicy_B)
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, groupPolicies = groupPolicies)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = groupPolicies))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -252,7 +261,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
   }
 
   test("Invalid data-input, minting a Series constructor Token") {
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
     val value_1_in =
       Value.defaultInstance.withLvl(Value.LVL(quantity = 1))
 
@@ -262,9 +271,10 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
     val inputs = List(SpentTransactionOutput(txoAddress_1, attFull, value_1_in))
     val outputs = List(UnspentTransactionOutput(trivialLockAddress, value_1_out))
     // policies contains same referenced Utxos
-    val seriesPolicies = List(Datum.SeriesPolicy(seriesPolicy), Datum.SeriesPolicy(seriesPolicy))
+    val seriesPolicies = List(seriesPolicy, seriesPolicy)
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, seriesPolicies = seriesPolicies)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = seriesPolicies))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -276,8 +286,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
   }
 
   test("Invalid data-input, minting a Series constructor Token") {
-    val seriesPolicy_A = Event.SeriesPolicy(label = "seriesLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy_B = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val seriesPolicy_A = SeriesPolicy(label = "seriesLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy_B = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
 
     val value_1_in =
       Value.defaultInstance.withLvl(Value.LVL(quantity = 1))
@@ -294,9 +304,10 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_2_out)
     )
     // policies contains same referenced Utxos
-    val seriesPolicies = List(Datum.SeriesPolicy(seriesPolicy_A), Datum.SeriesPolicy(seriesPolicy_B))
+    val seriesPolicies = List(seriesPolicy_A, seriesPolicy_B)
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, seriesPolicies = seriesPolicies)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = seriesPolicies))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -308,8 +319,8 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
   }
 
   test("Invalid data-input, minting a Group and Series constructor Token") {
-    val g1 = Event.GroupPolicy(label = "g1", registrationUtxo = txoAddress_1)
-    val s1 = Event.SeriesPolicy(label = "s1", registrationUtxo = txoAddress_1)
+    val g1 = GroupPolicy(label = "g1", registrationUtxo = txoAddress_1)
+    val s1 = SeriesPolicy(label = "s1", registrationUtxo = txoAddress_1)
 
     val value_abc_in =
       Value.defaultInstance.withLvl(Value.LVL(quantity = 1))
@@ -326,11 +337,13 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_2_out)
     )
     // policies contains same referenced Utxos
-    val groupPolicies = List(Datum.GroupPolicy(g1))
-    val seriesPolicies = List(Datum.SeriesPolicy(s1))
+    val groupPolicies = List(g1)
+    val seriesPolicies = List(s1)
 
+    val datum =
+      txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = seriesPolicies, groupPolicies = groupPolicies))
     val testTx =
-      txFull.copy(inputs = inputs, outputs = outputs, groupPolicies = groupPolicies, seriesPolicies = seriesPolicies)
+      txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap

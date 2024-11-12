@@ -4,7 +4,7 @@ import cats.Monad
 import org.plasmalabs.quivr.algebras.DigestVerifier
 import org.plasmalabs.quivr.runtime.QuivrRuntimeError
 import org.plasmalabs.quivr.runtime.QuivrRuntimeErrors.ValidationError
-import quivr.models.{Digest, DigestVerification, Preimage}
+import org.plasmalabs.quivr.models.{Digest, DigestVerification, Preimage}
 import cats.implicits.{catsSyntaxApplicativeId, catsSyntaxEitherObject}
 import org.plasmalabs.crypto.hash.Blake2b256
 

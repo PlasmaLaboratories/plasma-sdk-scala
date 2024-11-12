@@ -1,7 +1,7 @@
 package org.plasmalabs.sdk.wallet
 
 import org.plasmalabs.sdk.{MockHelpers, MockWalletKeyApi}
-import quivr.models.KeyPair
+import org.plasmalabs.quivr.models.KeyPair
 import cats.arrow.FunctionK
 import org.plasmalabs.sdk.models.Indices
 import io.circe.syntax.EncoderOps

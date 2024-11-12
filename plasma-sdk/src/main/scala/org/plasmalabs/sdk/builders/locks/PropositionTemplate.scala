@@ -1,7 +1,7 @@
 package org.plasmalabs.sdk.builders.locks
 
 import org.plasmalabs.sdk.builders.BuilderError
-import quivr.models.{Data, Digest, Proposition, VerificationKey}
+import org.plasmalabs.quivr.models.{Data, Digest, Proposition, VerificationKey}
 import PropositionTemplate.PropositionType
 import cats.implicits.{
   catsSyntaxApplicativeId,

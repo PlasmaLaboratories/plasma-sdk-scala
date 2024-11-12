@@ -324,7 +324,7 @@ import org.plasmalabs.sdk.servicekit.{WalletKeyApi, WalletStateApi, WalletStateR
 import org.plasmalabs.sdk.syntax.LvlType
 import org.plasmalabs.sdk.utils.Encoding
 import org.plasmalabs.sdk.wallet.{CredentiallerInterpreter, WalletApi}
-import quivr.models.VerificationKey
+import org.plasmalabs.quivr.models.VerificationKey
 
 import java.nio.file.Paths
 

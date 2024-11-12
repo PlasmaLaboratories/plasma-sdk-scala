@@ -1,7 +1,8 @@
 package org.plasmalabs.sdk.builders
 
-import org.plasmalabs.sdk.models.transaction.IoTransaction
-import org.plasmalabs.sdk.models.Datum
+import org.plasmalabs.quivr.models.SmallData
+import org.plasmalabs.sdk.models.transaction.{IoTransaction, Schedule}
+import org.plasmalabs.sdk.models.{Datum, Event}
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.syntax.{ioTransactionAsTransactionSyntaxOps, valueToTypeIdentifierSyntaxOps, LvlType}
 
@@ -10,8 +11,16 @@ class TransactionBuilderInterpreterSeriesMintingSpec extends TransactionBuilderI
   test("Success") {
     val txRes = buildMintSeriesTransaction.run
     val expectedTx = IoTransaction.defaultInstance
-      .withDatum(txDatum)
-      .withSeriesPolicies(Seq(Datum.SeriesPolicy(mockSeriesPolicyAlt)))
+      .withDatum(
+        Datum.IoTransaction(
+          Event
+            .IoTransaction(
+              Schedule(0, Long.MaxValue, System.currentTimeMillis),
+              SmallData.defaultInstance
+            )
+            .withSeriesPolicies(Seq(mockSeriesPolicyAlt))
+        )
+      )
       .withInputs(buildStxos(mockTxos :+ valToTxo(lvlValue, txAddr = mockSeriesPolicyAlt.registrationUtxo)))
       .withOutputs(
         // minted output

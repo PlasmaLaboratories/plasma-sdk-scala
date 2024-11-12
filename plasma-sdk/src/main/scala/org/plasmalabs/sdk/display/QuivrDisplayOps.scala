@@ -1,7 +1,7 @@
 package org.plasmalabs.sdk.display
 
 import org.plasmalabs.sdk.utils.Encoding
-import quivr.models.{Proof, Proposition}
+import org.plasmalabs.quivr.models.{Proof, Proposition}
 
 trait QuivrDisplayOps {
 

@@ -3,9 +3,9 @@ package org.plasmalabs.sdk.syntax
 import org.plasmalabs.crypto.signing
 import org.plasmalabs.crypto.signing.ExtendedEd25519
 import com.google.protobuf.ByteString
-import quivr.models.SigningKey.ExtendedEd25519Sk
-import quivr.models.VerificationKey.{Ed25519Vk, ExtendedEd25519Vk}
-import quivr.models.{KeyPair, SigningKey, VerificationKey}
+import org.plasmalabs.quivr.models.SigningKey.ExtendedEd25519Sk
+import org.plasmalabs.quivr.models.VerificationKey.{Ed25519Vk, ExtendedEd25519Vk}
+import org.plasmalabs.quivr.models.{KeyPair, SigningKey, VerificationKey}
 
 import scala.language.implicitConversions
 

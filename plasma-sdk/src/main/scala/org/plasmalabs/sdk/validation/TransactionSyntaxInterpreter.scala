@@ -6,13 +6,12 @@ import cats.implicits._
 import org.plasmalabs.sdk.builders.MergingOps
 import org.plasmalabs.sdk.common.ContainsImmutable.ContainsImmutableTOps
 import org.plasmalabs.sdk.common.ContainsImmutable.instances._
-import org.plasmalabs.sdk.models.TransactionOutputAddress
+import org.plasmalabs.sdk.models.{AssetMergingStatement, AssetMintingStatement, TransactionOutputAddress}
 import org.plasmalabs.sdk.models.box._
 import org.plasmalabs.sdk.models.transaction.{IoTransaction, SpentTransactionOutput, UnspentTransactionOutput}
 import org.plasmalabs.sdk.syntax._
 import org.plasmalabs.sdk.validation.algebras.TransactionSyntaxVerifier
-import quivr.models.{Int128, Proof, Proposition}
-
+import org.plasmalabs.quivr.models.{Int128, Proof, Proposition}
 import scala.util.Try
 
 object TransactionSyntaxInterpreter {
@@ -252,12 +251,14 @@ object TransactionSyntaxInterpreter {
   private def assetEqualFundsValidation(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] = {
     val inputAssets = transaction.inputs
       .filterNot(in =>
-        transaction.mergingStatements.flatMap(_.inputUtxos).contains(in.address)
+        transaction.datum.event.mergingStatements.flatMap(_.inputUtxos).contains(in.address)
       ) // ignoring merging inputs
       .filter(_.value.value.isAsset)
       .map(_.value.value)
     val outputAssets = transaction.outputs.zipWithIndex
-      .filterNot(out => transaction.mergingStatements.map(_.outputIdx).contains(out._2)) // ignoring merged outputs
+      .filterNot(out =>
+        transaction.datum.event.mergingStatements.map(_.outputIdx).contains(out._2)
+      ) // ignoring merged outputs
       .map(_._1)
       .filter(_.value.value.isAsset)
       .map(_.value.value)
@@ -276,7 +277,7 @@ object TransactionSyntaxInterpreter {
         .map(_.value.getSeries)
         .headOption
 
-    val mintedAsset = transaction.mintingStatements.map { stm =>
+    val mintedAsset = transaction.datum.event.mintingStatements.map { stm =>
       val series = seriesGivenMintedStatements(stm)
       Value.defaultInstance
         .withAsset(
@@ -344,10 +345,10 @@ object TransactionSyntaxInterpreter {
     val gIds =
       groupsIn.groupBy(_.groupId).keySet ++
       groupsOut.groupBy(_.groupId).keySet ++
-      transaction.groupPolicies.map(_.event.computeId).toSet
+      transaction.datum.event.groupPolicies.map(_.computeId).toSet
 
     val res = gIds.forall { gId =>
-      if (!transaction.groupPolicies.map(_.event.computeId).contains(gId)) {
+      if (!transaction.datum.event.groupPolicies.map(_.computeId).contains(gId)) {
         groupsIn.filter(_.groupId == gId).map(_.quantity: BigInt).sum ==
           groupsOut.filter(_.groupId == gId).map(_.quantity: BigInt).sum
       } else {
@@ -386,10 +387,10 @@ object TransactionSyntaxInterpreter {
     val sIds =
       seriesIn.groupBy(_.seriesId).keySet ++
       seriesOut.groupBy(_.seriesId).keySet ++
-      transaction.seriesPolicies.map(_.event.computeId).toSet
+      transaction.datum.event.seriesPolicies.map(_.computeId).toSet
 
     val sIdsOnMintingStatements = {
-      val sIdsAddress = transaction.mintingStatements.map(_.seriesTokenUtxo)
+      val sIdsAddress = transaction.datum.event.mintingStatements.map(_.seriesTokenUtxo)
       transaction.inputs
         .filter(sto => sIdsAddress.contains(sto.address))
         .filter(_.value.value.isSeries)
@@ -399,7 +400,7 @@ object TransactionSyntaxInterpreter {
     val res = sIds.forall { sId =>
       if (sIdsOnMintingStatements.contains(sId)) {
         seriesOut.filter(_.seriesId == sId).map(_.quantity: BigInt).sum >= 0
-      } else if (!transaction.seriesPolicies.map(_.event.computeId).contains(sId)) {
+      } else if (!transaction.datum.event.seriesPolicies.map(_.computeId).contains(sId)) {
         seriesIn.filter(_.seriesId == sId).map(_.quantity: BigInt).sum ==
           seriesOut.filter(_.seriesId == sId).map(_.quantity: BigInt).sum
       } else {
@@ -429,7 +430,7 @@ object TransactionSyntaxInterpreter {
   private def assetNoRepeatedUtxosValidation(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
     NonEmptyChain
       .fromSeq {
-        val mintingStatementsValidation = transaction.mintingStatements
+        val mintingStatementsValidation = transaction.datum.event.mintingStatements
           .flatMap(stm => Seq(stm.groupTokenUtxo, stm.seriesTokenUtxo))
           .groupBy(identity)
           .collect {
@@ -439,8 +440,10 @@ object TransactionSyntaxInterpreter {
           .toSeq
 
         val policiesValidation =
-          (transaction.groupPolicies.map(_.event.registrationUtxo) ++ transaction.seriesPolicies
-            .map(_.event.registrationUtxo))
+          (transaction.datum.event.groupPolicies.map(
+            _.registrationUtxo
+          ) ++ transaction.datum.event.seriesPolicies
+            .map(_.registrationUtxo))
             .groupBy(identity)
             .collect {
               case (address, seqAddresses) if seqAddresses.size > 1 =>
@@ -456,32 +459,32 @@ object TransactionSyntaxInterpreter {
     transaction.inputs.filter { stxo =>
       !stxo.value.value.isTopl &&
       !stxo.value.value.isAsset &&
-      (!stxo.value.value.isLvl || (transaction.groupPolicies.exists(
-        _.event.registrationUtxo == stxo.address
-      ) || transaction.seriesPolicies.exists(_.event.registrationUtxo == stxo.address)))
+      (!stxo.value.value.isLvl || (transaction.datum.event.groupPolicies.exists(
+        _.registrationUtxo == stxo.address
+      ) || transaction.datum.event.seriesPolicies.exists(_.registrationUtxo == stxo.address)))
     }
 
   private def mintingOutputsProjection(transaction: IoTransaction): Seq[UnspentTransactionOutput] = {
     val groupIdsOnMintedStatements =
       transaction.inputs
         .filter(_.value.value.isGroup)
-        .filter(sto => transaction.mintingStatements.map(_.groupTokenUtxo).contains(sto.address))
+        .filter(sto => transaction.datum.event.mintingStatements.map(_.groupTokenUtxo).contains(sto.address))
         .map(_.value.getGroup.groupId)
 
     val seriesIdsOnMintedStatements =
       transaction.inputs
         .filter(_.value.value.isSeries)
-        .filter(sto => transaction.mintingStatements.map(_.seriesTokenUtxo).contains(sto.address))
+        .filter(sto => transaction.datum.event.mintingStatements.map(_.seriesTokenUtxo).contains(sto.address))
         .map(_.value.getSeries.seriesId)
 
     transaction.outputs.filter { utxo =>
       !utxo.value.value.isLvl &&
       !utxo.value.value.isTopl &&
-      (!utxo.value.value.isGroup || transaction.groupPolicies
-        .map(_.event.computeId)
+      (!utxo.value.value.isGroup || transaction.datum.event.groupPolicies
+        .map(_.computeId)
         .contains(utxo.value.getGroup.groupId)) &&
-      (!utxo.value.value.isSeries || transaction.seriesPolicies
-        .map(_.event.computeId)
+      (!utxo.value.value.isSeries || transaction.datum.event.seriesPolicies
+        .map(_.computeId)
         .contains(utxo.value.getSeries.seriesId)) &&
       (!utxo.value.value.isAsset || (utxo.value.getAsset.groupId.exists(
         groupIdsOnMintedStatements.contains
@@ -505,17 +508,17 @@ object TransactionSyntaxInterpreter {
       }
 
     val validGroups = groups.forall { group =>
-      transaction.groupPolicies.exists { policy =>
-        policy.event.computeId == group.groupId &&
-        registrationInPolicyContainsLvls(policy.event.registrationUtxo)
+      transaction.datum.event.groupPolicies.exists { policy =>
+        policy.computeId == group.groupId &&
+        registrationInPolicyContainsLvls(policy.registrationUtxo)
       } &&
       group.quantity > 0
     }
 
     val validSeries = series.forall { series =>
-      transaction.seriesPolicies.exists { policy =>
-        policy.event.computeId == series.seriesId &&
-        registrationInPolicyContainsLvls(policy.event.registrationUtxo) &&
+      transaction.datum.event.seriesPolicies.exists { policy =>
+        policy.computeId == series.seriesId &&
+        registrationInPolicyContainsLvls(policy.registrationUtxo) &&
         series.quantity > 0
       }
     }
@@ -526,7 +529,7 @@ object TransactionSyntaxInterpreter {
      * and burned the number of where the referenced series specifies a token supply, then we have:
      * sIn - burned = sOut
      */
-    val validAssets = transaction.mintingStatements.forall { ams =>
+    val validAssets = transaction.datum.event.mintingStatements.forall { ams =>
       val maybeSeries: Option[Value.Series] =
         transaction.inputs
           .filter(_.value.value.isSeries)
@@ -554,7 +557,7 @@ object TransactionSyntaxInterpreter {
               val burned = sIn - sOut
 
               // all asset minting statements quantity with the same series id
-              def quantity(s: Value.Series) = transaction.mintingStatements.map { ams =>
+              def quantity(s: Value.Series) = transaction.datum.event.mintingStatements.map { ams =>
                 val filterSeries = transaction.inputs
                   .filter(_.address == ams.seriesTokenUtxo)
                   .filter(_.value.value.isSeries)
@@ -608,7 +611,7 @@ object TransactionSyntaxInterpreter {
    * Validate that the merging inputs are distinct (not re-used in other merging statements)
    */
   private def mergingDistinctValidation(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] = {
-    val mergingInputs = transaction.mergingStatements.flatMap(
+    val mergingInputs = transaction.datum.event.mergingStatements.flatMap(
       _.inputUtxos.distinct
     ) // distinct within each merging statement since those duplicates are handled via InvalidMergingStatement
     val repeatedInputs: Seq[TransactionSyntaxError] = mergingInputs
@@ -641,7 +644,7 @@ object TransactionSyntaxInterpreter {
     def isValidStatement: AsmCheck = s =>
       Seq(outputIdxInBounds, multipleInputs, allInputsPresent, distinctInputs).forall(_(s))
 
-    val invalidMergingStatements = transaction.mergingStatements.filterNot(isValidStatement)
+    val invalidMergingStatements = transaction.datum.event.mergingStatements.filterNot(isValidStatement)
     NonEmptyChain.fromSeq(invalidMergingStatements.map(TransactionSyntaxError.InvalidMergingStatement.apply)) match {
       case Some(repeated) => Validated.Invalid(repeated)
       case None           => ().validNec[TransactionSyntaxError]
@@ -690,7 +693,7 @@ object TransactionSyntaxInterpreter {
         validFungibility
       ).forall(_(v))
 
-    val toMerge = transaction.mergingStatements.map(asm =>
+    val toMerge = transaction.datum.event.mergingStatements.map(asm =>
       MergingValues(
         asm.inputUtxos.map(input => transaction.inputs.find(_.address == input).get.value),
         transaction.outputs(asm.outputIdx).value

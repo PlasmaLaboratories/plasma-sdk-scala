@@ -5,7 +5,7 @@ import LockTemplate.LockType
 import cats.Monad
 import cats.implicits.{catsSyntaxApplicativeId, catsSyntaxEitherId, toFlatMapOps}
 import org.plasmalabs.sdk.builders.locks.PropositionTemplate.ThresholdTemplate
-import quivr.models.{Proposition, VerificationKey}
+import org.plasmalabs.quivr.models.{Proposition, VerificationKey}
 import org.plasmalabs.sdk.models.box.Lock
 import org.plasmalabs.sdk.models.box.Challenge
 

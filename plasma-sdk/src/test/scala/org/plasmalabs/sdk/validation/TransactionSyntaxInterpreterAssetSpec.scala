@@ -3,9 +3,7 @@ package org.plasmalabs.sdk.validation
 import cats.Id
 import cats.implicits._
 import org.plasmalabs.sdk.MockHelpers
-import org.plasmalabs.sdk.models.Event
-import org.plasmalabs.sdk.models.TransactionOutputAddress
-import org.plasmalabs.sdk.models.box.AssetMintingStatement
+import org.plasmalabs.sdk.models.{AssetMintingStatement, Event, GroupPolicy, SeriesPolicy, TransactionOutputAddress}
 import org.plasmalabs.sdk.models.box.FungibilityType
 import org.plasmalabs.sdk.models.box.QuantityDescriptorType.IMMUTABLE
 import org.plasmalabs.sdk.models.box.QuantityDescriptorType.LIQUID
@@ -30,7 +28,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 1
    */
   test("Invalid data-input case 0+0 != 1") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val value_1: Value =
       Value.defaultInstance.withAsset(
         Value.Asset(
@@ -40,7 +38,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
         )
       )
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1)
-    val testTx = txFull.copy(outputs = List(output_1), mintingStatements = Seq.empty)
+    val testTx = txFull.copy(outputs = List(output_1))
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -64,7 +62,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 1
    */
   test("Valid data-input case") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val value_1_in: Value =
       Value.defaultInstance.withAsset(
         Value.Asset(
@@ -90,8 +88,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
 
     val testTx = txFull.copy(
       inputs = List(input_1),
-      outputs = List(output_1),
-      mintingStatements = Seq.empty
+      outputs = List(output_1)
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -117,8 +114,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - The asset is not the same, first contains a groupId
    */
   test("Invalid data-input case not equals assets") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withAsset(
         Value.Asset(
@@ -142,8 +139,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
 
     val testTx = txFull.copy(
       inputs = List(input_1),
-      outputs = List(output_1),
-      mintingStatements = Seq.empty
+      outputs = List(output_1)
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -170,7 +166,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    */
   test("Invalid data-input case: not equals quantity") {
 
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
 
     val value_1_in: Value =
       Value.defaultInstance.withAsset(
@@ -193,7 +189,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), mintingStatements = Seq.empty)
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1))
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -218,7 +214,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 1
    */
   test("Invalid data-input case, equals assets,  2 + 0 != 1") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val value_1_in: Value =
       Value.defaultInstance.withAsset(
         Value.Asset(
@@ -242,7 +238,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
     val input_2 = SpentTransactionOutput(txoAddress_2, attFull, value_2_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1), mintingStatements = Seq.empty)
+    val testTx = txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1))
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -268,7 +264,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 1
    */
   test("Valid data-input case, input(1) + minted(0) == output(1)") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val value_1_in: Value =
       Value.defaultInstance.withAsset(
         Value.Asset(
@@ -292,7 +288,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), mintingStatements = List.empty)
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1))
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -315,8 +311,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 1
    */
   test("Valid data-input case, input(0) + minted(1) == output(1)") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
 
@@ -351,7 +347,9 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
     val mintingStatements =
       List(AssetMintingStatement(groupTokenUtxo = txoAddress_1, seriesTokenUtxo = txoAddress_2, quantity = BigInt(1)))
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -376,8 +374,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 1
    */
   test("Invalid data-input case, input + minted == output") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
 
@@ -410,7 +408,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_3_out)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = List.empty)
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -436,8 +434,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 2
    */
   test("Invalid data-input case, input + minted == output") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
 
@@ -478,7 +476,9 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_3_out)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -504,8 +504,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 1
    */
   test("Invalid data-input case, input + minted == output") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
 
@@ -545,7 +545,9 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_3_out)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -571,8 +573,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - asset output = 2
    */
   test("Valid data-input case, input + minted == output") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withGroup(
         Value.Group(
@@ -641,7 +643,9 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_4_out)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -668,8 +672,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * - Fungibility Type is not the same
    */
   test("Invalid data-input case, input + minted == output") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withGroup(
         Value.Group(
@@ -732,7 +736,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, value_4_out)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -763,8 +768,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * We still expected failure because the second output's (groupId, seriesId) is not from minting or inputs.
    */
   test("Invalid data-input case, unexpected asset output") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val group_in: Value =
       Value.defaultInstance.withGroup(
         Value.Group(
@@ -825,7 +830,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, invalid_out)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = List(mintingStatement))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = Seq(mintingStatement)))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -853,8 +859,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * Both output's (groupId, seriesId) match the AMS, but both have invalid fields.
    */
   test("Invalid data-input case, invalid fields in minted asset") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val group_in: Value =
       Value.defaultInstance.withGroup(
         Value.Group(
@@ -898,10 +904,12 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
     val series_out: Value =
       Value.defaultInstance.withSeries(Value.Series(seriesId = seriesPolicy.computeId, quantity = BigInt(1)))
 
-    val mintingStatement = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(1)
+    val mintingStatements = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(1)
+      )
     )
 
     val inputs = List(
@@ -915,7 +923,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, minted_out_invalidQuantity)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = List(mintingStatement))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -943,8 +952,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * Both output's (groupId, seriesId) match the AMS, but only the first has valid fields.
    */
   test("Invalid data-input case, invalid fields in one minted asset") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val group_in: Value =
       Value.defaultInstance.withGroup(
         Value.Group(
@@ -988,10 +997,12 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
     val series_out: Value =
       Value.defaultInstance.withSeries(Value.Series(seriesId = seriesPolicy.computeId, quantity = BigInt(1)))
 
-    val mintingStatement = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(1)
+    val mintingStatements = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(1)
+      )
     )
 
     val inputs = List(
@@ -1005,7 +1016,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, minted_out_invalid)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = List(mintingStatement))
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -1033,8 +1045,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
    * Asset outputs has invalid fields (compared to its input).
    */
   test("Invalid data-input case, invalid fields in transferred assets") {
-    val groupPolicy = Event.GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
 
     val asset_in: Value =
       Value.defaultInstance.withAsset(
@@ -1075,7 +1087,7 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       UnspentTransactionOutput(trivialLockAddress, asset_out_invalidQuantityDescriptor)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = Seq.empty)
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap

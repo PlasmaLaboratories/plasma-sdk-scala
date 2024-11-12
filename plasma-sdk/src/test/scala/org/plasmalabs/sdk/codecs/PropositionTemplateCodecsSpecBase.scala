@@ -18,7 +18,7 @@ import org.plasmalabs.sdk.builders.locks.PropositionTemplate.{
 import org.plasmalabs.sdk.utils.Encoding.encodeToBase58
 import com.google.protobuf.ByteString
 import io.circe.Json
-import quivr.models.Data
+import org.plasmalabs.quivr.models.Data
 
 trait PropositionTemplateCodecsSpecBase extends MockHelpers {
 

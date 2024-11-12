@@ -8,7 +8,7 @@ import org.plasmalabs.sdk.utils.Encoding.{decodeFromBase58, encodeToBase58}
 import com.google.protobuf.ByteString
 import io.circe.syntax.EncoderOps
 import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
-import quivr.models.{Data, Digest}
+import org.plasmalabs.quivr.models.{Data, Digest}
 
 object PropositionTemplateCodecs {
   def encodePropositionTemplate[F[_]: Monad](template: PropositionTemplate[F]): Json = template.asJson

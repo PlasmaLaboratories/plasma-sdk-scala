@@ -3,9 +3,7 @@ package org.plasmalabs.sdk.validation
 import cats.Id
 import cats.implicits._
 import org.plasmalabs.sdk.MockHelpers
-import org.plasmalabs.sdk.models.Datum
-import org.plasmalabs.sdk.models.Event
-import org.plasmalabs.sdk.models.TransactionOutputAddress
+import org.plasmalabs.sdk.models.{Datum, Event, SeriesPolicy, TransactionOutputAddress}
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
@@ -25,7 +23,7 @@ class TransactionSyntaxInterpreterMintingCaseBSpec extends munit.FunSuite with M
   private val txoAddress_2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
 
   test("Valid data-input case 1, minting a Series constructor Token") {
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
     val value_1_in: Value =
       Value.defaultInstance.withLvl(
         Value.LVL(
@@ -44,11 +42,8 @@ class TransactionSyntaxInterpreterMintingCaseBSpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(
-      inputs = List(input_1),
-      outputs = List(output_1),
-      seriesPolicies = List(Datum.SeriesPolicy(seriesPolicy))
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = Seq(seriesPolicy)))
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -68,7 +63,7 @@ class TransactionSyntaxInterpreterMintingCaseBSpec extends munit.FunSuite with M
    * reference in policy contains LVLs (> 0)
    */
   test("Invalid data-input case 2, minting a Series constructor Token") {
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)
     val value_1_in: Value =
       Value.defaultInstance.withLvl(
         Value.LVL(
@@ -87,11 +82,8 @@ class TransactionSyntaxInterpreterMintingCaseBSpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(
-      inputs = List(input_1),
-      outputs = List(output_1),
-      seriesPolicies = List(Datum.SeriesPolicy(seriesPolicy))
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = Seq(seriesPolicy)))
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -114,7 +106,7 @@ class TransactionSyntaxInterpreterMintingCaseBSpec extends munit.FunSuite with M
    * reference in policy contains LVLs (> 0), registrationUtxo on policy is different that input_1
    */
   test("Invalid data-input case 3, minting a Series constructor Token") {
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
       Value.defaultInstance.withLvl(
         Value.LVL(
@@ -133,11 +125,8 @@ class TransactionSyntaxInterpreterMintingCaseBSpec extends munit.FunSuite with M
     val input_1 = SpentTransactionOutput(txoAddress_1, attFull, value_1_in)
     val output_1: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, value_1_out)
 
-    val testTx = txFull.copy(
-      inputs = List(input_1),
-      outputs = List(output_1),
-      seriesPolicies = List(Datum.SeriesPolicy(seriesPolicy))
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(seriesPolicies = Seq(seriesPolicy)))
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(output_1), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap

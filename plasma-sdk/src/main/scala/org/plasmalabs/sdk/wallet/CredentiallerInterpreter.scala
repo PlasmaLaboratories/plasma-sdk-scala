@@ -14,7 +14,7 @@ import org.plasmalabs.sdk.common.ContainsSignable.ContainsSignableTOps
 import org.plasmalabs.sdk.common.ContainsSignable.instances._
 import org.plasmalabs.quivr.api.Prover
 import org.plasmalabs.quivr.api.Verifier.instances.verifierInstance
-import quivr.models.{KeyPair, Proof, Proposition, SignableBytes, Witness}
+import org.plasmalabs.quivr.models.{KeyPair, Proof, Proposition, SignableBytes, Witness}
 import org.plasmalabs.sdk.models.Indices
 import cats.data.EitherT
 import org.plasmalabs.sdk.dataApi.WalletStateAlgebra

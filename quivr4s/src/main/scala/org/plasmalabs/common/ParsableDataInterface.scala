@@ -1,6 +1,6 @@
 package org.plasmalabs.common
 
-import quivr.models.Data
+import org.plasmalabs.quivr.models.Data
 
 trait ParsableDataInterface {
   val data: Data

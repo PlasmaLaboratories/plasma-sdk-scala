@@ -5,7 +5,7 @@ import scala.util.Success
 import scala.util.Try
 import org.plasmalabs.crypto.hash.sha256
 
-sealed abstract trait EncodingError extends Exception
+sealed trait EncodingError extends Exception
 case object InvalidChecksum extends EncodingError
 case object InvalidInputString extends EncodingError
 

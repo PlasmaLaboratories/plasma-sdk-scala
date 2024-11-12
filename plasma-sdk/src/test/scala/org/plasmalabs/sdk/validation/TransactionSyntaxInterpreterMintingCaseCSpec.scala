@@ -3,9 +3,8 @@ package org.plasmalabs.sdk.validation
 import cats.Id
 import cats.implicits._
 import org.plasmalabs.sdk.MockHelpers
-import org.plasmalabs.sdk.models.Event
-import org.plasmalabs.sdk.models.TransactionOutputAddress
-import org.plasmalabs.sdk.models.box.AssetMintingStatement
+import org.plasmalabs.sdk.models.{Event, GroupPolicy, SeriesPolicy, TransactionOutputAddress}
+import org.plasmalabs.sdk.models.AssetMintingStatement
 import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
@@ -25,8 +24,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   private val txoAddress_4 = TransactionOutputAddress(0, 0, 4, dummyTxIdentifier)
 
   test("Valid data-input case 1, minting a Asset Token Unlimited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy = Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = None)
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = None)
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -60,17 +59,17 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
     val output_3 = UnspentTransactionOutput(trivialLockAddress, value_3_out)
 
-    val mintingStatement_1 = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(1)
+    val mintingStatement_1 = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(1)
+      )
     )
 
-    val testTx = txFull.copy(
-      inputs = List(input_1, input_2),
-      outputs = List(output_1, output_2, output_3),
-      mintingStatements = List(mintingStatement_1)
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
+    val testTx =
+      txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1, output_2, output_3), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -80,9 +79,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Valid data-input case 1, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = 1))
@@ -119,12 +117,13 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
 
     val mintingStatement_1 =
-      AssetMintingStatement(groupTokenUtxo = txoAddress_1, seriesTokenUtxo = txoAddress_2, quantity = 10)
+      Seq(AssetMintingStatement(groupTokenUtxo = txoAddress_1, seriesTokenUtxo = txoAddress_2, quantity = 10))
 
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2),
-      mintingStatements = List(mintingStatement_1)
+      datum = datum
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -135,9 +134,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Valid data-input case 2, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -194,7 +192,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -204,9 +203,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Valid data-input case 3, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -252,16 +250,19 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
     val output_3 = UnspentTransactionOutput(trivialLockAddress, value_3_out)
 
-    val mintingStatement_1 = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(10)
+    val mintingStatement_1 = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(10)
+      )
     )
 
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2, output_3),
-      mintingStatements = List(mintingStatement_1)
+      datum = datum
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -272,9 +273,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Valid data-input case 4, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -319,16 +319,19 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out)
     val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
 
-    val mintingStatement_1 = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(20)
+    val mintingStatement_1 = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(20)
+      )
     )
 
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatement_1))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2),
-      mintingStatements = List(mintingStatement_1)
+      datum = datum
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -339,9 +342,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Valid data-input case 5, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -389,7 +391,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -400,16 +403,16 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
 
   test("Valid data-input case 6, minting a Asset Token Limited and transfer Other Asset") {
     val groupPolicy =
-      Event.GroupPolicy(label = "policy", registrationUtxo = txoAddress_1)
+      GroupPolicy(label = "policy", registrationUtxo = txoAddress_1)
 
     val groupPolicy_A =
-      Event.GroupPolicy(label = "policy_A", registrationUtxo = txoAddress_3)
+      GroupPolicy(label = "policy_A", registrationUtxo = txoAddress_3)
 
     val seriesPolicy =
-      Event.SeriesPolicy(label = "series", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+      SeriesPolicy(label = "series", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val seriesPolicy_A =
-      Event.SeriesPolicy(label = "series_A", registrationUtxo = txoAddress_4, tokenSupply = Some(10))
+      SeriesPolicy(label = "series_A", registrationUtxo = txoAddress_4, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -490,7 +493,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -500,9 +504,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Invalid data-input case 1, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -536,17 +539,16 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out)
     val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
 
-    val mintingStatement_1 = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(11) // Invalid data
+    val mintingStatements = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(11) // Invalid data
+      )
     )
 
-    val testTx = txFull.copy(
-      inputs = List(input_1, input_2),
-      outputs = List(output_1, output_2),
-      mintingStatements = List(mintingStatement_1)
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1, output_2), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -566,9 +568,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Invalid data-input case 2, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(10))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -602,17 +603,16 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out)
     val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
 
-    val mintingStatement_1 = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(10)
+    val mintingStatements = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(10)
+      )
     )
 
-    val testTx = txFull.copy(
-      inputs = List(input_1, input_2),
-      outputs = List(output_1, output_2),
-      mintingStatements = List(mintingStatement_1)
-    )
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = List(input_1, input_2), outputs = List(output_1, output_2), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -632,9 +632,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
   }
 
   test("Invalid data-input case 3, minting a Asset Token Limited") {
-    val groupPolicy = Event.GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
-    val seriesPolicy =
-      Event.SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(3))
+    val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
+    val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2, tokenSupply = Some(3))
 
     val value_1_in: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = groupPolicy.computeId, quantity = BigInt(1)))
@@ -668,16 +667,19 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out)
     val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
 
-    val mintingStatement_1 = AssetMintingStatement(
-      groupTokenUtxo = txoAddress_1,
-      seriesTokenUtxo = txoAddress_2,
-      quantity = BigInt(2)
+    val mintingStatements = Seq(
+      AssetMintingStatement(
+        groupTokenUtxo = txoAddress_1,
+        seriesTokenUtxo = txoAddress_2,
+        quantity = BigInt(2)
+      )
     )
 
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
     val testTx = txFull.copy(
       inputs = List(input_1, input_2),
       outputs = List(output_1, output_2),
-      mintingStatements = List(mintingStatement_1)
+      datum = datum
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -709,10 +711,10 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
 
     val dummyTxoAddress = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
 
-    val g1 = Event.GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
-    val g2 = Event.GroupPolicy(label = "policyG2", registrationUtxo = utxo_uvw)
+    val g1 = GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
+    val g2 = GroupPolicy(label = "policyG2", registrationUtxo = utxo_uvw)
 
-    val s1 = Event.SeriesPolicy(label = "policyS1", registrationUtxo = dummyTxoAddress, tokenSupply = Some(1))
+    val s1 = SeriesPolicy(label = "policyS1", registrationUtxo = dummyTxoAddress, tokenSupply = Some(1))
 
     val value_abc_in: Value =
       Value.defaultInstance.withSeries(
@@ -778,10 +780,13 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       quantity = BigInt(1)
     )
 
+    val datum = txFull.datum.copy(event =
+      txFull.datum.event.copy(mintingStatements = List(mintingStatement_1, mintingStatement_2))
+    )
     val testTx = txFull.copy(
       inputs = List(input_abc, input_def, input_xyz, input_uvw),
       outputs = List(output_1, output_2, output_3, output_4, output_5),
-      mintingStatements = List(mintingStatement_1, mintingStatement_2)
+      datum = datum
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -812,10 +817,10 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
 
     val dummyTxoAddress = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
 
-    val g1 = Event.GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
-    val g2 = Event.GroupPolicy(label = "policyG2", registrationUtxo = utxo_uvw)
+    val g1 = GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
+    val g2 = GroupPolicy(label = "policyG2", registrationUtxo = utxo_uvw)
 
-    val s1 = Event.SeriesPolicy(label = "policyS1", registrationUtxo = dummyTxoAddress, tokenSupply = Some(1))
+    val s1 = SeriesPolicy(label = "policyS1", registrationUtxo = dummyTxoAddress, tokenSupply = Some(1))
 
     val value_abc_in: Value =
       Value.defaultInstance.withSeries(
@@ -881,10 +886,13 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       quantity = BigInt(1)
     )
 
+    val datum = txFull.datum.copy(event =
+      txFull.datum.event.copy(mintingStatements = List(mintingStatement_1, mintingStatement_2))
+    )
     val testTx = txFull.copy(
       inputs = List(input_abc, input_def, input_xyz, input_uvw),
       outputs = List(output_1, output_2, output_3, output_4, output_5),
-      mintingStatements = List(mintingStatement_1, mintingStatement_2)
+      datum = datum
     )
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
@@ -914,10 +922,10 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val utxo3 = TransactionOutputAddress(0, 0, 3, dummyTxIdentifier)
     val utxo4 = TransactionOutputAddress(0, 0, 4, dummyTxIdentifier)
 
-    val gA = Event.GroupPolicy(label = "policyGA", registrationUtxo = utxo1)
-    val gB = Event.GroupPolicy(label = "policyGB", registrationUtxo = utxo2)
+    val gA = GroupPolicy(label = "policyGA", registrationUtxo = utxo1)
+    val gB = GroupPolicy(label = "policyGB", registrationUtxo = utxo2)
 
-    val sC = Event.SeriesPolicy(label = "policyS1", registrationUtxo = utxo, tokenSupply = Some(5))
+    val sC = SeriesPolicy(label = "policyS1", registrationUtxo = utxo, tokenSupply = Some(5))
 
     // inputs
     val inValue1_GA: Value =
@@ -984,7 +992,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo2, seriesTokenUtxo = utxo4, quantity = BigInt(5))
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -1014,10 +1023,10 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val utxo3 = TransactionOutputAddress(0, 0, 3, dummyTxIdentifier)
     val utxo4 = TransactionOutputAddress(0, 0, 4, dummyTxIdentifier)
 
-    val gA = Event.GroupPolicy(label = "policyGA", registrationUtxo = utxo1)
-    val gB = Event.GroupPolicy(label = "policyGB", registrationUtxo = utxo2)
+    val gA = GroupPolicy(label = "policyGA", registrationUtxo = utxo1)
+    val gB = GroupPolicy(label = "policyGB", registrationUtxo = utxo2)
 
-    val sC = Event.SeriesPolicy(label = "policyS1", registrationUtxo = utxo, tokenSupply = Some(5))
+    val sC = SeriesPolicy(label = "policyS1", registrationUtxo = utxo, tokenSupply = Some(5))
 
     // inputs
     val inValue1_GA: Value =
@@ -1072,7 +1081,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo2, seriesTokenUtxo = utxo4, quantity = BigInt(10))
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -1100,9 +1110,9 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val utxo_abc = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
     val utxo_xyz = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
 
-    val g1 = Event.GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
+    val g1 = GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
 
-    val sC = Event.SeriesPolicy(label = "policyS1", registrationUtxo = utxo, tokenSupply = Some(5))
+    val sC = SeriesPolicy(label = "policyS1", registrationUtxo = utxo, tokenSupply = Some(5))
 
     // inputs
     val inValue1_abc: Value =
@@ -1133,7 +1143,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo_xyz, seriesTokenUtxo = utxo_abc, quantity = 1)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap
@@ -1162,8 +1173,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val utxo_abc = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
     val utxo_xyz = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
 
-    val g1 = Event.GroupPolicy(label = "g1", registrationUtxo = utxo_xyz)
-    val s1 = Event.SeriesPolicy(label = "s1", registrationUtxo = utxo, tokenSupply = Some(5))
+    val g1 = GroupPolicy(label = "g1", registrationUtxo = utxo_xyz)
+    val s1 = SeriesPolicy(label = "s1", registrationUtxo = utxo, tokenSupply = Some(5))
 
     // inputs
     val inValue1_abc: Value =
@@ -1194,7 +1205,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       AssetMintingStatement(groupTokenUtxo = utxo_xyz, seriesTokenUtxo = utxo_abc, quantity = 1)
     )
 
-    val testTx = txFull.copy(inputs = inputs, outputs = outputs, mintingStatements = mintingStatements)
+    val datum = txFull.datum.copy(event = txFull.datum.event.copy(mintingStatements = mintingStatements))
+    val testTx = txFull.copy(inputs = inputs, outputs = outputs, datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator.validate(testTx).swap

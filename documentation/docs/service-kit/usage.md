@@ -113,7 +113,7 @@ import org.plasmalabs.sdk.builders.TransactionBuilderApi.implicits.lockAddressOp
 import co.topl.brambl.constants.NetworkConstants.{MAIN_LEDGER_ID, PRIVATE_NETWORK_ID}
 import org.plasmalabs.sdk.models.Indices
 import org.plasmalabs.sdk.utils.Encoding
-import quivr.models.VerificationKey
+import org.plasmalabs.quivr.models.VerificationKey
 
 import java.io.File
 
