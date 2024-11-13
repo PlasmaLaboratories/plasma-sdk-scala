@@ -1,14 +1,17 @@
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/topl/bramblsc?label=release&style=plastic)
+![Maven Central Version](https://img.shields.io/maven-central/v/org.plasmalabs/plasma-sdk_3)
 
-# BramblSc
 
-Topl's Brambl SDK implemented in Scala. [Read the docs to get started](https://topl.github.io/BramblSc/docs/current/reference/getting-started).
+# Plasma Sdk Scala
 
-Multiple artifacts will be built from this repo. Some will be just for Topl clients and some will be shared. 
+Plasma SDK implemented in Scala.
+
+Multiple artifacts will be built from this repo. Some will be just for Plasma clients and some will be shared. 
+
+Libraries are available for Scala 2.13 and Scala 3
 
 The artifacts generated from this repo are:
 
-- brambl-sdk
+- plasma-sdk
 - crypto
 - service-kit
 - quivr4s
