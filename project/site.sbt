@@ -4,7 +4,7 @@ Seq(
   "org.scoverage"           % "sbt-scoverage"             % "2.2.1",
   "com.github.sbt"          % "sbt-release"               % "1.4.0",
   "org.scalameta"           % "sbt-scalafmt"              % "2.5.2",
-  "ch.epfl.scala"           % "sbt-scalafix"              % "0.12.1",
+  "ch.epfl.scala"           % "sbt-scalafix"              % "0.13.0",
   "com.eed3si9n"            % "sbt-buildinfo"             % "0.13.1",
   "com.github.sbt"          % "sbt-ci-release"            % "1.9.0",
   "net.bzzt"                % "sbt-reproducible-builds"   % "0.32",
