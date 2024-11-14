@@ -1,10 +1,10 @@
-package co.topl.brambl.common
+package org.plasmalabs.sdk.common
 
-import co.topl.brambl.common.ContainsSignable.ContainsSignableTOps
-import co.topl.brambl.common.ContainsSignable.instances.ioTransactionSignable
-import co.topl.brambl.models.transaction.IoTransaction
-import co.topl.brambl.syntax.ioTransactionAsTransactionSyntaxOps
-import co.topl.brambl.utils.Encoding
+import org.plasmalabs.sdk.common.ContainsSignable.ContainsSignableTOps
+import org.plasmalabs.sdk.common.ContainsSignable.instances.ioTransactionSignable
+import org.plasmalabs.sdk.models.transaction.IoTransaction
+import org.plasmalabs.sdk.syntax.ioTransactionAsTransactionSyntaxOps
+import org.plasmalabs.sdk.utils.Encoding
 
 class TransactionCodecVectorsSpec extends munit.FunSuite {
 
@@ -25,6 +25,10 @@ class TransactionCodecVectorsSpec extends munit.FunSuite {
 
 object TransactionCodecVectorsSpec {
 
+  /**
+   * NOTE: These test vectors are intended to be consistent and implemented across all SDK target languages.
+   * Any updates to these vectors should also be included in the other SDK repositories.
+   */
   val vectors: List[TestVector] = List(
     TestVector(
       "1a060a040a002200",
