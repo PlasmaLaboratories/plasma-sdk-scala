@@ -13,7 +13,6 @@ jobs:
         ["ubuntu-latest"]
       java-versions: >-
         ["8"]
-      preserve-cache-between-runs: true
   maven-release:
     uses: ./.github/workflows/_maven_release.yml
     needs: sbt-build
