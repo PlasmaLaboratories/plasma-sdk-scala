@@ -31,7 +31,6 @@ jobs:
       with:
         distribution: temurin
         java-version: ${{ matrix.java }}
-        cache: sbt
     - uses: sbt/setup-sbt@v1
       with:
         sbt-runner-version: 1.9.9
