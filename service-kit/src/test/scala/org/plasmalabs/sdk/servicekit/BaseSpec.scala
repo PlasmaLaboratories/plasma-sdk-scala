@@ -20,7 +20,7 @@ import java.sql.Connection
 import org.plasmalabs.crypto.signing.{ExtendedEd25519, KeyPair}
 
 trait BaseSpec extends CatsEffectSuite with WalletStateResource {
-  override val munitTimeout: Duration = Duration(180, "s")
+  override val munitIOTimeout: Duration = Duration(180, "s")
 
   val TEST_DIR = "./tmp"
   val testDir: File = Paths.get(TEST_DIR).toFile
