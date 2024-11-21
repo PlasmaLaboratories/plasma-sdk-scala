@@ -44,7 +44,7 @@ object Dependencies {
   val cats: Seq[ModuleID] = Seq(
     "org.typelevel" %% "cats-core"   % catsCoreVersion,
     "org.typelevel" %% "cats-free"   % catsCoreVersion,
-    "org.typelevel" %% "cats-effect" % "3.5.5"
+    "org.typelevel" %% "cats-effect" % "3.5.6"
   )
 
   val protobufSpecs: Seq[ModuleID] = Seq(
