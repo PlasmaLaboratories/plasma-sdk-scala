@@ -31,7 +31,8 @@ class KeyInitializerSpec extends AnyPropSpec with ScalaCheckDrivenPropertyChecks
 
   implicit val inputsDecoder: Decoder[SpecInputs] = (c: HCursor) =>
     for {
-      (mnemonicString, size) <- EntropyTestVectorHelper.mnemonicStringAndSize(c)
+      pair <- EntropyTestVectorHelper.mnemonicStringAndSize(c)
+      (mnemonicString, size) = pair
       password               <- c.downField("password").as[Option[String]]
     } yield SpecInputs(mnemonicString, size, password)
 

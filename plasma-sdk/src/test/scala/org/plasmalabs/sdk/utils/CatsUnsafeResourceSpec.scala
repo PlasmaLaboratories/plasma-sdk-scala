@@ -7,6 +7,8 @@ import munit.CatsEffectSuite
 
 class CatsUnsafeResourceSpec extends CatsEffectSuite {
 
+  import cats.effect.implicits._
+
   type F[A] = IO[A]
 
   test("give thread safety to mutable data") {
@@ -14,10 +16,10 @@ class CatsUnsafeResourceSpec extends CatsEffectSuite {
     val a2 = Array.fill(16)(1: Byte)
     for {
       underTest <- CatsUnsafeResource.make[F, MutableResource](new MutableResource(16), 1)
-      (r1, r2) <- (
-        underTest.use(d => Sync[F].delay { d.setBytesSlowly(a1); d.getArrayCopy }),
-        underTest.use(d => Sync[F].delay { d.setBytesSlowly(a2); d.getArrayCopy })
-      ).parTupled
+      r1IO = underTest.use(d => Sync[F].delay { d.setBytesSlowly(a1); d.getArrayCopy })
+      r2IO = underTest.use(d => Sync[F].delay { d.setBytesSlowly(a2); d.getArrayCopy })
+      entry <- (r1IO, r2IO).parTupled
+      (r1, r2) = entry
       _ = assert(r1 sameElements a1)
       _ = assert(r2 sameElements a2)
     } yield ()
