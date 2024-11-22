@@ -179,6 +179,6 @@ lazy val plasma = project
     quivr4s
   )
 
-addCommandAlias("checkPR", s"; +clean; scalafixAll --check; scalafmtCheckAll; coverage; +test; coverageReport")
+addCommandAlias("checkPR", s"; clean; scalafixAll --check; scalafmtCheckAll; coverage; +test; coverageReport")
 addCommandAlias("preparePR", s"; scalafixAll; scalafmtAll; +test; unidoc")
 addCommandAlias("checkPRTestQuick", s"; scalafixAll --check; scalafmtCheckAll; +testQuick")
