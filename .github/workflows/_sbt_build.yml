@@ -41,8 +41,6 @@ jobs:
     - uses: sbt/setup-sbt@v1
       with:
         sbt-runner-version: 1.9.9
-    - name: Clean, delete step later
-      run: sbt +clean
     - name: Compile and Test
       run: sbt checkPR
     - name: Upload Test Results
