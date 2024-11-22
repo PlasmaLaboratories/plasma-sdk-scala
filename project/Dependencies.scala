@@ -6,7 +6,7 @@ object Dependencies {
   object Versions {
     val catsCoreVersion = "2.12.0"
     val circeVersion = "0.14.10"
-    val protobufSpecsVersion = "0.1.4"
+    val protobufSpecsVersion = "0.1.5"
   }
 
   val catsSlf4j: ModuleID =
