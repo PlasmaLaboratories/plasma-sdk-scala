@@ -14,19 +14,19 @@ import org.plasmalabs.sdk.validation.algebras.TransactionSyntaxVerifier
 import org.plasmalabs.quivr.models.{Int128, Proof, Proposition}
 import scala.util.Try
 import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
-import org.plasmalabs.sdk.constants.NetworkConstants.ETH_LEDGER_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.ACCOUNT_LEDGER_ID
 import org.plasmalabs.sdk.models.GroupPolicy
 import org.plasmalabs.sdk.constants.NetworkConstants
 import org.plasmalabs.sdk.models.TransactionId
 import com.google.protobuf.ByteString
 import org.plasmalabs.sdk.models.SeriesPolicy
 import org.plasmalabs.sdk.models.box.Value.Value.Asset
-import org.plasmalabs.sdk.constants.EthConstants.GroupPolicyEthMainnet
-import org.plasmalabs.sdk.constants.EthConstants.SeriesPolicyEthMainnet
-import org.plasmalabs.sdk.constants.EthConstants.SeriesPolicyEthTestnet
-import org.plasmalabs.sdk.constants.EthConstants.SeriesPolicyEthPrivate
-import org.plasmalabs.sdk.constants.EthConstants.GroupPolicyEthTestnet
-import org.plasmalabs.sdk.constants.EthConstants.GroupPolicyEthPrivate
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerMainnet
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLedgerMainnet
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLedgerTestnet
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLedgerPrivate
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerTestnet
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerPrivate
 
 object TransactionSyntaxInterpreter {
 
@@ -79,7 +79,7 @@ object TransactionSyntaxInterpreter {
       distinctInputsValidation, // OK
       oneOutputCountValidation, // OK new
       noStatementsValidation, // OK new
-      rightOutputAddressEth, // OK new
+      rightOutputAddressAccountLedger, // OK new
       rightOutputType, // OK new
       nonNegativeTimestampValidation, // OK
       scheduleValidation, // OK
@@ -99,7 +99,7 @@ object TransactionSyntaxInterpreter {
 
   private def isType1(transaction: IoTransaction): Boolean =
     transaction.inputs.forall(_.address.ledger == MAIN_LEDGER_ID) &&
-    transaction.outputs.forall(_.address.ledger == ETH_LEDGER_ID)
+    transaction.outputs.forall(_.address.ledger == ACCOUNT_LEDGER_ID)
 
   private def noStatementsValidation(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
     Validated.condNec(
@@ -114,46 +114,46 @@ object TransactionSyntaxInterpreter {
   private def rightOutputType(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
     transaction.outputs.headOption
       .map(x => (x.value.value, x.address))
-      .fold((TransactionSyntaxError.InvalidEthOutputNumber: TransactionSyntaxError).invalidNec[Unit]) {
+      .fold((TransactionSyntaxError.InvalidAccountLedgerOutputNumber: TransactionSyntaxError).invalidNec[Unit]) {
         case (
               Value.Value.Asset(Value.Asset(someGroupId, someSeriesId, Int128(_, _), _, _, _, _, _, _, _)),
               lockAddress
             ) =>
-          val someEthGroupId = lockAddress.network match {
-            case NetworkConstants.MAIN_NETWORK_ID    => Some(GroupPolicyEthMainnet.computeId)
-            case NetworkConstants.TEST_NETWORK_ID    => Some(GroupPolicyEthTestnet.computeId)
-            case NetworkConstants.PRIVATE_NETWORK_ID => Some(GroupPolicyEthPrivate.computeId)
+          val someAccountLedgerGroupId = lockAddress.network match {
+            case NetworkConstants.MAIN_NETWORK_ID    => Some(GroupPolicyAccountLedgerMainnet.computeId)
+            case NetworkConstants.TEST_NETWORK_ID    => Some(GroupPolicyAccountLedgerTestnet.computeId)
+            case NetworkConstants.PRIVATE_NETWORK_ID => Some(GroupPolicyAccountLedgerPrivate.computeId)
             case _                                   => None
           }
-          val someEthSeriesId = lockAddress.network match {
-            case NetworkConstants.MAIN_NETWORK_ID    => Some(SeriesPolicyEthMainnet.computeId)
-            case NetworkConstants.TEST_NETWORK_ID    => Some(SeriesPolicyEthTestnet.computeId)
-            case NetworkConstants.PRIVATE_NETWORK_ID => Some(SeriesPolicyEthPrivate.computeId)
+          val someAccountLedgerSeriesId = lockAddress.network match {
+            case NetworkConstants.MAIN_NETWORK_ID    => Some(SeriesPolicyAccountLedgerMainnet.computeId)
+            case NetworkConstants.TEST_NETWORK_ID    => Some(SeriesPolicyAccountLedgerTestnet.computeId)
+            case NetworkConstants.PRIVATE_NETWORK_ID => Some(SeriesPolicyAccountLedgerPrivate.computeId)
             case _                                   => None
           }
-          ((someGroupId, someSeriesId, someEthGroupId, someEthSeriesId)
+          ((someGroupId, someSeriesId, someAccountLedgerGroupId, someAccountLedgerSeriesId)
             .mapN { (groupId, seriesId, expectedGroupId, expectedSeriesId) =>
               Validated.condNec(
                 groupId.value.toByteArray
                   .sameElements(expectedGroupId.value.toByteArray()) &&
                 seriesId.value.toByteArray.sameElements(expectedSeriesId.value.toByteArray()),
                 (),
-                TransactionSyntaxError.InvalidEthAsset
+                TransactionSyntaxError.InvalidAccountLedgerAsset
               )
             })
             .getOrElse(TransactionSyntaxError.InvalidTransactionType.invalidNec[Unit])
         case _ =>
-          TransactionSyntaxError.InvalidEthAsset.invalidNec[Unit]
+          TransactionSyntaxError.InvalidAccountLedgerAsset.invalidNec[Unit]
       }
 
-  private def rightOutputAddressEth(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
+  private def rightOutputAddressAccountLedger(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
     transaction.outputs.headOption
       .map(_.address)
       .fold((TransactionSyntaxError.InvalidTransactionType: TransactionSyntaxError).invalidNec[Unit]) { lockAddress =>
         Validated.condNec(
           lockAddress.id.value.startsWith(ByteString.copyFrom(Array.fill(12)(0.toByte))),
           (),
-          TransactionSyntaxError.InvalidEthAddress
+          TransactionSyntaxError.InvalidAccountLedgerAddress
         )
 
       }
@@ -200,7 +200,7 @@ object TransactionSyntaxInterpreter {
   private def oneOutputCountValidation(
     transaction: IoTransaction
   ): ValidatedNec[TransactionSyntaxError, Unit] =
-    Validated.condNec(transaction.outputs.size == 1, (), TransactionSyntaxError.InvalidEthOutputNumber)
+    Validated.condNec(transaction.outputs.size == 1, (), TransactionSyntaxError.InvalidAccountLedgerOutputNumber)
 
   /**
    * Verify that the timestamp of the transaction is positive (greater than or equal to 0).  Transactions _can_ be created

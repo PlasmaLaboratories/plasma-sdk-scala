@@ -193,7 +193,7 @@ class TransactionSyntaxInterpreterSpec extends munit.FunSuite with MockHelpers {
   }
 
   test("type 1 tx: validate distinct inputs") {
-    val testTx = txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputEth0))
+    val testTx = txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputAccountLedger0))
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator
       .validate(testTx)
@@ -204,12 +204,12 @@ class TransactionSyntaxInterpreterSpec extends munit.FunSuite with MockHelpers {
 
   test("type 1 tx: validate one output") {
     val testTx =
-      txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputEth0, outputEth1))
+      txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputAccountLedger0, outputAccountLedger1))
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator
       .validate(testTx)
       .swap
-      .exists(_.toList.contains(TransactionSyntaxError.InvalidEthOutputNumber))
+      .exists(_.toList.contains(TransactionSyntaxError.InvalidAccountLedgerOutputNumber))
     assertEquals(result, true)
   }
 
@@ -237,7 +237,7 @@ class TransactionSyntaxInterpreterSpec extends munit.FunSuite with MockHelpers {
 
     val datum = txFull.datum.copy(event = txFull.datum.event.copy(groupPolicies = Seq(groupPolicy)))
 
-    val testTx = txFull.copy(inputs = List(input_1), outputs = List(outputEth0), datum = datum)
+    val testTx = txFull.copy(inputs = List(input_1), outputs = List(outputAccountLedger0), datum = datum)
 
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator
@@ -249,35 +249,35 @@ class TransactionSyntaxInterpreterSpec extends munit.FunSuite with MockHelpers {
 
   test("type 1 tx: validate right output address") {
     val testTx =
-      txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputEth2))
+      txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputAccountLedger2))
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator
       .validate(testTx)
       .swap
-      .exists(_.toList.contains(TransactionSyntaxError.InvalidEthAddress))
+      .exists(_.toList.contains(TransactionSyntaxError.InvalidAccountLedgerAddress))
     assertEquals(result, true)
   }
 
   test("type 1 tx: validate right output type") {
     val testTx =
-      txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputEth3))
+      txFull.copy(inputs = List(inputFull, inputFull), outputs = List(outputAccountLedger3))
     val validator = TransactionSyntaxInterpreter.make[Id]()
     val result = validator
       .validate(testTx)
       .swap
-      .exists(_.toList.contains(TransactionSyntaxError.InvalidEthAsset))
+      .exists(_.toList.contains(TransactionSyntaxError.InvalidAccountLedgerAsset))
     assertEquals(result, true)
   }
 
   test("type 1 tx: validate all rules, correct transaction") {
     // no fee
     val testTx0 =
-      txFull.copy(inputs = List(inputFullEth0), outputs = List(outputEth4))
+      txFull.copy(inputs = List(inputFullAccountLedger0), outputs = List(outputAccountLedger4))
     val validator = TransactionSyntaxInterpreter.make[Id]()
     assert(validator.validate(testTx0).isRight, true)
     // fee
     val testTx1 =
-      txFull.copy(inputs = List(inputFullEth1), outputs = List(outputEth4))
+      txFull.copy(inputs = List(inputFullAccountLedger1), outputs = List(outputAccountLedger4))
     println(validator.validate(testTx1))
     assert(validator.validate(testTx1).isRight, true)
   }

@@ -8,13 +8,13 @@ import org.plasmalabs.sdk.models.SeriesPolicy
 import org.plasmalabs.sdk.models.box.QuantityDescriptorType
 import org.plasmalabs.sdk.models.box.FungibilityType
 
-object EthConstants {
+object AccountLedgerConstants {
 
   private val RegistrationUtxoGroupSeries = ByteString.copyFrom(Array.fill[Byte](32)(0))
 
-  val GroupPolicyEthPrivate =
+  val GroupPolicyAccountLedgerPrivate =
     GroupPolicy(
-      label = "Eth Group",
+      label = "Account Ledger Group",
       registrationUtxo = TransactionOutputAddress(
         network = NetworkConstants.PRIVATE_NETWORK_ID,
         ledger = NetworkConstants.MAIN_LEDGER_ID,
@@ -24,9 +24,9 @@ object EthConstants {
       fixedSeries = None
     )
 
-  val SeriesPolicyEthPrivate =
+  val SeriesPolicyAccountLedgerPrivate =
     SeriesPolicy(
-      label = "Eth Series",
+      label = "Account Ledger Series",
       tokenSupply = None,
       registrationUtxo = TransactionOutputAddress(
         network = NetworkConstants.PRIVATE_NETWORK_ID,
@@ -38,9 +38,9 @@ object EthConstants {
       fungibility = FungibilityType.GROUP_AND_SERIES
     )
 
-  val GroupPolicyEthTestnet =
+  val GroupPolicyAccountLedgerTestnet =
     GroupPolicy(
-      label = "Eth Group",
+      label = "Account Ledger Group",
       registrationUtxo = TransactionOutputAddress(
         network = NetworkConstants.TEST_NETWORK_ID,
         ledger = NetworkConstants.MAIN_LEDGER_ID,
@@ -50,9 +50,9 @@ object EthConstants {
       fixedSeries = None
     )
 
-  val SeriesPolicyEthTestnet =
+  val SeriesPolicyAccountLedgerTestnet =
     SeriesPolicy(
-      label = "Eth Series",
+      label = "Account Ledger Series",
       tokenSupply = None,
       registrationUtxo = TransactionOutputAddress(
         network = NetworkConstants.TEST_NETWORK_ID,
@@ -64,9 +64,9 @@ object EthConstants {
       fungibility = FungibilityType.GROUP_AND_SERIES
     )
 
-  val GroupPolicyEthMainnet =
+  val GroupPolicyAccountLedgerMainnet =
     GroupPolicy(
-      label = "Eth Group",
+      label = "Account Ledger Group",
       registrationUtxo = TransactionOutputAddress(
         network = NetworkConstants.MAIN_NETWORK_ID,
         ledger = NetworkConstants.MAIN_LEDGER_ID,
@@ -76,9 +76,9 @@ object EthConstants {
       fixedSeries = None
     )
 
-  val SeriesPolicyEthMainnet =
+  val SeriesPolicyAccountLedgerMainnet =
     SeriesPolicy(
-      label = "Eth Series",
+      label = "Account Ledger Series",
       tokenSupply = None,
       registrationUtxo = TransactionOutputAddress(
         network = NetworkConstants.MAIN_NETWORK_ID,

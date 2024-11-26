@@ -28,7 +28,7 @@ object TransactionSyntaxError {
   /**
    * A Syntax error indicating that this transaction contains an invalid output number.
    */
-  case object InvalidEthOutputNumber extends TransactionSyntaxError
+  case object InvalidAccountLedgerOutputNumber extends TransactionSyntaxError
 
   /**
    * A Syntax error indicating that this transaction contains statements that are not allowed.
@@ -97,12 +97,12 @@ object TransactionSyntaxError {
   case object InvalidTransactionType extends TransactionSyntaxError
 
   /**
-   * A Syntax error indicating that the transaction contains an invalid Ethereum address.
+   * A Syntax error indicating that the transaction contains an invalid account ledger address.
    */
-  case object InvalidEthAddress extends TransactionSyntaxError
+  case object InvalidAccountLedgerAddress extends TransactionSyntaxError
 
   /**
-   * A Syntax error indicating that the transaction contains an invalid Ethereum asset.
+   * A Syntax error indicating that the transaction contains an invalid account ledger asset.
    */
-  case object InvalidEthAsset extends TransactionSyntaxError
+  case object InvalidAccountLedgerAsset extends TransactionSyntaxError
 }
