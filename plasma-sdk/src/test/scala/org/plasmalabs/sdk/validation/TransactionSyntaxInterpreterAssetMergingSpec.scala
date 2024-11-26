@@ -37,7 +37,9 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
 
   // The following mock lock address and attestation are used for all the UTXOs in the tests
   private val mockLock = Lock.Predicate(List(MockHeightProposition).map(Challenge().withRevealed), 1)
-  private val mockLockAddress = LockAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, LockId(Lock().withPredicate(mockLock).sizedEvidence.digest.value))
+
+  private val mockLockAddress =
+    LockAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, LockId(Lock().withPredicate(mockLock).sizedEvidence.digest.value))
   private val mockAttestation = Attestation().withPredicate(Attestation.Predicate(mockLock, List(MockHeightProof)))
 
   private val mockAsset =

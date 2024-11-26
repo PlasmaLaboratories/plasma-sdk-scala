@@ -146,7 +146,7 @@ trait MockHelpers {
     Value.Asset(
       Some(GroupPolicyAccountLedgerPrivate.computeId),
       Some(SeriesPolicyAccountLedgerPrivate.computeId),
-       Int128(ByteString.copyFrom(BigInt(2).toByteArray))
+      Int128(ByteString.copyFrom(BigInt(2).toByteArray))
     )
   )
 
@@ -182,7 +182,9 @@ trait MockHelpers {
   )
 
   val inLockFull: Lock = Lock().withPredicate(inPredicateLockFull)
-  val inLockFullAddress: LockAddress = LockAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, LockId(inLockFull.sizedEvidence.digest.value))
+
+  val inLockFullAddress: LockAddress =
+    LockAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, LockId(inLockFull.sizedEvidence.digest.value))
 
   val inPredicateLockFullAttestation: Attestation.Predicate = Attestation.Predicate(
     inPredicateLockFull,
@@ -199,13 +201,17 @@ trait MockHelpers {
 
   val output: UnspentTransactionOutput = UnspentTransactionOutput(trivialLockAddress, lvlValue)
 
-  val outputAccountLedger0: UnspentTransactionOutput = UnspentTransactionOutput(trivialAccountLedgerLockAddress0, lvlValue)
+  val outputAccountLedger0: UnspentTransactionOutput =
+    UnspentTransactionOutput(trivialAccountLedgerLockAddress0, lvlValue)
 
-  val outputAccountLedger1: UnspentTransactionOutput = UnspentTransactionOutput(trivialAccountLedgerLockAddress1, lvlValue)
+  val outputAccountLedger1: UnspentTransactionOutput =
+    UnspentTransactionOutput(trivialAccountLedgerLockAddress1, lvlValue)
 
-  val outputAccountLedger2: UnspentTransactionOutput = UnspentTransactionOutput(trivialAccountLedgerLockAddress0, lvlValue)
+  val outputAccountLedger2: UnspentTransactionOutput =
+    UnspentTransactionOutput(trivialAccountLedgerLockAddress0, lvlValue)
 
-  val outputAccountLedger3: UnspentTransactionOutput = UnspentTransactionOutput(trivialAccountLedgerLockAddress0, assetValue1)
+  val outputAccountLedger3: UnspentTransactionOutput =
+    UnspentTransactionOutput(trivialAccountLedgerLockAddress0, assetValue1)
 
   val outputAccountLedger4: UnspentTransactionOutput = UnspentTransactionOutput(trivialAccountLockAddress2, assetValue2)
 

@@ -802,7 +802,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
         )
       )
     )
-    println("result: "+ result)
+    println("result: " + result)
     assertEquals(assertError, false)
 
   }

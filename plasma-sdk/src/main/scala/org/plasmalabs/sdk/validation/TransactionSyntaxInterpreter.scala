@@ -426,7 +426,7 @@ object TransactionSyntaxInterpreter {
       output <- tupleAndGroup(outputAssets).toEither
       keySetResult = input.keySet ++ minted.keySet == output.keySet
       compareResult = output.keySet.forall { k =>
-            input.getOrElse(k, 0: BigInt) + minted.getOrElse(k, 0) >= output.getOrElse(k, 0)
+        input.getOrElse(k, 0: BigInt) + minted.getOrElse(k, 0) >= output.getOrElse(k, 0)
       }
     } yield (keySetResult && compareResult)
 
