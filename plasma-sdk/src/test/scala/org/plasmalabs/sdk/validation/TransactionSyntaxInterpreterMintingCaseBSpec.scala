@@ -8,6 +8,8 @@ import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
 import org.plasmalabs.sdk.syntax._
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
 
 /**
  * Test to coverage this specific syntax validation:
@@ -19,8 +21,8 @@ import org.plasmalabs.sdk.syntax._
  */
 class TransactionSyntaxInterpreterMintingCaseBSpec extends munit.FunSuite with MockHelpers {
 
-  private val txoAddress_1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-  private val txoAddress_2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
+  private val txoAddress_1 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+  private val txoAddress_2 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
 
   test("Valid data-input case 1, minting a Series constructor Token") {
     val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)

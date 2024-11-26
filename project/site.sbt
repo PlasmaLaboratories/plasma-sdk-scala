@@ -9,4 +9,5 @@ Seq(
   "com.github.sbt"          % "sbt-ci-release"            % "1.9.0",
   "net.bzzt"                % "sbt-reproducible-builds"   % "0.32",
   "com.github.sbt"          % "sbt-unidoc"                % "0.5.0",
+  "ch.epfl.scala"           % "sbt-bloop"                 % "2.0.5"
 ).map(addSbtPlugin)

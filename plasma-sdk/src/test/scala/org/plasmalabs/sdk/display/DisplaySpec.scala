@@ -56,7 +56,7 @@ class DisplaySpec extends munit.FunSuite with MockHelpers {
     assertNoDiff(
       testTx.display.trim(),
       s"""
-TransactionId              : AQQiYaYH5FGspd5R4sCkKDdQszHWdTTYPThL12PJ3od2
+TransactionId              : 5TFBe6eADcWbG8xxkr8boGwtkv1jsQuPEqDTWALh1g1o
 
 Group Policies
 ==============
@@ -95,14 +95,14 @@ Value                      : 1
 TxoAddress                 : 4pX2G4weCKBHDT9axEm3HChq6jURV7ZYRPgeb7KWkEzm#0
 Attestation                : Not implemented
 Type                       : Group Constructor
-Id                         : cabf98baf365915d2282eca423bfae4a6425bad6064b8d97f2c39ba6e9fceafb
+Id                         : d69cbea20a2e8fe2001a5f7450a87503911598de76081b6e1108ce9cffba157c
 Fixed-Series               : NO FIXED SERIES
 Value                      : 1
 -----------
 TxoAddress                 : 4pX2G4weCKBHDT9axEm3HChq6jURV7ZYRPgeb7KWkEzm#0
 Attestation                : Not implemented
 Type                       : Series Constructor
-Id                         : 094c5a3acf338bcca90c91c9adcae5f4b59dec385740e80660111a3d6b10a8ce
+Id                         : c5ae5cf5e687c46d19adc538941627fdb4f18c7e21b42bcb94ff5f6e5c84334f
 Fungibility                : group-and-series
 Token-Supply               : UNLIMITED
 Quant-Descr.               : liquid
@@ -111,8 +111,8 @@ Value                      : 1
 TxoAddress                 : 4pX2G4weCKBHDT9axEm3HChq6jURV7ZYRPgeb7KWkEzm#0
 Attestation                : Not implemented
 Type                       : Asset
-GroupId                    : cabf98baf365915d2282eca423bfae4a6425bad6064b8d97f2c39ba6e9fceafb
-SeriesId                   : 094c5a3acf338bcca90c91c9adcae5f4b59dec385740e80660111a3d6b10a8ce
+GroupId                    : d69cbea20a2e8fe2001a5f7450a87503911598de76081b6e1108ce9cffba157c
+SeriesId                   : c5ae5cf5e687c46d19adc538941627fdb4f18c7e21b42bcb94ff5f6e5c84334f
 GroupAlloy                 : N/A
 SeriesAlloy                : N/A
 Commitment                 : No commitment
@@ -121,28 +121,28 @@ Value                      : 1
 
 Outputs
 =======
-LockAddress                : 1111111145ALDDRQ2EubxAYgTNdCKvTaP6GZXEWzi2vz6JmTAvryHY6ok
+LockAddress                : ptetP7jshHTxZJvycCHWafhM42fdjBL3TtVZ4C9ngp5CieDUbbeNiR48Ffqq
 Type                       : LVL
 Value                      : 1
 -----------
-LockAddress                : 1111111145ALDDRQ2EubxAYgTNdCKvTaP6GZXEWzi2vz6JmTAvryHY6ok
+LockAddress                : ptetP7jshHTxZJvycCHWafhM42fdjBL3TtVZ4C9ngp5CieDUbbeNiR48Ffqq
 Type                       : Group Constructor
-Id                         : cabf98baf365915d2282eca423bfae4a6425bad6064b8d97f2c39ba6e9fceafb
+Id                         : d69cbea20a2e8fe2001a5f7450a87503911598de76081b6e1108ce9cffba157c
 Fixed-Series               : NO FIXED SERIES
 Value                      : 1
 -----------
-LockAddress                : 1111111145ALDDRQ2EubxAYgTNdCKvTaP6GZXEWzi2vz6JmTAvryHY6ok
+LockAddress                : ptetP7jshHTxZJvycCHWafhM42fdjBL3TtVZ4C9ngp5CieDUbbeNiR48Ffqq
 Type                       : Series Constructor
-Id                         : 094c5a3acf338bcca90c91c9adcae5f4b59dec385740e80660111a3d6b10a8ce
+Id                         : c5ae5cf5e687c46d19adc538941627fdb4f18c7e21b42bcb94ff5f6e5c84334f
 Fungibility                : group-and-series
 Token-Supply               : UNLIMITED
 Quant-Descr.               : liquid
 Value                      : 1
 -----------
-LockAddress                : 1111111145ALDDRQ2EubxAYgTNdCKvTaP6GZXEWzi2vz6JmTAvryHY6ok
+LockAddress                : ptetP7jshHTxZJvycCHWafhM42fdjBL3TtVZ4C9ngp5CieDUbbeNiR48Ffqq
 Type                       : Asset
-GroupId                    : cabf98baf365915d2282eca423bfae4a6425bad6064b8d97f2c39ba6e9fceafb
-SeriesId                   : 094c5a3acf338bcca90c91c9adcae5f4b59dec385740e80660111a3d6b10a8ce
+GroupId                    : d69cbea20a2e8fe2001a5f7450a87503911598de76081b6e1108ce9cffba157c
+SeriesId                   : c5ae5cf5e687c46d19adc538941627fdb4f18c7e21b42bcb94ff5f6e5c84334f
 GroupAlloy                 : N/A
 SeriesAlloy                : N/A
 Commitment                 : No commitment
@@ -214,7 +214,7 @@ Value                      : KJHK1EAZuVA
     - And
       left: HeightRange
       right: Signature
-        kg6S2aBmECwXiq6VF6XXUcCRgetPSGZc9tB8NJjFb9gMQNKe25DWUMLK1sgw7oH96qgu6D7qgy1uPfhGnj8Yjg7
+        4NTqoMeSwnYrcukLjwQwo2qUpXSHzxzDMMBWRCZn8kTCRGUwHw8SEsYDBJMLBWjiZb7cxeTyff6eKfuzNmbgFPeq
     - Not
         TickRange
     - Or

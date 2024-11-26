@@ -11,6 +11,9 @@ import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
 import org.plasmalabs.sdk.syntax._
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_NETWORK_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
 
 /**
  * Test to coverage this specific syntax validation:
@@ -18,8 +21,8 @@ import org.plasmalabs.sdk.syntax._
  */
 class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelpers {
 
-  private val txoAddress_1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-  private val txoAddress_2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
+  private val txoAddress_1 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+  private val txoAddress_2 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
 
   /**
    * Reasons:
@@ -498,12 +501,13 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
   }
 
   /**
-   * Reasons: This is expected to fail, but should works
+   * Reasons: In this case we mint some asset and then pay fees with it. The
+   * node should enforce if it is a valid asset to pay fees.
    * - input Assets = 0
    * - minted Assets = 2
    * - asset output = 1
    */
-  test("Invalid data-input case, input + minted == output") {
+  test("Valid data-input case, input + minted >= output") {
     val groupPolicy = GroupPolicy(label = "groupLabelA", registrationUtxo = txoAddress_1)
     val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_2)
     val value_1_in: Value =
@@ -561,8 +565,8 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
       )
     )
 
-    assertEquals(assertError, true)
-    assertEquals(result.map(_.toList.size).getOrElse(0), 1)
+    assertEquals(assertError, false)
+    assertEquals(result.map(_.toList.size).getOrElse(0), 0)
 
   }
 
@@ -1030,7 +1034,6 @@ class TransactionSyntaxInterpreterAssetSpec extends munit.FunSuite with MockHelp
         )
       )
     )
-
     assertEquals(assertError, true)
     assertEquals(result.map(_.toList.size).getOrElse(0), 1)
 

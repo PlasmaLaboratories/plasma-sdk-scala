@@ -26,6 +26,16 @@ object TransactionSyntaxError {
   case object ExcessiveOutputsCount extends TransactionSyntaxError
 
   /**
+   * A Syntax error indicating that this transaction contains an invalid output number.
+   */
+  case object InvalidEthOutputNumber extends TransactionSyntaxError
+
+  /**
+   * A Syntax error indicating that this transaction contains statements that are not allowed.
+   */
+  case object NoStatementsAllowed extends TransactionSyntaxError
+
+  /**
    * A Syntax error indicating that this transaction contains an invalid timestamp.
    */
   case class InvalidTimestamp(timestamp: Long) extends TransactionSyntaxError
@@ -80,4 +90,19 @@ object TransactionSyntaxError {
    * A Syntax error indicating that the lock addresses in the transaction do not all share the same network ID
    */
   case class InconsistentNetworkIDs(networkIDs: Set[Int]) extends TransactionSyntaxError
+
+  /**
+   * A Syntax error indicating that the transaction configuration is invalid.
+   */
+  case object InvalidTransactionType extends TransactionSyntaxError
+
+  /**
+   * A Syntax error indicating that the transaction contains an invalid Ethereum address.
+   */
+  case object InvalidEthAddress extends TransactionSyntaxError
+
+  /**
+   * A Syntax error indicating that the transaction contains an invalid Ethereum asset.
+   */
+  case object InvalidEthAsset extends TransactionSyntaxError
 }

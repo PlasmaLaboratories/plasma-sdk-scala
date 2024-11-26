@@ -15,6 +15,8 @@ import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
 import org.plasmalabs.sdk.syntax._
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
 
 /**
  * Test to coverage this specific syntax validation:
@@ -23,8 +25,8 @@ import org.plasmalabs.sdk.syntax._
  */
 class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelpers {
 
-  private val txoAddress_1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-  private val txoAddress_2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
+  private val txoAddress_1 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+  private val txoAddress_2 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
 
   /**
    * In this case there 2 validations that are failing;
@@ -193,7 +195,7 @@ class TransactionSyntaxInterpreterRuleBSpec extends munit.FunSuite with MockHelp
 
     assertEquals(assertError, true)
     assertEquals(assertError_2, true)
-    assertEquals(result.map(_.toList.size).getOrElse(0), 3)
+    assertEquals(result.map(_.toList.size).getOrElse(0), 2)
 
   }
 

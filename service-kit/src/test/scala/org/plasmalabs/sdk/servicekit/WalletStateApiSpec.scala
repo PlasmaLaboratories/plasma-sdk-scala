@@ -150,7 +150,11 @@ class WalletStateApiSpec extends CatsEffectSuite with BaseSpec {
 
   testDirectory.test("getLockByAddress") { _ =>
     val predicate = Lock.Predicate(Seq(), 1)
-    val lockAddress = LockAddress(0, 0, LockId(Lock().withPredicate(predicate).sizedEvidence.digest.value))
+    val lockAddress = LockAddress(
+      NetworkConstants.PRIVATE_NETWORK_ID,
+      NetworkConstants.MAIN_LEDGER_ID,
+      LockId(Lock().withPredicate(predicate).sizedEvidence.digest.value)
+    )
     assertIO(
       for {
         _ <- walletStateApi
@@ -170,7 +174,11 @@ class WalletStateApiSpec extends CatsEffectSuite with BaseSpec {
 
   testDirectory.test("getLockByAddress > LockAddress not known in Wallet State") { _ =>
     val predicate = Lock.Predicate(Seq(), 1)
-    val lockAddress = LockAddress(0, 0, LockId(Lock().withPredicate(predicate).sizedEvidence.digest.value))
+    val lockAddress = LockAddress(
+      NetworkConstants.PRIVATE_NETWORK_ID,
+      NetworkConstants.MAIN_LEDGER_ID,
+      LockId(Lock().withPredicate(predicate).sizedEvidence.digest.value)
+    )
     assertIO(
       for {
         _ <- walletStateApi
@@ -194,7 +202,11 @@ class WalletStateApiSpec extends CatsEffectSuite with BaseSpec {
 
   testDirectory.test("getInteractionList successful more than one result") { _ =>
     val predicate = Lock.Predicate(Seq(), 1)
-    val lockAddress = LockAddress(0, 0, LockId(Lock().withPredicate(predicate).sizedEvidence.digest.value))
+    val lockAddress = LockAddress(
+      NetworkConstants.PRIVATE_NETWORK_ID,
+      NetworkConstants.MAIN_LEDGER_ID,
+      LockId(Lock().withPredicate(predicate).sizedEvidence.digest.value)
+    )
 
     assertIO(
       for {

@@ -32,9 +32,11 @@ import org.plasmalabs.consensus.models.{SignatureKesProduct, SignatureKesSum, St
 import org.plasmalabs.indexer.services.Txo
 import org.plasmalabs.indexer.services.TxoState.UNSPENT
 import com.google.protobuf.ByteString
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
 
 trait TransactionBuilderInterpreterSpecBase extends munit.FunSuite with MockHelpers {
-  val txBuilder: TransactionBuilderApi[Id] = TransactionBuilderApi.make[Id](0, 0)
+  val txBuilder: TransactionBuilderApi[Id] = TransactionBuilderApi.make[Id](PRIVATE_NETWORK_ID, MAIN_LEDGER_ID)
 
   val RecipientAddr: LockAddress = inLockFullAddress
   val ChangeAddr: LockAddress = trivialLockAddress

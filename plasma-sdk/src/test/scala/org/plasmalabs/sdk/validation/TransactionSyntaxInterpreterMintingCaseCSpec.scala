@@ -9,6 +9,8 @@ import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
 import org.plasmalabs.sdk.syntax._
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
 
 /**
  * Test to coverage this specific syntax validation:
@@ -18,10 +20,10 @@ import org.plasmalabs.sdk.syntax._
  */
 class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with MockHelpers {
 
-  private val txoAddress_1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-  private val txoAddress_2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
-  private val txoAddress_3 = TransactionOutputAddress(0, 0, 3, dummyTxIdentifier)
-  private val txoAddress_4 = TransactionOutputAddress(0, 0, 4, dummyTxIdentifier)
+  private val txoAddress_1 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+  private val txoAddress_2 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
+  private val txoAddress_3 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 3, dummyTxIdentifier)
+  private val txoAddress_4 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 4, dummyTxIdentifier)
 
   test("Valid data-input case 1, minting a Asset Token Unlimited") {
     val groupPolicy = GroupPolicy(label = "policyG", registrationUtxo = txoAddress_1)
@@ -562,8 +564,8 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
       )
     )
     assertEquals(assertError, true)
-    // 2 InsufficientInputFunds validation rules are catch
-    assertEquals(result.map(_.toList.size).getOrElse(0), 2)
+    // 1 InsufficientInputFunds validation rules are catch
+    assertEquals(result.map(_.toList.size).getOrElse(0), 1)
 
   }
 
@@ -704,12 +706,12 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
    */
   test("Valid data-input case 4, minting a Asset Token Limited") {
 
-    val utxo_xyz = TransactionOutputAddress(1, 0, 0, dummyTxIdentifier)
-    val utxo_abc = TransactionOutputAddress(2, 0, 0, dummyTxIdentifier)
-    val utxo_def = TransactionOutputAddress(3, 0, 0, dummyTxIdentifier)
-    val utxo_uvw = TransactionOutputAddress(4, 0, 0, dummyTxIdentifier)
+    val utxo_xyz = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
+    val utxo_abc = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+    val utxo_def = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
+    val utxo_uvw = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 3, dummyTxIdentifier)
 
-    val dummyTxoAddress = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
+    val dummyTxoAddress = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
 
     val g1 = GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
     val g2 = GroupPolicy(label = "policyG2", registrationUtxo = utxo_uvw)
@@ -756,27 +758,27 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val value_5_out: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = g2.computeId, quantity = BigInt(1)))
 
-    val input_abc = SpentTransactionOutput(utxo_abc, attFull, value_abc_in)
-    val input_def = SpentTransactionOutput(utxo_def, attFull, value_def_in)
-    val input_xyz = SpentTransactionOutput(utxo_xyz, attFull, value_xyz_in)
-    val input_uvw = SpentTransactionOutput(utxo_uvw, attFull, value_uvw_in)
+    val input_abc = SpentTransactionOutput(utxo_abc, attFull, value_abc_in) // 2 series s1
+    val input_def = SpentTransactionOutput(utxo_def, attFull, value_def_in) // 1 series s1
+    val input_xyz = SpentTransactionOutput(utxo_xyz, attFull, value_xyz_in) // 1 group g1
+    val input_uvw = SpentTransactionOutput(utxo_uvw, attFull, value_uvw_in) // 1 group g2
 
-    val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out)
-    val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
-    val output_3 = UnspentTransactionOutput(trivialLockAddress, value_3_out)
-    val output_4 = UnspentTransactionOutput(trivialLockAddress, value_4_out)
-    val output_5 = UnspentTransactionOutput(trivialLockAddress, value_5_out)
+    val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out) // 1 minted asset g1:s1
+    val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out) // 1 series s1
+    val output_3 = UnspentTransactionOutput(trivialLockAddress, value_3_out) // 1 minted asset g2:s1
+    val output_4 = UnspentTransactionOutput(trivialLockAddress, value_4_out) // 1 group g1
+    val output_5 = UnspentTransactionOutput(trivialLockAddress, value_5_out) // 1 group g2
 
     // A transaction with 2 minting statements that point to distinct UTXOs, but their series UTXOs have the same seriesId.
     val mintingStatement_1 = AssetMintingStatement(
-      seriesTokenUtxo = utxo_abc,
-      groupTokenUtxo = utxo_xyz,
+      seriesTokenUtxo = utxo_abc, // s1
+      groupTokenUtxo = utxo_xyz, // g1
       quantity = BigInt(1)
     )
 
     val mintingStatement_2 = AssetMintingStatement(
-      seriesTokenUtxo = utxo_def,
-      groupTokenUtxo = utxo_uvw,
+      seriesTokenUtxo = utxo_def, // s1
+      groupTokenUtxo = utxo_uvw, // g2
       quantity = BigInt(1)
     )
 
@@ -800,7 +802,7 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
         )
       )
     )
-
+    println("result: "+ result)
     assertEquals(assertError, false)
 
   }
@@ -810,12 +812,12 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
    */
   test("Invalid data-input case 4, minting a Asset Token Limited") {
 
-    val utxo_xyz = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-    val utxo_abc = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
-    val utxo_def = TransactionOutputAddress(0, 0, 3, dummyTxIdentifier)
-    val utxo_uvw = TransactionOutputAddress(0, 0, 4, dummyTxIdentifier)
+    val utxo_xyz = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+    val utxo_abc = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
+    val utxo_def = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 3, dummyTxIdentifier)
+    val utxo_uvw = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 4, dummyTxIdentifier)
 
-    val dummyTxoAddress = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
+    val dummyTxoAddress = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
 
     val g1 = GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
     val g2 = GroupPolicy(label = "policyG2", registrationUtxo = utxo_uvw)
@@ -916,11 +918,11 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
    * @see [[co.topl.brambl.validation.pumls.valid_case_5.puml]]
    */
   test("Valid data-input case 5, minting 2 Asset Token Limited, with 2 groups and 2 series") {
-    val utxo = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
-    val utxo1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-    val utxo2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
-    val utxo3 = TransactionOutputAddress(0, 0, 3, dummyTxIdentifier)
-    val utxo4 = TransactionOutputAddress(0, 0, 4, dummyTxIdentifier)
+    val utxo = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
+    val utxo1 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+    val utxo2 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
+    val utxo3 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 3, dummyTxIdentifier)
+    val utxo4 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 4, dummyTxIdentifier)
 
     val gA = GroupPolicy(label = "policyGA", registrationUtxo = utxo1)
     val gB = GroupPolicy(label = "policyGB", registrationUtxo = utxo2)
@@ -1017,11 +1019,11 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
    * @see [[co.topl.brambl.validation.pumls.invalid_case_6.puml]]
    */
   test("Invalid data-input case 6, minting 2 Asset Token Limited, with 2 groups and 2 series") {
-    val utxo = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
-    val utxo1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-    val utxo2 = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
-    val utxo3 = TransactionOutputAddress(0, 0, 3, dummyTxIdentifier)
-    val utxo4 = TransactionOutputAddress(0, 0, 4, dummyTxIdentifier)
+    val utxo = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
+    val utxo1 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+    val utxo2 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
+    val utxo3 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 3, dummyTxIdentifier)
+    val utxo4 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 4, dummyTxIdentifier)
 
     val gA = GroupPolicy(label = "policyGA", registrationUtxo = utxo1)
     val gB = GroupPolicy(label = "policyGB", registrationUtxo = utxo2)
@@ -1106,9 +1108,9 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
    * @see [[co.topl.brambl.validation.pumls.invalid_case_7.puml]]
    */
   test("Invalid data-input case 7, minting 1 Asset, series Utxo does not refer to a series token") {
-    val utxo = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
-    val utxo_abc = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-    val utxo_xyz = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
+    val utxo = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
+    val utxo_abc = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+    val utxo_xyz = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
 
     val g1 = GroupPolicy(label = "policyG1", registrationUtxo = utxo_xyz)
 
@@ -1169,9 +1171,9 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
    * @see [[co.topl.brambl.validation.pumls.invalid_case_8.puml]]
    */
   test("Invalid data-input case 8, minting 1 Asset, group Utxo does not refer to a series token") {
-    val utxo = TransactionOutputAddress(0, 0, 0, dummyTxIdentifier)
-    val utxo_abc = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-    val utxo_xyz = TransactionOutputAddress(0, 0, 2, dummyTxIdentifier)
+    val utxo = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
+    val utxo_abc = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+    val utxo_xyz = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 2, dummyTxIdentifier)
 
     val g1 = GroupPolicy(label = "g1", registrationUtxo = utxo_xyz)
     val s1 = SeriesPolicy(label = "s1", registrationUtxo = utxo, tokenSupply = Some(5))

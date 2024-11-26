@@ -41,6 +41,11 @@ trait ValidationErrorDisplayOps {
     case _: NonDistinctMergingInput => "Transaction has an invalid NonDistinctMergingInput"
     case _: IncompatibleMerge       => "Transaction has an invalid IncompatibleMerge"
     case _: InconsistentNetworkIDs  => "Transaction has an invalid InconsistentNetworkIDs"
+    case InvalidEthOutputNumber     => "Type 1 transactions must have exactly 1 output"
+    case NoStatementsAllowed        => "Type 1 transactions cannot have statements"
+    case InvalidTransactionType     => "The shape of the transaction does not correspond to any known transaction type"
+    case InvalidEthAddress => "The Ethereum-compatible address in the transaction is invalid, 20 bytes are expected"
+    case InvalidEthAsset   => "Type 1 transactions must have exactly 1 output with a valid Ethereum-compatible asset"
   }
 
   implicit val authorizationErrorDisplay: DisplayOps[AuthorizationFailed] = (err: AuthorizationFailed) =>

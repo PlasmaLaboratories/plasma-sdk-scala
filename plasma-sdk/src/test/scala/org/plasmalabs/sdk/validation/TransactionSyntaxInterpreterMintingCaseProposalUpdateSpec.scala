@@ -8,6 +8,7 @@ import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
 import org.plasmalabs.sdk.syntax._
+import org.plasmalabs.sdk.constants.NetworkConstants
 
 /**
  * Test to coverage this specific syntax validation:
@@ -16,7 +17,8 @@ import org.plasmalabs.sdk.syntax._
  */
 class TransactionSyntaxInterpreterMintingCaseProposalUpdateSpec extends munit.FunSuite with MockHelpers {
 
-  private val txoAddress_1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
+  private val txoAddress_1 =
+    TransactionOutputAddress(NetworkConstants.PRIVATE_NETWORK_ID, NetworkConstants.MAIN_LEDGER_ID, 1, dummyTxIdentifier)
 
   test("Valid data-input case 1, minting a proposal updated Token") {
     val value_1_in: Value =

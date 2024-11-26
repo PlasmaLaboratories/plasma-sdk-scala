@@ -12,6 +12,8 @@ import org.plasmalabs.sdk.models.{AssetMergingStatement, Datum, Event, GroupId, 
 import org.plasmalabs.indexer.services.Txo
 import com.google.protobuf.ByteString
 import org.plasmalabs.quivr.models.{Int128, SmallData}
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
 
 /**
  * Test to coverage Asset Merging:
@@ -35,7 +37,7 @@ class TransactionSyntaxInterpreterAssetMergingSpec extends munit.FunSuite with M
 
   // The following mock lock address and attestation are used for all the UTXOs in the tests
   private val mockLock = Lock.Predicate(List(MockHeightProposition).map(Challenge().withRevealed), 1)
-  private val mockLockAddress = LockAddress(0, 0, LockId(Lock().withPredicate(mockLock).sizedEvidence.digest.value))
+  private val mockLockAddress = LockAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, LockId(Lock().withPredicate(mockLock).sizedEvidence.digest.value))
   private val mockAttestation = Attestation().withPredicate(Attestation.Predicate(mockLock, List(MockHeightProof)))
 
   private val mockAsset =

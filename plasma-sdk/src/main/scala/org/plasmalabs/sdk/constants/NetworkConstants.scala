@@ -10,4 +10,6 @@ object NetworkConstants {
 
   val MAIN_LEDGER_ID: Int = 0xe7b07a00
 
+  val ETH_LEDGER_ID: Int  = 0xe7b07a01
+
 }

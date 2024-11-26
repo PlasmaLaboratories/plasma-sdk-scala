@@ -8,6 +8,8 @@ import org.plasmalabs.sdk.models.box.Value
 import org.plasmalabs.sdk.models.transaction.SpentTransactionOutput
 import org.plasmalabs.sdk.models.transaction.UnspentTransactionOutput
 import org.plasmalabs.sdk.syntax._
+import org.plasmalabs.sdk.constants.NetworkConstants.PRIVATE_NETWORK_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
 
 /**
  * Test to coverage this specific syntax validation: Transfer series
@@ -15,8 +17,8 @@ import org.plasmalabs.sdk.syntax._
  */
 class TransactionSyntaxInterpreterTransferSeriesSpec extends munit.FunSuite with MockHelpers {
 
-  private val txoAddress_1 = TransactionOutputAddress(0, 0, 1, dummyTxIdentifier)
-  TransactionOutputAddress(2, 0, 0, dummyTxIdentifier)
+  private val txoAddress_1 = TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 1, dummyTxIdentifier)
+  TransactionOutputAddress(PRIVATE_NETWORK_ID, MAIN_LEDGER_ID, 0, dummyTxIdentifier)
 
   test("Valid data-input case, transfer a simple series ") {
     val seriesPolicy = SeriesPolicy(label = "seriesLabelB", registrationUtxo = txoAddress_1)

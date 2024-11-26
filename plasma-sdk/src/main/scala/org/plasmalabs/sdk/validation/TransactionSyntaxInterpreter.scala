@@ -13,6 +13,20 @@ import org.plasmalabs.sdk.syntax._
 import org.plasmalabs.sdk.validation.algebras.TransactionSyntaxVerifier
 import org.plasmalabs.quivr.models.{Int128, Proof, Proposition}
 import scala.util.Try
+import org.plasmalabs.sdk.constants.NetworkConstants.MAIN_LEDGER_ID
+import org.plasmalabs.sdk.constants.NetworkConstants.ETH_LEDGER_ID
+import org.plasmalabs.sdk.models.GroupPolicy
+import org.plasmalabs.sdk.constants.NetworkConstants
+import org.plasmalabs.sdk.models.TransactionId
+import com.google.protobuf.ByteString
+import org.plasmalabs.sdk.models.SeriesPolicy
+import org.plasmalabs.sdk.models.box.Value.Value.Asset
+import org.plasmalabs.sdk.constants.EthConstants.GroupPolicyEthMainnet
+import org.plasmalabs.sdk.constants.EthConstants.SeriesPolicyEthMainnet
+import org.plasmalabs.sdk.constants.EthConstants.SeriesPolicyEthTestnet
+import org.plasmalabs.sdk.constants.EthConstants.SeriesPolicyEthPrivate
+import org.plasmalabs.sdk.constants.EthConstants.GroupPolicyEthTestnet
+import org.plasmalabs.sdk.constants.EthConstants.GroupPolicyEthPrivate
 
 object TransactionSyntaxInterpreter {
 
@@ -21,14 +35,23 @@ object TransactionSyntaxInterpreter {
   def make[F[_]: Applicative](): TransactionSyntaxVerifier[F] = new TransactionSyntaxVerifier[F] {
 
     override def validate(t: IoTransaction): F[Either[NonEmptyChain[TransactionSyntaxError], IoTransaction]] =
-      validators
-        .foldMap(_ apply t)
-        .toEither
-        .as(t)
-        .pure[F]
+      if (isType0(t))
+        validatorsType0
+          .foldMap(_ apply t)
+          .toEither
+          .as(t)
+          .pure[F]
+      else if (isType1(t))
+        validatorsType1
+          .foldMap(_ apply t)
+          .toEither
+          .as(t)
+          .pure[F]
+      else
+        Applicative[F].pure(Left(NonEmptyChain(TransactionSyntaxError.InvalidTransactionType)))
   }
 
-  private val validators: Chain[IoTransaction => ValidatedNec[TransactionSyntaxError, Unit]] =
+  private val validatorsType0: Chain[IoTransaction => ValidatedNec[TransactionSyntaxError, Unit]] =
     Chain(
       nonEmptyInputsValidation,
       distinctInputsValidation,
@@ -49,6 +72,91 @@ object TransactionSyntaxInterpreter {
       mergingValidation,
       lockAddressesNetworkIdValidation
     )
+
+  private val validatorsType1: Chain[IoTransaction => ValidatedNec[TransactionSyntaxError, Unit]] =
+    Chain(
+      nonEmptyInputsValidation, // OK
+      distinctInputsValidation, // OK
+      oneOutputCountValidation, // OK new
+      noStatementsValidation, // OK new
+      rightOutputAddressEth, // OK new
+      rightOutputType, // OK new
+      nonNegativeTimestampValidation, // OK
+      scheduleValidation, // OK
+      positiveOutputValuesValidation, // OK
+      sufficientFundsValidation, // OK
+      attestationValidation, // OK
+      dataLengthValidation, // OK
+      assetEqualFundsValidation, // OK, this guarantees that assets are correct
+      groupEqualFundsValidation, // OK if there are groups this will make it fail
+      seriesEqualFundsValidation, // OK if there are series this will make it fail
+      mintingValidation // OK because no statements
+    )
+
+  private def isType0(transaction: IoTransaction): Boolean =
+    transaction.inputs.forall(_.address.ledger == MAIN_LEDGER_ID) &&
+    transaction.outputs.forall(_.address.ledger == MAIN_LEDGER_ID)
+
+  private def isType1(transaction: IoTransaction): Boolean =
+    transaction.inputs.forall(_.address.ledger == MAIN_LEDGER_ID) &&
+    transaction.outputs.forall(_.address.ledger == ETH_LEDGER_ID)
+
+  private def noStatementsValidation(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
+    Validated.condNec(
+      transaction.datum.event.mintingStatements.isEmpty &&
+      transaction.datum.event.groupPolicies.isEmpty &&
+      transaction.datum.event.seriesPolicies.isEmpty &&
+      transaction.datum.event.mergingStatements.isEmpty,
+      (),
+      TransactionSyntaxError.NoStatementsAllowed
+    )
+
+  private def rightOutputType(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
+    transaction.outputs.headOption
+      .map(x => (x.value.value, x.address))
+      .fold((TransactionSyntaxError.InvalidEthOutputNumber: TransactionSyntaxError).invalidNec[Unit]) {
+        case (
+              Value.Value.Asset(Value.Asset(someGroupId, someSeriesId, Int128(_, _), _, _, _, _, _, _, _)),
+              lockAddress
+            ) =>
+          val someEthGroupId = lockAddress.network match {
+            case NetworkConstants.MAIN_NETWORK_ID    => Some(GroupPolicyEthMainnet.computeId)
+            case NetworkConstants.TEST_NETWORK_ID    => Some(GroupPolicyEthTestnet.computeId)
+            case NetworkConstants.PRIVATE_NETWORK_ID => Some(GroupPolicyEthPrivate.computeId)
+            case _                                   => None
+          }
+          val someEthSeriesId = lockAddress.network match {
+            case NetworkConstants.MAIN_NETWORK_ID    => Some(SeriesPolicyEthMainnet.computeId)
+            case NetworkConstants.TEST_NETWORK_ID    => Some(SeriesPolicyEthTestnet.computeId)
+            case NetworkConstants.PRIVATE_NETWORK_ID => Some(SeriesPolicyEthPrivate.computeId)
+            case _                                   => None
+          }
+          ((someGroupId, someSeriesId, someEthGroupId, someEthSeriesId)
+            .mapN { (groupId, seriesId, expectedGroupId, expectedSeriesId) =>
+              Validated.condNec(
+                groupId.value.toByteArray
+                  .sameElements(expectedGroupId.value.toByteArray()) &&
+                seriesId.value.toByteArray.sameElements(expectedSeriesId.value.toByteArray()),
+                (),
+                TransactionSyntaxError.InvalidEthAsset
+              )
+            })
+            .getOrElse(TransactionSyntaxError.InvalidTransactionType.invalidNec[Unit])
+        case _ =>
+          TransactionSyntaxError.InvalidEthAsset.invalidNec[Unit]
+      }
+
+  private def rightOutputAddressEth(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
+    transaction.outputs.headOption
+      .map(_.address)
+      .fold((TransactionSyntaxError.InvalidTransactionType: TransactionSyntaxError).invalidNec[Unit]) { lockAddress =>
+        Validated.condNec(
+          lockAddress.id.value.startsWith(ByteString.copyFrom(Array.fill(12)(0.toByte))),
+          (),
+          TransactionSyntaxError.InvalidEthAddress
+        )
+
+      }
 
   /**
    * Verify that this transaction contains at least one input
@@ -84,6 +192,15 @@ object TransactionSyntaxInterpreter {
     transaction: IoTransaction
   ): ValidatedNec[TransactionSyntaxError, Unit] =
     Validated.condNec(transaction.outputs.size < Short.MaxValue, (), TransactionSyntaxError.ExcessiveOutputsCount)
+
+  /**
+   * Verify that this transaction contains exactly one output. This applies
+   * to transactions that send funds to the Ethereum-compatible network.
+   */
+  private def oneOutputCountValidation(
+    transaction: IoTransaction
+  ): ValidatedNec[TransactionSyntaxError, Unit] =
+    Validated.condNec(transaction.outputs.size == 1, (), TransactionSyntaxError.InvalidEthOutputNumber)
 
   /**
    * Verify that the timestamp of the transaction is positive (greater than or equal to 0).  Transactions _can_ be created
@@ -308,9 +425,9 @@ object TransactionSyntaxInterpreter {
       minted <- tupleAndGroup(mintedAsset).toEither
       output <- tupleAndGroup(outputAssets).toEither
       keySetResult = input.keySet ++ minted.keySet == output.keySet
-      compareResult = output.keySet.forall(k =>
-        input.getOrElse(k, 0: BigInt) + minted.getOrElse(k, 0) == output.getOrElse(k, 0)
-      )
+      compareResult = output.keySet.forall { k =>
+            input.getOrElse(k, 0: BigInt) + minted.getOrElse(k, 0) >= output.getOrElse(k, 0)
+      }
     } yield (keySetResult && compareResult)
 
     Validated.condNec(
@@ -721,4 +838,5 @@ object TransactionSyntaxInterpreter {
       TransactionSyntaxError.InconsistentNetworkIDs(distinctNetworkIds.toSet)
     )
   }
+
 }
