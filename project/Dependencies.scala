@@ -10,9 +10,9 @@ object Dependencies {
   }
 
   val catsSlf4j: ModuleID =
-    "org.typelevel" %% "log4cats-slf4j" % "2.4.0"
+    "org.typelevel" %% "log4cats-slf4j" % "2.7.0"
 
-  val fs2Io: ModuleID = "co.fs2" %% "fs2-io" % "3.10.2"
+  val fs2Io: ModuleID = "co.fs2" %% "fs2-io" % "3.11.0"
 
   val circe: Seq[ModuleID] = Seq(
     "io.circe" %% "circe-core"    % circeVersion,
@@ -52,7 +52,7 @@ object Dependencies {
   )
 
   val sqlite: Seq[ModuleID] = Seq(
-    "org.xerial" % "sqlite-jdbc" % "3.47.0.0"
+    "org.xerial" % "sqlite-jdbc" % "3.47.1.0"
   )
 
   val grpcNetty = "io.grpc" % "grpc-netty" % "1.68.1"
