@@ -27,6 +27,12 @@ import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLe
 import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLedgerPrivate
 import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerTestnet
 import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerPrivate
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerMainnetId
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLedgerMainnetId
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLedgerTestnetId
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.SeriesPolicyAccountLedgerPrivateId
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerTestnetId
+import org.plasmalabs.sdk.constants.AccountLedgerConstants.GroupPolicyAccountLedgerPrivateId
 
 object TransactionSyntaxInterpreter {
 
@@ -75,22 +81,22 @@ object TransactionSyntaxInterpreter {
 
   private val validatorsType1: Chain[IoTransaction => ValidatedNec[TransactionSyntaxError, Unit]] =
     Chain(
-      nonEmptyInputsValidation, // OK
-      distinctInputsValidation, // OK
-      oneOutputCountValidation, // OK new
-      noStatementsValidation, // OK new
-      rightOutputAddressAccountLedger, // OK new
-      rightOutputType, // OK new
-      nonNegativeTimestampValidation, // OK
-      scheduleValidation, // OK
-      positiveOutputValuesValidation, // OK
-      sufficientFundsValidation, // OK
-      attestationValidation, // OK
-      dataLengthValidation, // OK
-      assetEqualFundsValidation, // OK, this guarantees that assets are correct
-      groupEqualFundsValidation, // OK if there are groups this will make it fail
-      seriesEqualFundsValidation, // OK if there are series this will make it fail
-      mintingValidation // OK because no statements
+      nonEmptyInputsValidation,
+      distinctInputsValidation,
+      oneOutputCountValidation,
+      noStatementsValidation,
+      rightOutputAddressAccountLedger,
+      rightOutputType,
+      nonNegativeTimestampValidation,
+      scheduleValidation,
+      positiveOutputValuesValidation,
+      sufficientFundsValidation,
+      attestationValidation,
+      dataLengthValidation,
+      assetEqualFundsValidation,
+      groupEqualFundsValidation,
+      seriesEqualFundsValidation,
+      mintingValidation
     )
 
   private def isType0(transaction: IoTransaction): Boolean =
@@ -101,6 +107,11 @@ object TransactionSyntaxInterpreter {
     transaction.inputs.forall(_.address.ledger == MAIN_LEDGER_ID) &&
     transaction.outputs.forall(_.address.ledger == ACCOUNT_LEDGER_ID)
 
+  /**
+   * Validate that no statements are present in the transaction. This is a requirement
+   * for type 1 transactions.
+   * @param transaction The transaction to validate.
+   */
   private def noStatementsValidation(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
     Validated.condNec(
       transaction.datum.event.mintingStatements.isEmpty &&
@@ -111,6 +122,10 @@ object TransactionSyntaxInterpreter {
       TransactionSyntaxError.NoStatementsAllowed
     )
 
+  /**
+   * Validate that the asset being moved is the right type for a type 1 transaction.
+   * @param transaction The transaction to validate.
+   */
   private def rightOutputType(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
     transaction.outputs.headOption
       .map(x => (x.value.value, x.address))
@@ -120,15 +135,15 @@ object TransactionSyntaxInterpreter {
               lockAddress
             ) =>
           val someAccountLedgerGroupId = lockAddress.network match {
-            case NetworkConstants.MAIN_NETWORK_ID    => Some(GroupPolicyAccountLedgerMainnet.computeId)
-            case NetworkConstants.TEST_NETWORK_ID    => Some(GroupPolicyAccountLedgerTestnet.computeId)
-            case NetworkConstants.PRIVATE_NETWORK_ID => Some(GroupPolicyAccountLedgerPrivate.computeId)
+            case NetworkConstants.MAIN_NETWORK_ID    => Some(GroupPolicyAccountLedgerMainnetId)
+            case NetworkConstants.TEST_NETWORK_ID    => Some(GroupPolicyAccountLedgerTestnetId)
+            case NetworkConstants.PRIVATE_NETWORK_ID => Some(GroupPolicyAccountLedgerPrivateId)
             case _                                   => None
           }
           val someAccountLedgerSeriesId = lockAddress.network match {
-            case NetworkConstants.MAIN_NETWORK_ID    => Some(SeriesPolicyAccountLedgerMainnet.computeId)
-            case NetworkConstants.TEST_NETWORK_ID    => Some(SeriesPolicyAccountLedgerTestnet.computeId)
-            case NetworkConstants.PRIVATE_NETWORK_ID => Some(SeriesPolicyAccountLedgerPrivate.computeId)
+            case NetworkConstants.MAIN_NETWORK_ID    => Some(SeriesPolicyAccountLedgerMainnetId)
+            case NetworkConstants.TEST_NETWORK_ID    => Some(SeriesPolicyAccountLedgerTestnetId)
+            case NetworkConstants.PRIVATE_NETWORK_ID => Some(SeriesPolicyAccountLedgerPrivateId)
             case _                                   => None
           }
           ((someGroupId, someSeriesId, someAccountLedgerGroupId, someAccountLedgerSeriesId)
@@ -146,6 +161,10 @@ object TransactionSyntaxInterpreter {
           TransactionSyntaxError.InvalidAccountLedgerAsset.invalidNec[Unit]
       }
 
+  /**
+   * Validate that the address is correct. An account ledger address must start with 12 zero bytes and be followed by
+   * by 20 bytes that represent the account identifier.
+   */
   private def rightOutputAddressAccountLedger(transaction: IoTransaction): ValidatedNec[TransactionSyntaxError, Unit] =
     transaction.outputs.headOption
       .map(_.address)

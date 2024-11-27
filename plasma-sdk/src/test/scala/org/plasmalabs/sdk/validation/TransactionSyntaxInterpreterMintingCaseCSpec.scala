@@ -758,27 +758,26 @@ class TransactionSyntaxInterpreterMintingCaseCSpec extends munit.FunSuite with M
     val value_5_out: Value =
       Value.defaultInstance.withGroup(Value.Group(groupId = g2.computeId, quantity = BigInt(1)))
 
-    val input_abc = SpentTransactionOutput(utxo_abc, attFull, value_abc_in) // 2 series s1
-    val input_def = SpentTransactionOutput(utxo_def, attFull, value_def_in) // 1 series s1
-    val input_xyz = SpentTransactionOutput(utxo_xyz, attFull, value_xyz_in) // 1 group g1
-    val input_uvw = SpentTransactionOutput(utxo_uvw, attFull, value_uvw_in) // 1 group g2
-
-    val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out) // 1 minted asset g1:s1
-    val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out) // 1 series s1
-    val output_3 = UnspentTransactionOutput(trivialLockAddress, value_3_out) // 1 minted asset g2:s1
-    val output_4 = UnspentTransactionOutput(trivialLockAddress, value_4_out) // 1 group g1
-    val output_5 = UnspentTransactionOutput(trivialLockAddress, value_5_out) // 1 group g2
+    val input_abc = SpentTransactionOutput(utxo_abc, attFull, value_abc_in)
+    val input_def = SpentTransactionOutput(utxo_def, attFull, value_def_in)
+    val input_xyz = SpentTransactionOutput(utxo_xyz, attFull, value_xyz_in)
+    val input_uvw = SpentTransactionOutput(utxo_uvw, attFull, value_uvw_in)
+    val output_1 = UnspentTransactionOutput(trivialLockAddress, value_1_out)
+    val output_2 = UnspentTransactionOutput(trivialLockAddress, value_2_out)
+    val output_3 = UnspentTransactionOutput(trivialLockAddress, value_3_out)
+    val output_4 = UnspentTransactionOutput(trivialLockAddress, value_4_out)
+    val output_5 = UnspentTransactionOutput(trivialLockAddress, value_5_out)
 
     // A transaction with 2 minting statements that point to distinct UTXOs, but their series UTXOs have the same seriesId.
     val mintingStatement_1 = AssetMintingStatement(
-      seriesTokenUtxo = utxo_abc, // s1
-      groupTokenUtxo = utxo_xyz, // g1
+      seriesTokenUtxo = utxo_abc,
+      groupTokenUtxo = utxo_xyz,
       quantity = BigInt(1)
     )
 
     val mintingStatement_2 = AssetMintingStatement(
-      seriesTokenUtxo = utxo_def, // s1
-      groupTokenUtxo = utxo_uvw, // g2
+      seriesTokenUtxo = utxo_def,
+      groupTokenUtxo = utxo_uvw,
       quantity = BigInt(1)
     )
 

@@ -7,12 +7,13 @@ import org.plasmalabs.sdk.models.TransactionId
 import org.plasmalabs.sdk.models.SeriesPolicy
 import org.plasmalabs.sdk.models.box.QuantityDescriptorType
 import org.plasmalabs.sdk.models.box.FungibilityType
+import org.plasmalabs.sdk.syntax._
 
 object AccountLedgerConstants {
 
   private val RegistrationUtxoGroupSeries = ByteString.copyFrom(Array.fill[Byte](32)(0))
 
-  val GroupPolicyAccountLedgerPrivate =
+  lazy val GroupPolicyAccountLedgerPrivate =
     GroupPolicy(
       label = "Account Ledger Group",
       registrationUtxo = TransactionOutputAddress(
@@ -24,7 +25,9 @@ object AccountLedgerConstants {
       fixedSeries = None
     )
 
-  val SeriesPolicyAccountLedgerPrivate =
+  lazy val GroupPolicyAccountLedgerPrivateId = GroupPolicyAccountLedgerPrivate.computeId
+
+  lazy val SeriesPolicyAccountLedgerPrivate =
     SeriesPolicy(
       label = "Account Ledger Series",
       tokenSupply = None,
@@ -38,7 +41,9 @@ object AccountLedgerConstants {
       fungibility = FungibilityType.GROUP_AND_SERIES
     )
 
-  val GroupPolicyAccountLedgerTestnet =
+  lazy val SeriesPolicyAccountLedgerPrivateId = SeriesPolicyAccountLedgerPrivate.computeId
+
+  lazy val GroupPolicyAccountLedgerTestnet =
     GroupPolicy(
       label = "Account Ledger Group",
       registrationUtxo = TransactionOutputAddress(
@@ -50,7 +55,9 @@ object AccountLedgerConstants {
       fixedSeries = None
     )
 
-  val SeriesPolicyAccountLedgerTestnet =
+  lazy val GroupPolicyAccountLedgerTestnetId = GroupPolicyAccountLedgerTestnet.computeId
+
+  lazy val SeriesPolicyAccountLedgerTestnet =
     SeriesPolicy(
       label = "Account Ledger Series",
       tokenSupply = None,
@@ -64,7 +71,9 @@ object AccountLedgerConstants {
       fungibility = FungibilityType.GROUP_AND_SERIES
     )
 
-  val GroupPolicyAccountLedgerMainnet =
+  lazy val SeriesPolicyAccountLedgerTestnetId = SeriesPolicyAccountLedgerTestnet.computeId
+
+  lazy val GroupPolicyAccountLedgerMainnet =
     GroupPolicy(
       label = "Account Ledger Group",
       registrationUtxo = TransactionOutputAddress(
@@ -76,7 +85,9 @@ object AccountLedgerConstants {
       fixedSeries = None
     )
 
-  val SeriesPolicyAccountLedgerMainnet =
+  lazy val GroupPolicyAccountLedgerMainnetId = GroupPolicyAccountLedgerMainnet.computeId
+
+  lazy val SeriesPolicyAccountLedgerMainnet =
     SeriesPolicy(
       label = "Account Ledger Series",
       tokenSupply = None,
@@ -89,5 +100,7 @@ object AccountLedgerConstants {
       quantityDescriptor = QuantityDescriptorType.LIQUID,
       fungibility = FungibilityType.GROUP_AND_SERIES
     )
+
+  lazy val SeriesPolicyAccountLedgerMainnetId = SeriesPolicyAccountLedgerMainnet.computeId
 
 }
