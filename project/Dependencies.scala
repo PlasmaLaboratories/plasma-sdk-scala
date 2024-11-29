@@ -55,7 +55,7 @@ object Dependencies {
     "org.xerial" % "sqlite-jdbc" % "3.47.1.0"
   )
 
-  val grpcNetty = "io.grpc" % "grpc-netty" % "1.68.1"
+  val grpcNetty = "io.grpc" % "grpc-netty" % "1.68.2"
 
   object Crypto {
 
