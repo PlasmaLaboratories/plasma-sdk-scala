@@ -59,18 +59,21 @@ private object TransactionCodecVectorsReference extends scala.App {
   println(Encoding.encodeToHex(vector0.toByteArray))
   println(Encoding.encodeToHex(ioTransactionSignable.signableBytes(vector0).value.toByteArray))
   println(Encoding.encodeToBase58(vector0.computeId.value.toByteArray))
-  val bs32_0 = ByteString.copyFrom(Array[Byte](
-    42, -15, 73, -128, 96, -45, 12, 127,
-    -93, 55, -22, 84, -67, 3, -112, 95,
-    -8, 113, -59, 27, -74, 88, -31, 66,
-    19, -103, 44, -85, 7, -126, 91, -40
-  ))
-  val bs32_1 = ByteString.copyFrom(Array[Byte](
-    -17, 82, -94, 116, -53, 25, -127, 63,
-    104, -72, 38, -61, 79, -26, 11, -89,
-    52, -113, 97, -44, 15, -78, 121, -5,
-    86, -33, 69, -101, 30, -67, 93, -19
-  ))
+
+  val bs32_0 = ByteString.copyFrom(
+    Array[Byte](
+      42, -15, 73, -128, 96, -45, 12, 127, -93, 55, -22, 84, -67, 3, -112, 95, -8, 113, -59, 27, -74, 88, -31, 66, 19,
+      -103, 44, -85, 7, -126, 91, -40
+    )
+  )
+
+  val bs32_1 = ByteString.copyFrom(
+    Array[Byte](
+      -17, 82, -94, 116, -53, 25, -127, 63, 104, -72, 38, -61, 79, -26, 11, -89, 52, -113, 97, -44, 15, -78, 121, -5,
+      86, -33, 69, -101, 30, -67, 93, -19
+    )
+  )
+
   val vector1 = IoTransaction(
     inputs = List(
       SpentTransactionOutput(
@@ -79,22 +82,32 @@ private object TransactionCodecVectorsReference extends scala.App {
           Attestation.Value.Predicate(
             Attestation.Predicate(
               Lock.Predicate(
-                List(Challenge(Challenge.Proposition.Revealed(Proposition(Proposition.Value.HeightRange(Proposition.HeightRange("foo", 434, 639)))))
+                List(
+                  Challenge(
+                    Challenge.Proposition.Revealed(
+                      Proposition(Proposition.Value.HeightRange(Proposition.HeightRange("foo", 434, 639)))
+                    )
+                  )
+                )
               )
             )
           )
-        )
-      ),
+        ),
         value = Value(Value.Value.Lvl(Value.LVL(Int128(ByteString.copyFrom(Array[Byte](50, 91, 117))))))
-    )
-  ),
+      )
+    ),
     outputs = List(
       UnspentTransactionOutput(
         address = LockAddress(network = 593, ledger = 5, id = LockId(bs32_1)),
         value = Value(Value.Value.Lvl(Value.LVL(Int128(ByteString.copyFrom(Array[Byte](33, 77, 122))))))
       )
     ),
-    datum = Datum.IoTransaction(Event.IoTransaction(Schedule(5000, 9000, 345957893L), metadata = SmallData(ByteString.copyFrom(Array[Byte](54, -12, 44)))))
+    datum = Datum.IoTransaction(
+      Event.IoTransaction(
+        Schedule(5000, 9000, 345957893L),
+        metadata = SmallData(ByteString.copyFrom(Array[Byte](54, -12, 44)))
+      )
+    )
   )
   println("vector1")
   println(Encoding.encodeToHex(vector1.toByteArray))

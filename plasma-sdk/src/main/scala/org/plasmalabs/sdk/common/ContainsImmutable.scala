@@ -347,7 +347,9 @@ object ContainsImmutable {
       event =>
         event.schedule.immutable ++
         event.metadata.immutable // ++
-    // event.policies.immutable // TODO what happens here?
+    // TODO what happens here?
+    // TODO Add asset tests to TransactionCodecVectorsSpec once these codecs are implemented
+    // event.policies.immutable
 
     implicit val eventImmutable: ContainsImmutable[Event] = _.value match {
       case Event.Value.Eon(e)           => eonEventImmutable.immutableBytes(e)
