@@ -117,7 +117,8 @@ object TransactionSyntaxInterpreter {
       transaction.datum.event.mintingStatements.isEmpty &&
       transaction.datum.event.groupPolicies.isEmpty &&
       transaction.datum.event.seriesPolicies.isEmpty &&
-      transaction.datum.event.mergingStatements.isEmpty,
+      transaction.datum.event.mergingStatements.isEmpty &&
+      transaction.datum.event.splittingStatements.isEmpty,
       (),
       TransactionSyntaxError.NoStatementsAllowed
     )
